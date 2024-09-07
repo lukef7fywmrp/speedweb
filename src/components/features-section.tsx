@@ -7,6 +7,25 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 
+interface WorkItem {
+  title: string;
+  description: string;
+  imageUrl: string;
+}
+
+const recentWork: WorkItem[] = [
+  {
+    title: "Project 1",
+    description: "Brief description of Project 1",
+    imageUrl: "/path/to/image1.jpg",
+  },
+  {
+    title: "Project 2",
+    description: "Brief description of Project 2",
+    imageUrl: "/path/to/image2.jpg",
+  },
+];
+
 export function Features() {
   return (
     <section className="container flex flex-col items-center gap-6 py-24 sm:gap-7">
