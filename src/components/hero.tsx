@@ -91,8 +91,7 @@ function InteractiveLandingPage() {
               src="https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Farrow.png&w=3840&q=75"
               alt="Interactive landing page example"
               layout="fill"
-              objectFit="contain"
-              className="rounded-lg"
+              className="rounded-lg object-contain"
             />
             <Button
               variant="secondary"
