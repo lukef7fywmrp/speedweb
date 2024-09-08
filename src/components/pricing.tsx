@@ -2,7 +2,8 @@
 
 import { Check } from "lucide-react";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import Cal, { getCalApi } from "@calcom/embed-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ const plans = [
       "30-Day Support",
       "1 Round of Revisions",
     ],
+    calLink: "your-cal-link/starter-consultation",
   },
   {
     name: "Growth",
@@ -36,6 +38,7 @@ const plans = [
       "Priority Support",
     ],
     isBestValue: true,
+    calLink: "your-cal-link/growth-consultation",
   },
   {
     name: "Enterprise",
@@ -50,12 +53,31 @@ const plans = [
       "Unlimited Revisions",
       "24/7 Priority Support",
     ],
+    calLink: "your-cal-link/enterprise-consultation",
   },
 ];
 
 export function Pricing() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi();
+      cal("ui", {
+        styles: { branding: { brandColor: "#000000" } },
+        hideEventTypeDetails: false,
+        layout: "month_view",
+      });
+    })();
+  }, []);
+
+  const openCalModal = (calLink: string) => {
+    (async function () {
+      const cal = await getCalApi();
+      cal("modal", { calLink });
+    })();
+  };
 
   return (
     <section
@@ -117,6 +139,7 @@ export function Pricing() {
                   className={`w-full justify-center ${
                     plan.isBestValue ? "bg-primary text-background hover:bg-primary/90" : ""
                   }`}
+                  onClick={() => openCalModal(plan.calLink)}
                 >
                   {plan.name === "Enterprise" ? "Contact Us" : "Get Started"}
                 </CTAButton>
@@ -134,12 +157,16 @@ export function Pricing() {
         <p className="text-lg text-muted-foreground mb-4">
           Not sure which plan is right for you? Let's discuss your needs.
         </p>
-        <Button variant="outline" size="lg" asChild>
-          <a href="#" className="font-semibold">
-            Schedule a Free Consultation
-          </a>
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => openCalModal("your-cal-link/general-consultation")}
+          className="font-semibold"
+        >
+          Schedule a Free Consultation
         </Button>
       </motion.div>
+      <Cal calLink="your-cal-link" style={{ width: "100%", height: "100%", overflow: "scroll" }} />
     </section>
   );
 }
