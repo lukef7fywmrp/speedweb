@@ -76,7 +76,7 @@ function WorkCard({ item }: { item: WorkItem }) {
           <Image
             src={item.imageUrl}
             alt={item.title}
-            layout="fill"
+            fill
             className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -107,15 +107,18 @@ function WorkCard({ item }: { item: WorkItem }) {
 }
 
 export function Features() {
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const ref = useRef(null);
+  const [activeIndices, setActiveIndices] = useState<number[]>([]);
+  const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: sectionRef,
     offset: ["start end", "end start"],
   });
 
   return (
-    <section ref={ref} className="container flex flex-col items-center gap-6 py-24 sm:gap-10">
+    <section
+      ref={sectionRef}
+      className="container flex flex-col items-center gap-6 py-24 sm:gap-10"
+    >
       <div className="text-center">
         <h2 className="font-heading text-3xl font-semibold sm:text-4xl lg:text-5xl mb-4">
           Our Recent Work
@@ -125,14 +128,16 @@ export function Features() {
           innovative design and conversion-focused strategies.
         </p>
       </div>
-      <div className="w-full max-w-6xl mt-12 flex flex-col gap-32">
+      <div className="w-full max-w-6xl mt-12 flex flex-col gap-16">
         {recentWork.map((item, index) => {
           const ref = useRef(null);
-          const isInView = useInView(ref, { amount: 0.5 });
+          const isInView = useInView(ref, { amount: 0.5, once: false });
 
           useEffect(() => {
             if (isInView) {
-              setActiveIndex(index);
+              setActiveIndices((prev) => Array.from(new Set([...prev, index])));
+            } else {
+              setActiveIndices((prev) => prev.filter((i) => i !== index));
             }
           }, [isInView, index]);
 
@@ -140,9 +145,9 @@ export function Features() {
             <motion.div
               key={index}
               ref={ref}
-              className="flex flex-col md:flex-row gap-8 items-center min-h-[600px]"
+              className="flex flex-col md:flex-row gap-8 items-center min-h-[500px]"
               initial={{ opacity: 0.3 }}
-              animate={{ opacity: activeIndex === index ? 1 : 0.3 }}
+              animate={{ opacity: activeIndices.includes(index) ? 1 : 0.3 }}
               transition={{ duration: 0.5 }}
             >
               <div className="md:w-1/2">
