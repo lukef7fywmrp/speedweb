@@ -22,12 +22,12 @@ const plans = [
       "30-Day Support",
       "1 Round of Revisions",
     ],
-    calLink: "your-cal-link/starter-consultation",
+    calLink: "ali-codes-daubbp/starter",
   },
   {
     name: "Growth",
     price: "$2,499",
-    description: "Ideal for growing businesses and e-commerce brands.",
+    description: "ali-codes-daubbp/growth",
     features: [
       "3 High-Converting Landing Pages",
       "Advanced Analytics Integration",
@@ -53,7 +53,7 @@ const plans = [
       "Unlimited Revisions",
       "24/7 Priority Support",
     ],
-    calLink: "your-cal-link/enterprise-consultation",
+    calLink: "ali-codes-daubbp/enterprise",
   },
 ];
 
@@ -160,13 +160,16 @@ export function Pricing() {
         <Button
           variant="outline"
           size="lg"
-          onClick={() => openCalModal("your-cal-link/general-consultation")}
+          onClick={() => openCalModal("ali-codes-daubbp/free-discovery-call")}
           className="font-semibold"
         >
-          Schedule a Free Consultation
+          Schedule a Free Discovery Call
         </Button>
       </motion.div>
-      <Cal calLink="your-cal-link" style={{ width: "100%", height: "100%", overflow: "scroll" }} />
+      <Cal
+        calLink="ali-codes-daubbp"
+        style={{ width: "100%", height: "100%", overflow: "scroll" }}
+      />
     </section>
   );
 }
