@@ -6,18 +6,12 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
+import { Spotlight } from "@/components/ui/spotlight";
 
 export function Hero() {
   return (
-    <section className="container flex flex-col items-center justify-center gap-8 pt-12 sm:pt-16 sm:gap-10 relative min-h-[calc(100vh-80px)]">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl"
-      >
-        <div className="w-full h-24 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 rounded-full blur-3xl" />
-      </motion.div>
+    <section className="container flex flex-col items-center justify-center gap-8 pt-12 sm:pt-16 sm:gap-10 relative min-h-[calc(100vh-80px)] overflow-hidden">
+      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
