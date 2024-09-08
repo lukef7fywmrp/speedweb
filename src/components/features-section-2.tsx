@@ -1,30 +1,33 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { LineChart, Zap, Target, Rocket } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Player } from "@lottiefiles/react-lottie-player";
+import Link from "next/link";
+import { Zap } from "lucide-react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { CTAButton } from "@/components/ui/cta-button";
 
 const features = [
   {
-    icon: LineChart,
+    iconSrc: "/lottie/data-driven-optimization.json",
     title: "Data-Driven Optimization",
     description: "Leverage analytics to continuously improve conversion rates.",
   },
   {
-    icon: Zap,
+    iconSrc: "/lottie/psychology-driven-design.json",
     title: "Psychology-Driven Design",
     description: "Implement persuasive design principles to boost engagement.",
   },
   {
-    icon: Target,
+    iconSrc: "/lottie/conversion-focused-copy.json",
     title: "Conversion-Focused Copy",
     description: "Craft compelling narratives that drive action and sales.",
   },
   {
-    icon: Rocket,
+    iconSrc: "/lottie/rapid-implementation.json",
     title: "Rapid Implementation",
     description: "Quick turnaround times to get your optimized pages live fast.",
   },
@@ -32,6 +35,21 @@ const features = [
 
 export function Features2() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const playerRefs = useRef<(Player | null)[]>([]);
+
+  useEffect(() => {
+    playerRefs.current = playerRefs.current.slice(0, features.length);
+  }, []);
+
+  useEffect(() => {
+    playerRefs.current.forEach((player, index) => {
+      if (hoveredIndex === index) {
+        player?.play();
+      } else {
+        player?.stop();
+      }
+    });
+  }, [hoveredIndex]);
 
   return (
     <section className="container flex flex-col items-center gap-8 py-24 sm:gap-12">
@@ -61,17 +79,19 @@ export function Features2() {
           >
             <Card className="h-full shadow-lg border-0 overflow-hidden group relative">
               <CardContent className="flex flex-col gap-6 p-8 text-center items-center h-full">
-                <motion.div
-                  className="inline-flex items-center justify-center rounded-full p-3 bg-primary/10"
-                  animate={{
-                    scale: hoveredIndex === index ? 1.1 : 1,
-                    backgroundColor:
-                      hoveredIndex === index ? "var(--primary)" : "var(--primary-10)",
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <feature.icon size={32} className="text-primary" />
-                </motion.div>
+                <div className="w-12 h-12 flex items-center justify-center">
+                  <Player
+                    ref={(el) => (playerRefs.current[index] = el)}
+                    src={feature.iconSrc}
+                    className="w-12 h-12"
+                    loop={false}
+                    autoplay={false}
+                    style={{
+                      filter:
+                        "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%)",
+                    }}
+                  />
+                </div>
                 <div>
                   <h4 className="mb-3 text-xl font-semibold text-foreground">{feature.title}</h4>
                   <p className="text-muted-foreground">{feature.description}</p>
@@ -87,9 +107,7 @@ export function Features2() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.8 }}
       >
-        <Button size="lg" className="mt-8 text-lg font-semibold">
-          Boost Your Conversions Now
-        </Button>
+        <CTAButton href="#">Boost Your Conversions Now</CTAButton>
       </motion.div>
     </section>
   );

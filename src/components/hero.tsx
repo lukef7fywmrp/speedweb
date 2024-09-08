@@ -7,6 +7,7 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { Spotlight } from "@/components/ui/spotlight";
+import { CTAButton } from "@/components/ui/cta-button";
 
 export function Hero() {
   return (
@@ -36,17 +37,14 @@ export function Hero() {
         transition={{ duration: 0.8, delay: 0.6 }}
         className="flex flex-col sm:flex-row justify-center gap-4 w-full max-w-md mx-auto"
       >
-        <Button
-          size="lg"
-          asChild
-          variant="default"
-          className="w-full sm:w-auto h-14 text-base font-semibold hover:scale-105 transition duration-300 group bg-primary text-gray-900 hover:bg-primary/90"
-        >
-          <Link href="#" className="flex items-center justify-center">
-            Get Your Free Conversion Audit
+        <CTAButton
+          href="#"
+          icon={
             <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </Button>
+          }
+        >
+          Get Your Free Conversion Audit
+        </CTAButton>
         <motion.div
           initial={{ scale: 1 }}
           whileHover={{ scale: 1.05 }}
