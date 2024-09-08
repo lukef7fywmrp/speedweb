@@ -1,154 +1,145 @@
+"use client";
+
 import { Check } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { CTAButton } from "@/components/ui/cta-button";
+
+const plans = [
+  {
+    name: "Starter",
+    price: "$999",
+    description: "Perfect for small businesses and startups.",
+    features: [
+      "1 High-Converting Landing Page",
+      "Data-Driven Optimization",
+      "Psychology-Driven Design",
+      "Conversion-Focused Copy",
+      "30-Day Support",
+      "1 Round of Revisions",
+    ],
+  },
+  {
+    name: "Growth",
+    price: "$2,499",
+    description: "Ideal for growing businesses and e-commerce brands.",
+    features: [
+      "3 High-Converting Landing Pages",
+      "Advanced Analytics Integration",
+      "A/B Testing Setup",
+      "Email Marketing Integration",
+      "60-Day Support",
+      "3 Rounds of Revisions",
+      "Priority Support",
+    ],
+    isBestValue: true,
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    description: "Tailored solutions for large-scale operations.",
+    features: [
+      "Unlimited Landing Pages",
+      "Full Funnel Optimization",
+      "Custom Integrations",
+      "Dedicated Account Manager",
+      "Ongoing Support",
+      "Unlimited Revisions",
+      "24/7 Priority Support",
+    ],
+  },
+];
 
 export function Pricing() {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+
   return (
-    <section className="container flex flex-col items-center gap-6 py-24 sm:gap-7">
-      <div className="flex flex-col gap-3">
-        <h2 className="font-heading text-3xl font-semibold sm:text-4xl text-center">
-          Ready to boost your conversions?
+    <section
+      ref={sectionRef}
+      className="container flex flex-col items-center gap-12 py-24 sm:gap-16"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.6 }}
+        className="flex flex-col gap-4 text-center"
+      >
+        <h2 className="font-heading text-4xl font-semibold sm:text-5xl lg:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          Invest in Your Success
         </h2>
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          Choose the plan that fits your business needs and start boosting your conversions today.
+        </p>
+      </motion.div>
+      <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-3 md:grid-cols-2 max-w-6xl">
+        {plans.map((plan, index) => (
+          <motion.div
+            key={plan.name}
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+          >
+            <Card className="relative h-full shadow-lg bg-gradient-to-br from-background/80 to-background hover:from-primary/5 hover:to-secondary/5 transition-all duration-300">
+              {plan.isBestValue && (
+                <span className="absolute inset-x-0 -top-5 mx-auto w-36 rounded-full bg-primary px-3 py-2 text-center text-sm font-semibold text-background shadow-md">
+                  Most Popular
+                </span>
+              )}
+              <CardContent className="flex flex-col h-full p-6 sm:p-8">
+                <div className="mb-6">
+                  <h3 className="font-heading text-2xl font-semibold mb-2 text-foreground">
+                    {plan.name}
+                  </h3>
+                  <p className="text-muted-foreground">{plan.description}</p>
+                </div>
+                <div className="mb-6">
+                  <span className="font-heading text-4xl font-semibold text-foreground">
+                    {plan.price}
+                  </span>
+                  {plan.name !== "Enterprise" && (
+                    <span className="text-muted-foreground">/project</span>
+                  )}
+                </div>
+                <ul className="space-y-3 mb-8 flex-grow">
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className="flex items-center gap-3">
+                      <Check size={20} className="text-primary" />
+                      <span className="text-muted-foreground">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <CTAButton
+                  href="#"
+                  className={`w-full justify-center ${
+                    plan.isBestValue ? "bg-primary text-background hover:bg-primary/90" : ""
+                  }`}
+                >
+                  {plan.name === "Enterprise" ? "Contact Us" : "Get Started"}
+                </CTAButton>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
       </div>
-      <p className="text-lg text-muted-foreground max-w-lg text-center" />
-      <div className="mt-7 grid w-full grid-cols-1 gap-7 lg:grid-cols-2 md:grid-cols-2">
-        <Card className="relative shadow-lg bg-white/5 hover:bg-white/10">
-          <CardContent className="divide-y p-0">
-            <div className="flex flex-col px-7 py-10">
-              <h4 className="font-heading text-2xl font-semibold text-foreground">One-Off</h4>
-              <p className="mt-2 text-muted-foreground">For side project.</p>
-              <div className="mt-5 flex flex-col space-y-2">
-                <span className="font-heading text-5xl font-semibold text-white">$2199</span>
-                <span className="text-sm" />
-              </div>
-              <p className="max-w-xs text-white">
-                Perfect for single, high-impact, conversion-focused landing page.
-              </p>
-              <p className="max-w-xs text-white" />
-              <p className="max-w-xs text-white" />
-              <p className="max-w-xs text-white" />
-              <Button size="lg" asChild className="mt-10 w-full text-black bg-white">
-                <a href="#">Get started</a>
-              </Button>
-            </div>
-            <ul className="space-y-2 px-7 py-10">
-              <p className="max-w-xs text-white">Services:</p>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Unlimited projects</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Unlimited storage</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Unlimited storage</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">24/7 support</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">API access</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Custom branding</span>
-              </li>
-              <p className="max-w-xs text-white">Features:</p>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Custom branding</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Custom branding</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Custom branding</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Custom branding</span>
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
-        <Card className="relative shadow-lg bg-white/5 hover:bg-white/10">
-          <CardContent className="divide-y p-0">
-            <div className="flex flex-col px-7 py-10">
-              <span className="absolute inset-x-0 -top-5 mx-auto w-32 rounded-full bg-primary px-3 py-2 text-center text-sm font-semibold text-primary-foreground shadow-md text-black">
-                Best Value
-              </span>
-              <h4 className="font-heading text-2xl font-semibold text-foreground">
-                Multiple Website
-              </h4>
-              <p className="mt-2 text-muted-foreground">For startups and teams.</p>
-              <div className="mt-5 flex flex-col space-y-2">
-                <span className="font-heading text-5xl font-semibold text-white">$4199</span>
-                <span className="text-sm" />
-              </div>
-              <p className="max-w-xs text-white">
-                Ideal for those who need an ongoing design support.
-              </p>
-              <p className="max-w-xs text-white" />
-              <p className="max-w-xs text-white" />
-              <p className="max-w-xs text-white" />
-              <p className="max-w-xs text-white" />
-              <p className="max-w-xs text-white" />
-              <p className="max-w-xs text-white" />
-              <p className="max-w-xs text-white" />
-              <Button size="lg" asChild className="mt-10 w-full text-black bg-white">
-                <a href="#">Get started</a>
-              </Button>
-            </div>
-            <ul className="space-y-2 px-7 py-10">
-              <p className="max-w-xs text-white">Services:</p>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Everything in Basic</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Priority support</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Advanced analytics</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Unlimited users</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Custom domain</span>
-              </li>
-              <p className="max-w-xs text-white">Features:&nbsp;</p>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Custom domain</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Custom domain</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Custom domain</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Check size={24} className="text-primary" />
-                <span className="text-muted-foreground">Custom domain</span>
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className="text-center"
+      >
+        <p className="text-lg text-muted-foreground mb-4">
+          Not sure which plan is right for you? Let's discuss your needs.
+        </p>
+        <Button variant="outline" size="lg" asChild>
+          <a href="#" className="font-semibold">
+            Schedule a Free Consultation
+          </a>
+        </Button>
+      </motion.div>
     </section>
   );
 }

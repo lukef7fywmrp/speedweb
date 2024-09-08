@@ -1,8 +1,8 @@
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
-import { Features } from "@/components/features-section";
-import { Features2 } from "@/components/features-section-2";
-import { Features3 } from "@/components/features-section-3";
+import { RecentWork } from "@/components/recent-work";
+import { ConversionOptimizationFeatures } from "@/components/conversion-optimization-features";
+import { TailoredSolutionsSection } from "@/components/tailored-solutions-section";
 import { Technologies } from "@/components/technologies";
 import { Pricing } from "@/components/pricing";
 import { Testimonials } from "@/components/testimonials";
@@ -15,9 +15,9 @@ export default function HomePage() {
     <>
       <Header />
       <Hero />
-      <Features />
-      <Features2 />
-      <Features3 />
+      <RecentWork />
+      <ConversionOptimizationFeatures />
+      <TailoredSolutionsSection />
       <Technologies />
       <Pricing />
       <Testimonials />

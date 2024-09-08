@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import Link from "next/link";
@@ -33,9 +33,11 @@ const features = [
   },
 ];
 
-export function Features2() {
+export function ConversionOptimizationFeatures() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const playerRefs = useRef<(Player | null)[]>([]);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
   useEffect(() => {
     playerRefs.current = playerRefs.current.slice(0, features.length);
@@ -52,10 +54,13 @@ export function Features2() {
   }, [hoveredIndex]);
 
   return (
-    <section className="container flex flex-col items-center gap-8 py-24 sm:gap-12">
+    <section
+      ref={sectionRef}
+      className="container flex flex-col items-center gap-8 py-24 sm:gap-12"
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.6 }}
         className="flex flex-col gap-4 text-center"
       >
@@ -72,7 +77,7 @@ export function Features2() {
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: index * 0.2 }}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
@@ -104,7 +109,7 @@ export function Features2() {
       </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.6, delay: 0.8 }}
       >
         <CTAButton href="#">Boost Your Conversions Now</CTAButton>

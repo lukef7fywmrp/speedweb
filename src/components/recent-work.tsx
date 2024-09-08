@@ -106,7 +106,7 @@ function WorkCard({ item }: { item: WorkItem }) {
   );
 }
 
-export function Features() {
+export function RecentWork() {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({

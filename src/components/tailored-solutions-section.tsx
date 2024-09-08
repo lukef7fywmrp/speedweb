@@ -1,8 +1,8 @@
 "use client";
 
 import { Target, TrendingUp, Zap } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { createElement, useState } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
+import { createElement, useState, useRef } from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,15 +29,20 @@ const clientTypes = [
   },
 ];
 
-export function Features3() {
+export function TailoredSolutionsSection() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
 
   return (
-    <section className="container flex flex-col items-center gap-8 py-24 sm:gap-12 bg-gradient-to-b from-background to-background/80 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="container flex flex-col items-center gap-8 py-24 sm:gap-12 bg-gradient-to-b from-background to-background/80 overflow-hidden"
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: 0.2 }}
         className="flex flex-col gap-4 text-center"
       >
         <h2 className="font-heading text-3xl font-semibold sm:text-4xl lg:text-5xl max-w-3xl mx-auto bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
@@ -48,7 +53,12 @@ export function Features3() {
           their unique markets.
         </p>
       </motion.div>
-      <div className="w-full max-w-4xl relative">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className="w-full max-w-4xl relative"
+      >
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 blur-3xl pointer-events-none" />
         <AnimatePresence mode="wait">
           <motion.div
@@ -79,7 +89,12 @@ export function Features3() {
             </Card>
           </motion.div>
         </AnimatePresence>
-        <div className="flex flex-wrap justify-center mt-8 gap-4 relative z-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="flex flex-wrap justify-center mt-8 gap-4 relative z-20"
+        >
           {clientTypes.map((clientType, index) => (
             <Button
               key={index}
@@ -94,9 +109,15 @@ export function Features3() {
               <span className={activeIndex === index ? "text-black" : ""}>{clientType.title}</span>
             </Button>
           ))}
-        </div>
-      </div>
-      <CTAButton href="#">Elevate Your {clientTypes[activeIndex].title} Conversions</CTAButton>
+        </motion.div>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: 0.8 }}
+      >
+        <CTAButton href="#">Elevate Your {clientTypes[activeIndex].title} Conversions</CTAButton>
+      </motion.div>
     </section>
   );
 }
