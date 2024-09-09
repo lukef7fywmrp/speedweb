@@ -28,8 +28,8 @@ export function Hero() {
         className="max-w-2xl text-center text-lg text-muted-foreground sm:text-xl"
       >
         Unlock the secret to skyrocketing sales with our conversion-focused pages. Imagine doubling
-        your revenue without working harder – that's the power of psychology-driven design at your
-        fingertips.
+        your revenue without working harder – that`&apos;s the power of psychology-driven design at
+        your fingertips.
       </motion.p>
       <motion.div
         initial={{ opacity: 0, y: -20 }}

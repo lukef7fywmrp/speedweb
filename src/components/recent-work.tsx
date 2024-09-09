@@ -106,8 +106,30 @@ function WorkCard({ item }: { item: WorkItem }) {
   );
 }
 
+function WorkItem({ item, index }: { item: WorkItem; index: number }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { amount: 0.5, once: false });
+
+  return (
+    <motion.div
+      ref={ref}
+      className="flex flex-col md:flex-row gap-8 items-center min-h-[500px]"
+      initial={{ opacity: 0.3 }}
+      animate={{ opacity: isInView ? 1 : 0.3 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="md:w-1/2">
+        <h3 className="text-2xl font-semibold mb-4">{item.title}</h3>
+        <p className="text-muted-foreground">{item.description}</p>
+      </div>
+      <div className="md:w-1/2 w-full">
+        <WorkCard item={item} />
+      </div>
+    </motion.div>
+  );
+}
+
 export function RecentWork() {
-  const [activeIndices, setActiveIndices] = useState<number[]>([]);
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -124,42 +146,14 @@ export function RecentWork() {
           Our Recent Work
         </h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Discover how we've helped businesses like yours achieve remarkable results through
+          Discover how we`&apos;ve helped businesses like yours achieve remarkable results through
           innovative design and conversion-focused strategies.
         </p>
       </div>
       <div className="w-full max-w-6xl mt-12 flex flex-col gap-16">
-        {recentWork.map((item, index) => {
-          const ref = useRef(null);
-          const isInView = useInView(ref, { amount: 0.5, once: false });
-
-          useEffect(() => {
-            if (isInView) {
-              setActiveIndices((prev) => Array.from(new Set([...prev, index])));
-            } else {
-              setActiveIndices((prev) => prev.filter((i) => i !== index));
-            }
-          }, [isInView, index]);
-
-          return (
-            <motion.div
-              key={index}
-              ref={ref}
-              className="flex flex-col md:flex-row gap-8 items-center min-h-[500px]"
-              initial={{ opacity: 0.3 }}
-              animate={{ opacity: activeIndices.includes(index) ? 1 : 0.3 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="md:w-1/2">
-                <h3 className="text-2xl font-semibold mb-4">{item.title}</h3>
-                <p className="text-muted-foreground">{item.description}</p>
-              </div>
-              <div className="md:w-1/2 w-full">
-                <WorkCard item={item} />
-              </div>
-            </motion.div>
-          );
-        })}
+        {recentWork.map((item, index) => (
+          <WorkItem key={index} item={item} index={index} />
+        ))}
       </div>
     </section>
   );

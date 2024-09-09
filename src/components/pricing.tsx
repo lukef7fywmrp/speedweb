@@ -155,7 +155,7 @@ export function Pricing() {
         className="text-center"
       >
         <p className="text-lg text-muted-foreground mb-4">
-          Not sure which plan is right for you? Let's discuss your needs.
+          Not sure which plan is right for you? Let`&apos;s discuss your needs.
         </p>
         <Button
           variant="outline"
