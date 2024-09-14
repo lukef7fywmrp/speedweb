@@ -23,8 +23,7 @@ const recentWork: WorkItem[] = [
     description:
       "Innovative landing page design that boosted conversions by 150%. Our team crafted a sleek, user-friendly interface that simplified complex task management processes, resulting in increased user engagement and productivity.",
     shortDescription: "Landing page redesign boosted conversions by 150%.",
-    imageUrl:
-      "https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Farrow.png&w=3840&q=75",
+    imageUrl: "/images/Nvidia.jpeg",
     challenge: "Low conversion rates and complex UI",
     solution: "Redesigned landing page with intuitive flow",
     results: "150% conversion increase, better engagement",
@@ -34,8 +33,7 @@ const recentWork: WorkItem[] = [
     description:
       "E-commerce redesign that increased sales by 200% in 3 months. We completely overhauled the user experience, implemented advanced product recommendation algorithms, and optimized the checkout process to drive unprecedented growth.",
     shortDescription: "E-commerce redesign increased sales by 200% in 3 months.",
-    imageUrl:
-      "https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Fopenstage.png&w=3840&q=75",
+    imageUrl: "/images/Nvidia.jpeg",
     challenge: "Stagnant sales and poor UX",
     solution: "UX overhaul and recommendation system",
     results: "200% sales increase in 3 months",
@@ -45,8 +43,7 @@ const recentWork: WorkItem[] = [
     description:
       "SaaS dashboard that improved user engagement by 80%. Our team developed an intuitive, visually striking dashboard that transformed complex data into actionable insights, empowering businesses to make data-driven decisions with ease.",
     shortDescription: "SaaS dashboard improved user engagement by 80%.",
-    imageUrl:
-      "https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Fdevjuice.png&w=3840&q=75",
+    imageUrl: "/images/Nvidia.jpeg",
     challenge: "Complex data and low engagement",
     solution: "Intuitive, visual dashboard design",
     results: "80% engagement improvement",
@@ -56,8 +53,7 @@ const recentWork: WorkItem[] = [
     description:
       "Mobile app design that increased user retention by 50%. We created a comprehensive health tracking solution with personalized insights, seamless integration with wearables, and an engaging user interface that kept users coming back.",
     shortDescription: "Health app design increased retention by 50%.",
-    imageUrl:
-      "https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Fdevjuice.png&w=3840&q=75",
+    imageUrl: "/images/Nvidia.jpeg",
     challenge: "Low user retention in health app",
     solution: "Personalized insights and wearable integration",
     results: "50% increase in user retention",
@@ -67,8 +63,7 @@ const recentWork: WorkItem[] = [
     description:
       "Branding overhaul that led to 100% increase in brand recognition. Our team developed a cohesive brand identity that resonated with environmentally conscious consumers, including a striking logo, eco-friendly packaging designs, and a compelling brand story.",
     shortDescription: "Branding overhaul doubled brand recognition.",
-    imageUrl:
-      "https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Fdevjuice.png&w=3840&q=75",
+    imageUrl: "/images/Nvidia.jpeg",
     challenge: "Low brand recognition in eco-market",
     solution: "Comprehensive eco-friendly branding",
     results: "100% increase in brand recognition",

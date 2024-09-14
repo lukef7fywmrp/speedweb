@@ -27,7 +27,7 @@ const testimonials = [
     id: 2,
     content: {
       desktop:
-        "The team's expertise in performance optimization cut our load times in half. Our customers love the seamless experience!",
+        "The team&apos;s expertise in performance optimization cut our load times in half. Our customers love the seamless experience!",
       mobile: "Speedweb halved our load times. Customers love it!",
     },
     author: "Emily Chen",
@@ -41,8 +41,8 @@ const testimonials = [
     id: 3,
     content: {
       desktop:
-        "Speedweb's tailored solutions helped us stand out in a crowded market. We've seen a 200% increase in user engagement.",
-      mobile: "Speedweb's solutions increased our engagement by 200%!",
+        "Speedweb&apos;s tailored solutions helped us stand out in a crowded market. We&apos;ve seen a 200% increase in user engagement.",
+      mobile: "Speedweb&apos;s solutions increased our engagement by 200%!",
     },
     author: "Michael Johnson",
     role: "Marketing Director, BrandBoost",
@@ -131,11 +131,11 @@ export function Testimonials() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-xl sm:text-2xl font-medium mb-6 text-foreground"
                 >
-                  "
+                  &ldquo;
                   {isMobile
                     ? testimonials[currentIndex].content.mobile
                     : testimonials[currentIndex].content.desktop}
-                  "
+                  &rdquo;
                 </motion.p>
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
@@ -177,7 +177,7 @@ export function Testimonials() {
                     <div className="ml-auto w-20 h-10 relative">
                       <Image
                         src={testimonials[currentIndex].companyLogo}
-                        alt={`${testimonials[currentIndex].author}'s company logo`}
+                        alt={`${testimonials[currentIndex].author}&apos;s company logo`}
                         fill
                         className="object-contain"
                       />

@@ -23,11 +23,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Speedweb | High-Converting Landing Pages",
     description: "Boost your sales with psychology-driven, conversion-focused landing pages.",
-    url: "https://www.yourwebsite.com",
+    url: "https://speedweb.vercel.app",
     siteName: "Speedweb",
     images: [
       {
-        url: "https://www.yourwebsite.com/og-image.jpg",
+        url: "https://speedweb.vercel.app/og-image.jpg",
         width: 1200,
         height: 630,
       },
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Speedweb | High-Converting Landing Pages",
     description: "Boost your sales with psychology-driven, conversion-focused landing pages.",
-    images: ["https://www.yourwebsite.com/twitter-image.jpg"],
+    images: ["https://speedweb.vercel.app/twitter-image.jpg"],
   },
 };
 
