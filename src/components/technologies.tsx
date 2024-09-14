@@ -63,18 +63,27 @@ export function Technologies() {
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.1 * index }}
             >
-              <Tooltip delayDuration={100}>
-                <TooltipTrigger asChild>
-                  <Card className="group hover:border-primary transition-colors duration-300">
-                    <CardContent className="flex items-center justify-center p-6">
-                      <tech.icon className="w-12 h-12 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
-                    </CardContent>
-                  </Card>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8}>
-                  <p>{tech.name}</p>
-                </TooltipContent>
-              </Tooltip>
+              {isMobile ? (
+                <Card className="group hover:border-primary transition-colors duration-300">
+                  <CardContent className="flex flex-col items-center justify-center p-4">
+                    <tech.icon className="w-10 h-10 text-muted-foreground group-hover:text-primary transition-colors duration-300 mb-2" />
+                    <p className="text-xs text-center text-foreground">{tech.name}</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Tooltip delayDuration={100}>
+                  <TooltipTrigger asChild>
+                    <Card className="group hover:border-primary transition-colors duration-300">
+                      <CardContent className="flex items-center justify-center p-6">
+                        <tech.icon className="w-12 h-12 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+                      </CardContent>
+                    </Card>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={8}>
+                    <p>{tech.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </motion.div>
           ))}
         </TooltipProvider>
