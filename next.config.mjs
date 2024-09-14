@@ -4,6 +4,11 @@ const nextConfig = {
     remotePatterns: [
       {
         hostname: "www.withsupafast.com",
+        protocol: "https",
+      },
+      {
+        hostname: "logo.clearbit.com",
+        protocol: "https",
       },
     ],
   },

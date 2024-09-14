@@ -8,17 +8,21 @@ import Cal, { getCalApi } from "@calcom/embed-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CTAButton } from "@/components/ui/cta-button";
+import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 
 const plans = [
   {
     name: "Starter",
     price: "$999",
-    description: "Perfect for small businesses and startups.",
+    description: {
+      desktop: "Perfect for small businesses and startups.",
+      mobile: "For small businesses & startups.",
+    },
     features: [
       "1 High-Converting Landing Page",
-      "Data-Driven Optimization",
-      "Psychology-Driven Design",
-      "Conversion-Focused Copy",
+      "Performance Analysis",
+      "User-Focused Design",
+      "Persuasive Content Writing",
       "30-Day Support",
       "1 Round of Revisions",
     ],
@@ -27,13 +31,16 @@ const plans = [
   {
     name: "Growth",
     price: "$2,499",
-    description: "ali-codes-daubbp/growth",
+    description: {
+      desktop: "Ideal for growing businesses seeking expansion.",
+      mobile: "For growing businesses.",
+    },
     features: [
       "3 High-Converting Landing Pages",
-      "Advanced Analytics Integration",
-      "A/B Testing Setup",
-      "Email Marketing Integration",
-      "60-Day Support",
+      "Advanced Performance Tracking",
+      "Conversion Rate Optimization",
+      "Marketing Tool Integration",
+      "90-Day Support",
       "3 Rounds of Revisions",
       "Priority Support",
     ],
@@ -43,12 +50,15 @@ const plans = [
   {
     name: "Enterprise",
     price: "Custom",
-    description: "Tailored solutions for large-scale operations.",
+    description: {
+      desktop: "Tailored solutions for large-scale operations.",
+      mobile: "For large-scale operations.",
+    },
     features: [
       "Unlimited Landing Pages",
-      "Full Funnel Optimization",
-      "Custom Integrations",
-      "Dedicated Account Manager",
+      "Complete Sales Process Optimization",
+      "Tailored System Integrations",
+      "Personal Account Manager",
       "Ongoing Support",
       "Unlimited Revisions",
       "24/7 Priority Support",
@@ -60,6 +70,7 @@ const plans = [
 export function Pricing() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   useEffect(() => {
     (async function () {
@@ -81,6 +92,7 @@ export function Pricing() {
 
   return (
     <section
+      id="pricing"
       ref={sectionRef}
       className="container flex flex-col items-center gap-12 py-24 sm:gap-16"
     >
@@ -90,11 +102,13 @@ export function Pricing() {
         transition={{ duration: 0.6 }}
         className="flex flex-col gap-4 text-center"
       >
-        <h2 className="font-heading text-4xl font-semibold sm:text-5xl lg:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-          Invest in Your Success
+        <h2 className="font-heading text-3xl font-semibold sm:text-4xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary to-primary">
+          {isMobile ? "Pricing Plans" : "Invest in Your Success"}
         </h2>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Choose the plan that fits your business needs and start boosting your conversions today.
+        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+          {isMobile
+            ? "Choose your plan and boost conversions."
+            : "Choose the plan that fits your business needs and start boosting your conversions today."}
         </p>
       </motion.div>
       <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-3 md:grid-cols-2 max-w-6xl">
@@ -113,24 +127,26 @@ export function Pricing() {
               )}
               <CardContent className="flex flex-col h-full p-6 sm:p-8">
                 <div className="mb-6">
-                  <h3 className="font-heading text-2xl font-semibold mb-2 text-foreground">
+                  <h3 className="font-heading text-xl sm:text-2xl font-semibold mb-2 text-foreground">
                     {plan.name}
                   </h3>
-                  <p className="text-muted-foreground">{plan.description}</p>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    {isMobile ? plan.description.mobile : plan.description.desktop}
+                  </p>
                 </div>
                 <div className="mb-6">
-                  <span className="font-heading text-4xl font-semibold text-foreground">
+                  <span className="font-heading text-3xl sm:text-4xl font-semibold text-foreground">
                     {plan.price}
                   </span>
                   {plan.name !== "Enterprise" && (
-                    <span className="text-muted-foreground">/project</span>
+                    <span className="text-sm sm:text-base text-muted-foreground">/project</span>
                   )}
                 </div>
                 <ul className="space-y-3 mb-8 flex-grow">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-3">
-                      <Check size={20} className="text-primary" />
-                      <span className="text-muted-foreground">{feature}</span>
+                      <Check size={isMobile ? 16 : 20} className="text-primary" />
+                      <span className="text-sm sm:text-base text-muted-foreground">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -154,8 +170,10 @@ export function Pricing() {
         transition={{ duration: 0.6, delay: 0.4 }}
         className="text-center"
       >
-        <p className="text-lg text-muted-foreground mb-4">
-          Not sure which plan is right for you? Let`&apos;s discuss your needs.
+        <p className="text-base sm:text-lg text-muted-foreground mb-4">
+          {isMobile
+            ? "Not sure? Let's talk."
+            : "Not sure which plan is right for you? Let's discuss your needs."}
         </p>
         <Button
           variant="outline"
@@ -163,13 +181,9 @@ export function Pricing() {
           onClick={() => openCalModal("ali-codes-daubbp/free-discovery-call")}
           className="font-semibold"
         >
-          Schedule a Free Discovery Call
+          {isMobile ? "Free Discovery Call" : "Schedule a Free Discovery Call"}
         </Button>
       </motion.div>
-      <Cal
-        calLink="ali-codes-daubbp"
-        style={{ width: "100%", height: "100%", overflow: "scroll" }}
-      />
     </section>
   );
 }

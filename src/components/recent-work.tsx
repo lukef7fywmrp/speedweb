@@ -5,10 +5,12 @@ import Image from "next/image";
 import { motion, useScroll, useInView } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 
 interface WorkItem {
   title: string;
   description: string;
+  shortDescription: string;
   imageUrl: string;
   challenge: string;
   solution: string;
@@ -17,58 +19,65 @@ interface WorkItem {
 
 const recentWork: WorkItem[] = [
   {
-    title: "Streamline: Revolutionizing Task Management",
+    title: "Streamline: Task Management",
     description:
       "Innovative landing page design that boosted conversions by 150%. Our team crafted a sleek, user-friendly interface that simplified complex task management processes, resulting in increased user engagement and productivity.",
+    shortDescription: "Landing page redesign boosted conversions by 150%.",
     imageUrl:
       "https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Farrow.png&w=3840&q=75",
-    challenge: "Low conversion rates and complex user interface",
-    solution: "Redesigned landing page with intuitive task management flow",
-    results: "150% increase in conversions, improved user engagement",
+    challenge: "Low conversion rates and complex UI",
+    solution: "Redesigned landing page with intuitive flow",
+    results: "150% conversion increase, better engagement",
   },
   {
-    title: "FashionFusion: Redefining Online Shopping",
+    title: "FashionFusion: E-commerce Revamp",
     description:
       "E-commerce redesign that increased sales by 200% in 3 months. We completely overhauled the user experience, implemented advanced product recommendation algorithms, and optimized the checkout process to drive unprecedented growth.",
+    shortDescription: "E-commerce redesign increased sales by 200% in 3 months.",
     imageUrl:
       "https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Fopenstage.png&w=3840&q=75",
-    challenge: "Stagnant sales and poor user experience",
-    solution: "Complete UX overhaul and advanced recommendation system",
-    results: "200% increase in sales within 3 months",
+    challenge: "Stagnant sales and poor UX",
+    solution: "UX overhaul and recommendation system",
+    results: "200% sales increase in 3 months",
   },
   {
-    title: "DataViz Pro: Transforming Data Analytics",
+    title: "DataViz Pro: Analytics Dashboard",
     description:
       "SaaS dashboard that improved user engagement by 80%. Our team developed an intuitive, visually striking dashboard that transformed complex data into actionable insights, empowering businesses to make data-driven decisions with ease.",
+    shortDescription: "SaaS dashboard improved user engagement by 80%.",
     imageUrl:
       "https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Fdevjuice.png&w=3840&q=75",
-    challenge: "Complex data presentation and low user engagement",
-    solution: "Intuitive, visually striking dashboard design",
-    results: "80% improvement in user engagement",
+    challenge: "Complex data and low engagement",
+    solution: "Intuitive, visual dashboard design",
+    results: "80% engagement improvement",
   },
   {
-    title: "HealthTrack: Revolutionizing Personal Wellness",
+    title: "HealthTrack: Wellness App",
     description:
       "Mobile app design that increased user retention by 50%. We created a comprehensive health tracking solution with personalized insights, seamless integration with wearables, and an engaging user interface that kept users coming back.",
+    shortDescription: "Health app design increased retention by 50%.",
     imageUrl:
       "https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Fdevjuice.png&w=3840&q=75",
-    challenge: "Low user retention in health tracking app",
+    challenge: "Low user retention in health app",
     solution: "Personalized insights and wearable integration",
     results: "50% increase in user retention",
   },
   {
-    title: "EcoSmart: Empowering Sustainable Living",
+    title: "EcoSmart: Sustainable Branding",
     description:
       "Branding overhaul that led to 100% increase in brand recognition. Our team developed a cohesive brand identity that resonated with environmentally conscious consumers, including a striking logo, eco-friendly packaging designs, and a compelling brand story.",
+    shortDescription: "Branding overhaul doubled brand recognition.",
     imageUrl:
       "https://www.withsupafast.com/_next/image?url=%2Fimages%2Fwork%2Fdevjuice.png&w=3840&q=75",
-    challenge: "Low brand recognition in sustainable products market",
-    solution: "Comprehensive branding overhaul with eco-friendly focus",
+    challenge: "Low brand recognition in eco-market",
+    solution: "Comprehensive eco-friendly branding",
     results: "100% increase in brand recognition",
   },
 ];
 
 function WorkCard({ item }: { item: WorkItem }) {
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
   return (
     <Card className="h-full shadow-lg overflow-hidden group relative">
       <CardContent className="p-0">
@@ -98,7 +107,7 @@ function WorkCard({ item }: { item: WorkItem }) {
             variant="outline"
             className="text-white border-white hover:bg-white hover:text-black transition-colors duration-300"
           >
-            View Project
+            {isMobile ? "View" : "View Project"}
           </Button>
         </div>
       </CardContent>
@@ -109,18 +118,25 @@ function WorkCard({ item }: { item: WorkItem }) {
 function WorkItem({ item, index }: { item: WorkItem; index: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { amount: 0.5, once: false });
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
+  const isEven = index % 2 === 0;
 
   return (
     <motion.div
       ref={ref}
-      className="flex flex-col md:flex-row gap-8 items-center min-h-[500px]"
+      className={`flex flex-col md:flex-row gap-8 items-center min-h-[500px] ${
+        isEven ? "" : "md:flex-row-reverse"
+      }`}
       initial={{ opacity: 0.3 }}
       animate={{ opacity: isInView ? 1 : 0.3 }}
       transition={{ duration: 0.5 }}
     >
       <div className="md:w-1/2">
         <h3 className="text-2xl font-semibold mb-4">{item.title}</h3>
-        <p className="text-muted-foreground">{item.description}</p>
+        <p className="text-muted-foreground">
+          {isMobile ? item.shortDescription : item.description}
+        </p>
       </div>
       <div className="md:w-1/2 w-full">
         <WorkCard item={item} />
@@ -135,9 +151,11 @@ export function RecentWork() {
     target: sectionRef,
     offset: ["start end", "end start"],
   });
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   return (
     <section
+      id="work"
       ref={sectionRef}
       className="container flex flex-col items-center gap-6 py-24 sm:gap-10"
     >
@@ -146,8 +164,9 @@ export function RecentWork() {
           Our Recent Work
         </h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Discover how we`&apos;ve helped businesses like yours achieve remarkable results through
-          innovative design and conversion-focused strategies.
+          {isMobile
+            ? "See how we've boosted businesses with innovative design."
+            : "Discover how we've helped businesses like yours achieve remarkable results through innovative design and conversion-focused strategies."}
         </p>
       </div>
       <div className="w-full max-w-6xl mt-12 flex flex-col gap-16">

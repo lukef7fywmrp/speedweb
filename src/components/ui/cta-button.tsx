@@ -32,7 +32,7 @@ export function CTAButton({
       size="lg"
       variant="default"
       className={cn(
-        "h-14 text-base font-semibold hover:scale-105 transition duration-300 group bg-primary text-gray-900 hover:bg-primary/90",
+        "h-14 text-base font-semibold hover:scale-105 transition duration-300 group bg-gradient-to-r from-[#ff8c00] to-[#ff7f00] text-black hover:from-[#ff7300] hover:to-[#ff6600] shadow-lg shadow-[#ff7f00]/30",
         className,
       )}
       onClick={onClick}
