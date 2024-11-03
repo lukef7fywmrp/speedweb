@@ -91,7 +91,9 @@ export function ConversionOptimizationFeatures() {
               <CardContent className="flex flex-col gap-6 p-8 text-center items-center h-full">
                 <div className="w-12 h-12 flex items-center justify-center">
                   <Player
-                    ref={(el) => (playerRefs.current[index] = el)}
+                    ref={(el) => {
+                      playerRefs.current[index] = el;
+                    }}
                     src={feature.iconSrc}
                     className="w-12 h-12"
                     loop={false}

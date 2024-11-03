@@ -204,7 +204,7 @@ export function Pricing() {
                     <DialogHeader>
                       <DialogTitle>Choose Payment Method</DialogTitle>
                       <DialogDescription>
-                        Select your preferred payment method. We'll schedule a call to provide
+                        Select your preferred payment method. We&apos;ll schedule a call to provide
                         payment details.
                       </DialogDescription>
                     </DialogHeader>
