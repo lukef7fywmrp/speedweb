@@ -15,63 +15,37 @@ interface WorkItem {
   challenge: string;
   solution: string;
   results: string;
+  projectUrl: string;
 }
 
 const recentWork: WorkItem[] = [
   {
-    title: "Streamline: Task Management",
+    title: "NVIDIA Website Redesign Concept",
     description:
-      "Innovative landing page design that boosted conversions by 150%. Our team crafted a sleek, user-friendly interface that simplified complex task management processes, resulting in increased user engagement and productivity.",
-    shortDescription: "Landing page redesign boosted conversions by 150%.",
-    imageUrl: "/images/Nvidia.jpeg",
-    challenge: "Low conversion rates and complex UI",
-    solution: "Redesigned landing page with intuitive flow",
-    results: "150% conversion increase, better engagement",
+      "Created a conceptual redesign of NVIDIA's AI platform website, focusing on improved user experience and technical content presentation. This concept project demonstrates our approach to handling complex technical information through intuitive navigation and interactive demonstrations.",
+    shortDescription: "UI/UX concept redesign for NVIDIA's AI platform.",
+    imageUrl: "/images/nvidia/hero-banner.png",
+    challenge: "Simplifying complex technical content while maintaining visual appeal",
+    solution: "Conceptual redesign with focus on user experience and clarity",
+    results: "Showcase of modern design principles for technical platforms",
+    projectUrl: "https://nvidia-phi.vercel.app/",
   },
   {
-    title: "FashionFusion: E-commerce Revamp",
+    title: "Al Jamal Al Sheyaka Beauty Salon",
     description:
-      "E-commerce redesign that increased sales by 200% in 3 months. We completely overhauled the user experience, implemented advanced product recommendation algorithms, and optimized the checkout process to drive unprecedented growth.",
-    shortDescription: "E-commerce redesign increased sales by 200% in 3 months.",
-    imageUrl: "/images/Nvidia.jpeg",
-    challenge: "Stagnant sales and poor UX",
-    solution: "UX overhaul and recommendation system",
-    results: "200% sales increase in 3 months",
-  },
-  {
-    title: "DataViz Pro: Analytics Dashboard",
-    description:
-      "SaaS dashboard that improved user engagement by 80%. Our team developed an intuitive, visually striking dashboard that transformed complex data into actionable insights, empowering businesses to make data-driven decisions with ease.",
-    shortDescription: "SaaS dashboard improved user engagement by 80%.",
-    imageUrl: "/images/Nvidia.jpeg",
-    challenge: "Complex data and low engagement",
-    solution: "Intuitive, visual dashboard design",
-    results: "80% engagement improvement",
-  },
-  {
-    title: "HealthTrack: Wellness App",
-    description:
-      "Mobile app design that increased user retention by 50%. We created a comprehensive health tracking solution with personalized insights, seamless integration with wearables, and an engaging user interface that kept users coming back.",
-    shortDescription: "Health app design increased retention by 50%.",
-    imageUrl: "/images/Nvidia.jpeg",
-    challenge: "Low user retention in health app",
-    solution: "Personalized insights and wearable integration",
-    results: "50% increase in user retention",
-  },
-  {
-    title: "EcoSmart: Sustainable Branding",
-    description:
-      "Branding overhaul that led to 100% increase in brand recognition. Our team developed a cohesive brand identity that resonated with environmentally conscious consumers, including a striking logo, eco-friendly packaging designs, and a compelling brand story.",
-    shortDescription: "Branding overhaul doubled brand recognition.",
-    imageUrl: "/images/Nvidia.jpeg",
-    challenge: "Low brand recognition in eco-market",
-    solution: "Comprehensive eco-friendly branding",
-    results: "100% increase in brand recognition",
+      "Created an elegant, user-friendly website for a premium beauty salon in Sharjah, featuring WhatsApp integration for appointments, service showcase, and customer testimonials. The design emphasizes luxury and professionalism while maintaining accessibility for diverse clientele.",
+    shortDescription: "Premium salon website with WhatsApp booking.",
+    imageUrl: "/images/salon/hero-banner.png",
+    challenge: "Balancing luxury aesthetics with simple booking process",
+    solution: "Intuitive UI with WhatsApp integration for direct appointments",
+    results: "Streamlined client communication and booking process",
+    projectUrl: "https://al-jamal-al-sheyaka.vercel.app",
   },
 ];
 
 function WorkCard({ item }: { item: WorkItem }) {
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <Card className="h-full shadow-lg overflow-hidden group relative">
@@ -81,30 +55,65 @@ function WorkCard({ item }: { item: WorkItem }) {
             src={item.imageUrl}
             alt={item.title}
             fill
-            className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+            className={`object-cover ${!isMobile && "md:transition-transform md:duration-500 md:ease-in-out md:group-hover:scale-105"}`}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {!isMobile && (
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          )}
         </div>
-        <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out">
-          <h3 className="text-xl font-semibold mb-2 text-white">{item.title}</h3>
-          <div className="text-sm text-gray-200 mb-4">
-            <p>
-              <strong>Challenge:</strong> {item.challenge}
-            </p>
-            <p>
-              <strong>Solution:</strong> {item.solution}
-            </p>
-            <p>
-              <strong>Results:</strong> {item.results}
-            </p>
+        {!isMobile && (
+          <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out">
+            <h3 className="text-xl font-semibold mb-2 text-white">{item.title}</h3>
+            <div className="text-sm text-gray-200 mb-4">
+              <p>
+                <strong>Challenge:</strong> {item.challenge}
+              </p>
+              <p>
+                <strong>Solution:</strong> {item.solution}
+              </p>
+              <p>
+                <strong>Results:</strong> {item.results}
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              className="text-white border-white hover:bg-white hover:text-black transition-colors duration-300"
+              asChild
+            >
+              <a href={item.projectUrl} target="_blank" rel="noopener noreferrer">
+                {isMobile ? "View" : "View Project"}
+              </a>
+            </Button>
           </div>
-          <Button
-            variant="outline"
-            className="text-white border-white hover:bg-white hover:text-black transition-colors duration-300"
-          >
-            {isMobile ? "View" : "View Project"}
-          </Button>
-        </div>
+        )}
+        {isMobile && (
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium text-white truncate pr-2">{item.title}</h3>
+              <a
+                href={item.projectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-white/90 hover:text-white transition-colors group/link"
+              >
+                <span className="text-sm">View</span>
+                <svg
+                  className="w-4 h-4 transform transition-transform group-hover/link:translate-x-0.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

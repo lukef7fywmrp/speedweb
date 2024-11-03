@@ -1,19 +1,23 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Bitcoin, Building2, Check } from "lucide-react";
 import { motion, useInView } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CTAButton } from "@/components/ui/cta-button";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
 const plans = [
   {
     name: "Starter",
-    price: "$999",
+    price: {
+      crypto: "999 USDT",
+      wire: "$999",
+    },
     description: {
       desktop: "Perfect for small businesses and startups.",
       mobile: "For small businesses & startups.",
@@ -30,7 +34,10 @@ const plans = [
   },
   {
     name: "Growth",
-    price: "$2,499",
+    price: {
+      crypto: "2,499 USDT",
+      wire: "$2,499",
+    },
     description: {
       desktop: "Ideal for growing businesses seeking expansion.",
       mobile: "For growing businesses.",
@@ -49,7 +56,10 @@ const plans = [
   },
   {
     name: "Enterprise",
-    price: "Custom",
+    price: {
+      crypto: "Custom",
+      wire: "Custom",
+    },
     description: {
       desktop: "Tailored solutions for large-scale operations.",
       mobile: "For large-scale operations.",
@@ -67,10 +77,36 @@ const plans = [
   },
 ];
 
+interface PaymentMethod {
+  icon: React.ReactNode;
+  name: string;
+  description: string;
+}
+
+const paymentMethods: PaymentMethod[] = [
+  {
+    icon: <Bitcoin className="w-6 h-6" />,
+    name: "Cryptocurrency",
+    description: "Pay with BTC, ETH, or USDT",
+  },
+  {
+    icon: <Building2 className="w-6 h-6" />,
+    name: "Wire Transfer",
+    description: "Traditional bank transfer",
+  },
+];
+
 export function Pricing() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<(typeof plans)[0] | null>(null);
+
+  const handlePlanSelect = (plan: (typeof plans)[0]) => {
+    setSelectedPlan(plan);
+    setShowPaymentDialog(true);
+  };
 
   useEffect(() => {
     (async function () {
@@ -136,11 +172,14 @@ export function Pricing() {
                 </div>
                 <div className="mb-6">
                   <span className="font-heading text-3xl sm:text-4xl font-semibold text-foreground">
-                    {plan.price}
+                    {plan.price.wire}
                   </span>
                   {plan.name !== "Enterprise" && (
                     <span className="text-sm sm:text-base text-muted-foreground">/project</span>
                   )}
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {plan.name !== "Enterprise" && `or ${plan.price.crypto}`}
+                  </div>
                 </div>
                 <ul className="space-y-3 mb-8 flex-grow">
                   {plan.features.map((feature, i) => (
@@ -155,10 +194,43 @@ export function Pricing() {
                   className={`w-full justify-center ${
                     plan.isBestValue ? "bg-primary text-background hover:bg-primary/90" : ""
                   }`}
-                  onClick={() => openCalModal(plan.calLink)}
+                  onClick={() => handlePlanSelect(plan)}
                 >
-                  {plan.name === "Enterprise" ? "Contact Us" : "Get Started"}
+                  View Payment Options
                 </CTAButton>
+
+                <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Choose Payment Method</DialogTitle>
+                      <DialogDescription>
+                        Select your preferred payment method. We'll schedule a call to provide
+                        payment details.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4">
+                      {paymentMethods.map((method) => (
+                        <Button
+                          key={method.name}
+                          variant="outline"
+                          className="flex items-center justify-start gap-4 p-4 h-auto"
+                          onClick={() => {
+                            setShowPaymentDialog(false);
+                            openCalModal(selectedPlan?.calLink || "");
+                          }}
+                        >
+                          {method.icon}
+                          <div className="text-left">
+                            <div className="font-semibold">{method.name}</div>
+                            <div className="text-sm text-muted-foreground">
+                              {method.description}
+                            </div>
+                          </div>
+                        </Button>
+                      ))}
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </CardContent>
             </Card>
           </motion.div>
