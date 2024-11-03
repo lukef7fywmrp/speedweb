@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter, Instrument_Sans } from "next/font/google";
 
 import { cn } from "@/lib/utils";
+import { siteConfig } from "@/lib/constants";
 
 const fontSans = Inter({
   variable: "--font-sans",
@@ -23,13 +24,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Speedweb | High-Converting Landing Pages",
     description: "Boost your sales with psychology-driven, conversion-focused landing pages.",
-    url: "https://speedweb.vercel.app",
-    siteName: "Speedweb",
+    url: siteConfig.url,
+    siteName: siteConfig.name,
     images: [
       {
-        url: "https://speedweb.vercel.app/og-image.jpg",
+        url: siteConfig.ogImage.default,
         width: 1200,
         height: 630,
+        alt: "Speedweb - High Converting Landing Pages",
       },
     ],
     locale: "en_US",
@@ -39,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Speedweb | High-Converting Landing Pages",
     description: "Boost your sales with psychology-driven, conversion-focused landing pages.",
-    images: ["https://speedweb.vercel.app/twitter-image.jpg"],
+    images: [siteConfig.ogImage.twitter],
   },
 };
 
