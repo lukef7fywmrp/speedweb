@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 import { CTAButton } from "@/components/ui/cta-button";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
+import { useCalendly } from "@/lib/hooks/useCalendly";
 
 const testimonials = [
   {
@@ -27,7 +28,7 @@ const testimonials = [
     id: 2,
     content: {
       desktop:
-        "The team&apos;s expertise in performance optimization cut our load times in half. Our customers love the seamless experience!",
+        "The team's expertise in performance optimization cut our load times in half. Our customers love the seamless experience!",
       mobile: "Speedweb halved our load times. Customers love it!",
     },
     author: "Emily Chen",
@@ -41,8 +42,8 @@ const testimonials = [
     id: 3,
     content: {
       desktop:
-        "Speedweb&apos;s tailored solutions helped us stand out in a crowded market. We&apos;ve seen a 200% increase in user engagement.",
-      mobile: "Speedweb&apos;s solutions increased our engagement by 200%!",
+        "Speedweb's tailored solutions helped us stand out in a crowded market. We've seen a 200% increase in user engagement.",
+      mobile: "Speedweb's solutions increased our engagement by 200%!",
     },
     author: "Michael Johnson",
     role: "Marketing Director, BrandBoost",
@@ -59,6 +60,12 @@ export function Testimonials() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const [mounted, setMounted] = useState(false);
+  const { openCalModal } = useCalendly();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (autoplay) {
@@ -119,11 +126,13 @@ export function Testimonials() {
                   className="flex justify-between items-center mb-6"
                 >
                   <Quote className="text-primary w-12 h-12" />
-                  <div className="flex items-center">
-                    {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
+                  {mounted && (
+                    <div className="flex items-center">
+                      {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                  )}
                 </motion.div>
                 <motion.p
                   initial={{ y: 20, opacity: 0 }}
@@ -177,7 +186,7 @@ export function Testimonials() {
                     <div className="ml-auto w-20 h-10 relative">
                       <Image
                         src={testimonials[currentIndex].companyLogo}
-                        alt={`${testimonials[currentIndex].author}&apos;s company logo`}
+                        alt={`${testimonials[currentIndex].author}'s company logo`}
                         fill
                         className="object-contain"
                       />
@@ -232,7 +241,9 @@ export function Testimonials() {
         <p className="text-muted-foreground mb-4">
           {isMobile ? "Join 500+ happy customers" : "Join 500+ satisfied customers worldwide"}
         </p>
-        <CTAButton href="#">{isMobile ? "Start Now" : "Start Your Conversion Journey"}</CTAButton>
+        <CTAButton href="#" onClick={() => openCalModal("speedweb/30min")}>
+          {isMobile ? "Start Now" : "Start Your Conversion Journey"}
+        </CTAButton>
       </motion.div>
     </section>
   );

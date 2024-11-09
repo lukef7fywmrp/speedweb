@@ -11,7 +11,12 @@ const socialIcons = [
   { id: 1, title: "Meta (Facebook)", Icon: SiMeta, url: "https://facebook.com" },
   { id: 2, title: "X (Twitter)", Icon: FaXTwitter, url: "https://x.com" },
   { id: 3, title: "LinkedIn", Icon: FaLinkedin, url: "https://linkedin.com" },
-  { id: 4, title: "Instagram", Icon: FaInstagram, url: "https://instagram.com" },
+  {
+    id: 4,
+    title: "Instagram",
+    Icon: FaInstagram,
+    url: "https://www.instagram.com/speedwebofficial/",
+  },
 ];
 
 export function Footer() {

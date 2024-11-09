@@ -94,7 +94,11 @@ export function Header() {
       <div className="hidden items-center gap-2 md:flex flex-1 justify-end">
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button asChild className="text-black group">
-            <Link href="#" className="cursor-pointer flex items-center">
+            <Link
+              href="#pricing"
+              className="cursor-pointer flex items-center"
+              onClick={(e) => smoothScroll("pricing")(e)}
+            >
               Get Started
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
@@ -149,8 +153,12 @@ export function Header() {
                 onKeyDown={(e) => handleMenuItemKeyDown(e, navItems.length)}
               >
                 <Link
-                  href="#"
+                  href="#pricing"
                   className="cursor-pointer flex items-center justify-center w-full h-full"
+                  onClick={(e) => {
+                    smoothScroll("pricing")(e);
+                    setIsOpen(false);
+                  }}
                 >
                   Get Started
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />

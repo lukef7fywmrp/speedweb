@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { BarChart, Users, Target, TrendingUp } from "lucide-react";
 import { CTAButton } from "@/components/ui/cta-button";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
+import { useCalendly } from "@/lib/hooks/useCalendly";
 
 export function CtaSection() {
   const sectionRef = useRef(null);
@@ -17,6 +18,7 @@ export function CtaSection() {
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
   const rotateReverse = useTransform(scrollYProgress, [0, 1], [360, 0]);
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const { openCalModal } = useCalendly();
 
   const ctaItems = [
     {
@@ -78,6 +80,7 @@ export function CtaSection() {
             <CTAButton
               href="#"
               className="text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={() => openCalModal("speedweb/30min")}
             >
               {isMobile ? "Talk Strategy" : "Let's Talk Strategy"}
             </CTAButton>

@@ -37,6 +37,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+    other: {
+      rel: "apple-touch-icon",
+      url: "/favicon.svg",
+    },
+  },
   twitter: {
     card: "summary_large_image",
     title: "Speedweb | High-Converting Landing Pages",

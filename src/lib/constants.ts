@@ -1,6 +1,6 @@
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL ||
-  (process.env.NODE_ENV === "production" ? "https://speedweb.vercel.app" : "http://localhost:3000");
+  (process.env.NODE_ENV === "production" ? "https://withspeedweb.com" : "http://localhost:3000");
 
 export const siteConfig = {
   name: "Speedweb",

@@ -1,13 +1,14 @@
 "use client";
 
-import { Bitcoin, Building2, Check } from "lucide-react";
+import { getCalApi } from "@calcom/embed-react";
 import { motion, useInView } from "framer-motion";
+import { Bitcoin, Building2, Check } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import Cal, { getCalApi } from "@calcom/embed-react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { CTAButton } from "@/components/ui/cta-button";
+import { useCalendly } from "@/lib/hooks/useCalendly";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
@@ -15,8 +16,14 @@ const plans = [
   {
     name: "Starter",
     price: {
-      crypto: "999 USDT",
-      wire: "$999",
+      crypto: {
+        original: "1,499 USDT",
+        discounted: "999 USDT",
+      },
+      wire: {
+        original: "$1,499",
+        discounted: "$999",
+      },
     },
     description: {
       desktop: "Perfect for small businesses and startups.",
@@ -30,13 +37,19 @@ const plans = [
       "30-Day Support",
       "1 Round of Revisions",
     ],
-    calLink: "ali-codes-daubbp/starter",
+    calLink: "speedweb/15min",
   },
   {
     name: "Growth",
     price: {
-      crypto: "2,499 USDT",
-      wire: "$2,499",
+      crypto: {
+        original: "3,499 USDT",
+        discounted: "2,499 USDT",
+      },
+      wire: {
+        original: "$3,499",
+        discounted: "$2,499",
+      },
     },
     description: {
       desktop: "Ideal for growing businesses seeking expansion.",
@@ -52,13 +65,19 @@ const plans = [
       "Priority Support",
     ],
     isBestValue: true,
-    calLink: "your-cal-link/growth-consultation",
+    calLink: "speedweb/30min",
   },
   {
     name: "Enterprise",
     price: {
-      crypto: "Custom",
-      wire: "Custom",
+      crypto: {
+        original: "Custom",
+        discounted: "Custom",
+      },
+      wire: {
+        original: "Custom",
+        discounted: "Custom",
+      },
     },
     description: {
       desktop: "Tailored solutions for large-scale operations.",
@@ -73,7 +92,7 @@ const plans = [
       "Unlimited Revisions",
       "24/7 Priority Support",
     ],
-    calLink: "ali-codes-daubbp/enterprise",
+    calLink: "speedweb/30min",
   },
 ];
 
@@ -102,6 +121,7 @@ export function Pricing() {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<(typeof plans)[0] | null>(null);
+  const { openCalModal } = useCalendly();
 
   const handlePlanSelect = (plan: (typeof plans)[0]) => {
     setSelectedPlan(plan);
@@ -119,12 +139,16 @@ export function Pricing() {
     })();
   }, []);
 
-  const openCalModal = (calLink: string) => {
-    (async function () {
-      const cal = await getCalApi();
-      cal("modal", { calLink });
-    })();
-  };
+  function calculateDiscount(original: string, discounted: string): string {
+    if (original === "Custom" || discounted === "Custom") return "";
+
+    const originalPrice = parseInt(original.replace(/[^0-9]/g, ""));
+    const discountedPrice = parseInt(discounted.replace(/[^0-9]/g, ""));
+    const savings = originalPrice - discountedPrice;
+    const percentage = Math.round((savings / originalPrice) * 100);
+
+    return `${percentage}%`;
+  }
 
   return (
     <section
@@ -163,24 +187,38 @@ export function Pricing() {
               )}
               <CardContent className="flex flex-col h-full p-6 sm:p-8">
                 <div className="mb-6">
-                  <h3 className="font-heading text-xl sm:text-2xl font-semibold mb-2 text-foreground">
-                    {plan.name}
-                  </h3>
-                  <p className="text-sm sm:text-base text-muted-foreground">
-                    {isMobile ? plan.description.mobile : plan.description.desktop}
-                  </p>
-                </div>
-                <div className="mb-6">
-                  <span className="font-heading text-3xl sm:text-4xl font-semibold text-foreground">
-                    {plan.price.wire}
-                  </span>
                   {plan.name !== "Enterprise" && (
-                    <span className="text-sm sm:text-base text-muted-foreground">/project</span>
+                    <div className="flex flex-col">
+                      <span className="text-sm text-muted-foreground line-through">
+                        {plan.price.wire.original}
+                      </span>
+                      <div className="flex items-baseline gap-2">
+                        <span className="font-heading text-3xl sm:text-4xl font-semibold text-foreground">
+                          {plan.price.wire.discounted}
+                        </span>
+                        <span className="text-sm sm:text-base text-muted-foreground">/project</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground mt-1">
+                        or <span className="line-through">{plan.price.crypto.original}</span>
+                        <span className="text-primary font-semibold ml-1">
+                          {plan.price.crypto.discounted}
+                        </span>
+                      </div>
+                      <div className="mt-2">
+                        <span className="inline-block bg-primary/10 text-primary text-sm px-2 py-1 rounded">
+                          Save{" "}
+                          {calculateDiscount(plan.price.wire.original, plan.price.wire.discounted)}
+                        </span>
+                      </div>
+                    </div>
                   )}
-                  <div className="text-sm text-muted-foreground mt-1">
-                    {plan.name !== "Enterprise" && `or ${plan.price.crypto}`}
-                  </div>
+                  {plan.name === "Enterprise" && (
+                    <span className="font-heading text-3xl sm:text-4xl font-semibold text-foreground">
+                      Custom
+                    </span>
+                  )}
                 </div>
+
                 <ul className="space-y-3 mb-8 flex-grow">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-3">
@@ -250,7 +288,7 @@ export function Pricing() {
         <Button
           variant="outline"
           size="lg"
-          onClick={() => openCalModal("ali-codes-daubbp/free-discovery-call")}
+          onClick={() => openCalModal("speedweb/15min")}
           className="font-semibold"
         >
           {isMobile ? "Free Discovery Call" : "Schedule a Free Discovery Call"}

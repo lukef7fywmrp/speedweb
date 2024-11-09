@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CTAButton } from "@/components/ui/cta-button";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
+import { useCalendly } from "@/lib/hooks/useCalendly";
 
 const clientTypes = [
   {
@@ -47,7 +48,7 @@ export function TailoredSolutionsSection() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
   const isMobile = useMediaQuery("(max-width: 640px)");
-
+  const { openCalModal } = useCalendly();
   return (
     <section
       id="solutions"
@@ -136,7 +137,7 @@ export function TailoredSolutionsSection() {
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, delay: 0.8 }}
       >
-        <CTAButton href="#">
+        <CTAButton href="#" onClick={() => openCalModal("speedweb/30min")}>
           {isMobile
             ? `Boost ${clientTypes[activeIndex].title}`
             : `Elevate Your ${clientTypes[activeIndex].title} Conversions`}

@@ -1,13 +1,12 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { Player } from "@lottiefiles/react-lottie-player";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CTAButton } from "@/components/ui/cta-button";
+import { useCalendly } from "@/lib/hooks/useCalendly";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
-
+import { Player } from "@lottiefiles/react-lottie-player";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 const features = [
   {
     iconSrc: "/lottie/data-driven-optimization.json",
@@ -41,6 +40,7 @@ export function ConversionOptimizationFeatures() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const { openCalModal } = useCalendly();
 
   useEffect(() => {
     playerRefs.current = playerRefs.current.slice(0, features.length);
@@ -123,7 +123,7 @@ export function ConversionOptimizationFeatures() {
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.6, delay: 0.8 }}
       >
-        <CTAButton href="#">
+        <CTAButton href="#" onClick={() => openCalModal("speedweb/30min")}>
           {isMobile ? "Boost Conversions" : "Boost Your Conversions Now"}
         </CTAButton>
       </motion.div>

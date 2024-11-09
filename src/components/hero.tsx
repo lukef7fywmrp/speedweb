@@ -1,17 +1,18 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight, Eye, Star } from "lucide-react";
 import { motion } from "framer-motion";
-import Image from "next/image";
+import { ArrowRight, Code, Eye, Users, Zap } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { Spotlight } from "@/components/ui/spotlight";
 import { CTAButton } from "@/components/ui/cta-button";
+import { Spotlight } from "@/components/ui/spotlight";
+import { useCalendly } from "@/lib/hooks/useCalendly";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 
 export function Hero() {
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const { openCalModal } = useCalendly();
 
   return (
     <section
@@ -45,11 +46,12 @@ export function Hero() {
       >
         <CTAButton
           href="#"
+          onClick={() => openCalModal("speedweb/15min")}
           icon={
             <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           }
         >
-          {isMobile ? "Free Audit" : "Get Your Free Conversion Audit"}
+          {isMobile ? "Book Free Call" : "Book Your Free Growth Call"}
         </CTAButton>
         <motion.div
           initial={{ scale: 1 }}
@@ -64,7 +66,7 @@ export function Hero() {
             variant="outline"
             className="w-full h-full text-base font-semibold hover:bg-secondary/10 transition duration-300 text-foreground hover:text-foreground group border-2 border-transparent bg-background relative z-10 m-[1px]"
           >
-            <Link href="#" className="flex items-center justify-center">
+            <Link href="#testimonials" className="flex items-center justify-center">
               {isMobile ? "Success Stories" : "See Success Stories"}
               <Eye className="ml-2 h-4 w-4" />
             </Link>
@@ -75,38 +77,34 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.8 }}
-        className="flex flex-col items-center justify-center mt-8 space-y-4 px-4 sm:px-0 sm:flex-row sm:space-y-0 sm:space-x-6"
+        className="flex flex-col items-center justify-center mt-8 space-y-4 px-4 sm:px-0"
       >
-        <div className="flex flex-col items-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3">
-          <div className="flex items-center">
-            <Image
-              src="https://cdn.trustpilot.net/brand-assets/1.1.0/logo-white.svg"
-              alt="Trustpilot"
-              width={100}
-              height={24}
-              className="brightness-150 w-24 sm:w-[120px]"
-            />
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-12">
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-full bg-primary/10">
+              <Zap className="w-4 h-4 text-primary" />
+            </div>
+            <span className="text-sm font-medium">
+              {isMobile ? "Fast Results" : "Results in 30 Days"}
+            </span>
           </div>
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
-            ))}
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-full bg-primary/10">
+              <Users className="w-4 h-4 text-primary" />
+            </div>
+            <span className="text-sm font-medium">
+              {isMobile ? "1:1 Support" : "Dedicated 1:1 Support"}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-full bg-primary/10">
+              <Code className="w-4 h-4 text-primary" />
+            </div>
+            <span className="text-sm font-medium">
+              {isMobile ? "Custom Code" : "Custom-Built Solutions"}
+            </span>
           </div>
         </div>
-        <span className="text-xs sm:text-sm font-medium text-muted-foreground text-center sm:text-left">
-          {isMobile ? (
-            <>
-              <span className="text-primary font-semibold">500+</span> happy customers
-              <br />
-              Avg. rating: <span className="text-primary font-semibold">4.9/5</span>
-            </>
-          ) : (
-            <>
-              Trusted by <span className="text-primary font-semibold">500+</span> happy customers
-              with an average rating of <span className="text-primary font-semibold">4.9/5</span>
-            </>
-          )}
-        </span>
       </motion.div>
       <motion.p
         initial={{ opacity: 0 }}

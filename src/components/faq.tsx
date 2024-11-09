@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { CTAButton } from "@/components/ui/cta-button";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
+import { useCalendly } from "@/lib/hooks/useCalendly";
 
 const faqs = [
   {
@@ -71,6 +72,7 @@ export function Faq() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const { openCalModal } = useCalendly();
 
   return (
     <section
@@ -135,7 +137,9 @@ export function Faq() {
             ? "More questions? We're here to help!"
             : "Still have questions about our code or services? We're here to help!"}
         </p>
-        <CTAButton href="#">Contact Our Dev Team</CTAButton>
+        <CTAButton href="#" onClick={() => openCalModal("speedweb/30min")}>
+          Contact Our Dev Team
+        </CTAButton>
       </motion.div>
     </section>
   );
