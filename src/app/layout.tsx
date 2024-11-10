@@ -52,6 +52,9 @@ export const metadata: Metadata = {
     description: "Boost your sales with psychology-driven, conversion-focused landing pages.",
     images: [siteConfig.ogImage.twitter],
   },
+  verification: {
+    google: "7jOURQU_OUwDcuG9P7HzNX4LrQNvh-Qn8DGiWm9D7b0",
+  },
 };
 
 export default function RootLayout({
