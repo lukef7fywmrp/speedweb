@@ -17,6 +17,21 @@ const fontHeading = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://withspeedweb.com"),
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   title: "Speedweb | High-Converting Landing Pages",
   description:
     "Boost your sales with psychology-driven, conversion-focused landing pages. Transform visitors into customers with our expert web design services.",
