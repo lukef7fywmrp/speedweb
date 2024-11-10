@@ -2,7 +2,7 @@
 
 import { getCalApi } from "@calcom/embed-react";
 import { motion, useInView } from "framer-motion";
-import { Bitcoin, Building2, Check } from "lucide-react";
+import { Bitcoin, Building2, Check, Phone, Copy } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,17 @@ import { CTAButton } from "@/components/ui/cta-button";
 import { useCalendly } from "@/lib/hooks/useCalendly";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import Image from "next/image";
 
 const plans = [
   {
@@ -100,18 +111,27 @@ interface PaymentMethod {
   icon: React.ReactNode;
   name: string;
   description: string;
+  type: "call" | "crypto" | "wire";
 }
 
 const paymentMethods: PaymentMethod[] = [
   {
+    icon: <Phone className="w-6 h-6" />,
+    name: "Book a Call",
+    description: "Discuss with an expert and pay during the call",
+    type: "call",
+  },
+  {
     icon: <Bitcoin className="w-6 h-6" />,
     name: "Cryptocurrency",
     description: "Pay with BTC, ETH, or USDT",
+    type: "crypto",
   },
   {
     icon: <Building2 className="w-6 h-6" />,
     name: "Wire Transfer",
     description: "Traditional bank transfer",
+    type: "wire",
   },
 ];
 
@@ -121,11 +141,42 @@ export function Pricing() {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<(typeof plans)[0] | null>(null);
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState<string>("");
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [openPaymentDrawer, setOpenPaymentDrawer] = useState(false);
+  const [hasCopied, setHasCopied] = useState(false);
   const { openCalModal } = useCalendly();
+
+  const handleCopy = async (text: string) => {
+    await navigator.clipboard.writeText(text);
+    setHasCopied(true);
+    setTimeout(() => setHasCopied(false), 2000);
+  };
+
+  const handlePaymentMethodSelect = (methodType: string) => {
+    setSelectedMethod(methodType);
+
+    if (methodType === "call") {
+      setOpenDrawer(false);
+      openCalModal(selectedPlan?.calLink || "");
+    } else {
+      if (isMobile) {
+        setOpenDrawer(false);
+        setOpenPaymentDrawer(true);
+      } else {
+        setShowPaymentDetails(true);
+      }
+    }
+  };
 
   const handlePlanSelect = (plan: (typeof plans)[0]) => {
     setSelectedPlan(plan);
-    setShowPaymentDialog(true);
+    if (isMobile) {
+      setOpenDrawer(true);
+    } else {
+      setShowPaymentDialog(true);
+    }
   };
 
   useEffect(() => {
@@ -237,38 +288,211 @@ export function Pricing() {
                   View Payment Options
                 </CTAButton>
 
-                <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
-                  <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                      <DialogTitle>Choose Payment Method</DialogTitle>
-                      <DialogDescription>
-                        Select your preferred payment method. We&apos;ll schedule a call to provide
-                        payment details.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4">
-                      {paymentMethods.map((method) => (
-                        <Button
-                          key={method.name}
-                          variant="outline"
-                          className="flex items-center justify-start gap-4 p-4 h-auto"
-                          onClick={() => {
-                            setShowPaymentDialog(false);
-                            openCalModal(selectedPlan?.calLink || "");
-                          }}
-                        >
-                          {method.icon}
-                          <div className="text-left">
-                            <div className="font-semibold">{method.name}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {method.description}
+                {!isMobile ? (
+                  <>
+                    <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Choose Payment Method</DialogTitle>
+                          <DialogDescription>
+                            Select your preferred payment method below.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4">
+                          {paymentMethods.map((method) => (
+                            <Button
+                              key={method.name}
+                              variant="outline"
+                              className="flex items-center justify-start gap-4 p-4 h-auto transition-all duration-200 hover:bg-primary/5 hover:scale-[1.02] hover:border-primary/20 hover:text-foreground [&>*]:hover:text-foreground"
+                              onClick={() => handlePaymentMethodSelect(method.type)}
+                            >
+                              {method.icon}
+                              <div className="text-left">
+                                <div className="font-semibold">{method.name}</div>
+                                <div className="text-sm text-muted-foreground">
+                                  {method.description}
+                                </div>
+                              </div>
+                            </Button>
+                          ))}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+
+                    <Dialog open={showPaymentDetails} onOpenChange={setShowPaymentDetails}>
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Payment Details</DialogTitle>
+                          <DialogDescription>
+                            {selectedMethod === "crypto"
+                              ? "Scan the QR code or copy the wallet address below to make your payment."
+                              : "Use the bank details below to make your wire transfer."}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                          {selectedMethod === "crypto" ? (
+                            <div className="text-center space-y-4">
+                              <Image
+                                src="/images/crypto.png"
+                                alt="Crypto payment QR code"
+                                width={192}
+                                height={192}
+                                className="mx-auto rounded-lg"
+                              />
+                              <div className="text-sm text-muted-foreground space-y-2 mb-4">
+                                <p className="mb-2">Wallet Address:</p>
+                                <div className="relative flex items-center">
+                                  <code className="flex-1 p-2 pr-10 bg-muted rounded select-all font-mono text-xs">
+                                    THsLgX1syZ8qRZXwPVo5SZoLc2BcsgCM9W
+                                  </code>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="absolute right-1 h-7 w-7 p-0"
+                                    onClick={() => handleCopy("THsLgX1syZ8qRZXwPVo5SZoLc2BcsgCM9W")}
+                                  >
+                                    {hasCopied ? (
+                                      <Check className="h-3 w-3 text-green-500" />
+                                    ) : (
+                                      <Copy className="h-3 w-3" />
+                                    )}
+                                    <span className="sr-only">Copy wallet address</span>
+                                  </Button>
+                                </div>
+                              </div>
                             </div>
+                          ) : (
+                            <div className="space-y-2">
+                              <p>
+                                <strong>Bank Name:</strong> Your Bank
+                              </p>
+                              <p>
+                                <strong>Account Number:</strong> XXXX-XXXX-XXXX
+                              </p>
+                              <p>
+                                <strong>SWIFT/BIC:</strong> XXXXXXXX
+                              </p>
+                              <p>
+                                <strong>Account Name:</strong> Your Company Name
+                              </p>
+                            </div>
+                          )}
+                          <div className="border-t pt-4">
+                            <p className="text-sm text-muted-foreground">
+                              After completing your payment, please contact us with your payment
+                              receipt at{" "}
+                              <a href="mailto:Speedweborg@gmail.com" className="text-primary">
+                                Speedweborg@gmail.com
+                              </a>
+                            </p>
                           </div>
-                        </Button>
-                      ))}
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </>
+                ) : (
+                  <>
+                    <Drawer open={openDrawer} onOpenChange={setOpenDrawer}>
+                      <DrawerContent>
+                        <DrawerHeader>
+                          <DrawerTitle>Choose Payment Method</DrawerTitle>
+                          <DrawerDescription>
+                            Select your preferred payment method below.
+                          </DrawerDescription>
+                        </DrawerHeader>
+                        <div className="grid gap-4 p-4">
+                          {paymentMethods.map((method) => (
+                            <Button
+                              key={method.name}
+                              variant="outline"
+                              className="flex items-center justify-start gap-4 p-4 h-auto transition-all duration-200 hover:bg-primary/5 hover:scale-[1.02] hover:border-primary/20 hover:text-foreground [&>*]:hover:text-foreground"
+                              onClick={() => handlePaymentMethodSelect(method.type)}
+                            >
+                              {method.icon}
+                              <div className="text-left">
+                                <div className="font-semibold">{method.name}</div>
+                                <div className="text-sm text-muted-foreground">
+                                  {method.description}
+                                </div>
+                              </div>
+                            </Button>
+                          ))}
+                        </div>
+                      </DrawerContent>
+                    </Drawer>
+
+                    <Drawer open={openPaymentDrawer} onOpenChange={setOpenPaymentDrawer}>
+                      <DrawerContent>
+                        <DrawerHeader>
+                          <DrawerTitle>Payment Details</DrawerTitle>
+                          <DrawerDescription>
+                            {selectedMethod === "crypto"
+                              ? "Scan the QR code or copy the wallet address below to make your payment."
+                              : "Use the bank details below to make your wire transfer."}
+                          </DrawerDescription>
+                        </DrawerHeader>
+                        <div className="space-y-4 p-4">
+                          {selectedMethod === "crypto" ? (
+                            <div className="text-center space-y-4">
+                              <Image
+                                src="/images/crypto.png"
+                                alt="Crypto payment QR code"
+                                width={192}
+                                height={192}
+                                className="mx-auto rounded-lg"
+                              />
+                              <div className="text-sm text-muted-foreground">
+                                <p className="mb-2">Wallet Address:</p>
+                                <div className="relative flex items-center">
+                                  <code className="flex-1 p-2 pr-10 bg-muted rounded select-all font-mono text-xs">
+                                    THsLgX1syZ8qRZXwPVo5SZoLc2BcsgCM9W
+                                  </code>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="absolute right-1 h-7 w-7 p-0"
+                                    onClick={() => handleCopy("THsLgX1syZ8qRZXwPVo5SZoLc2BcsgCM9W")}
+                                  >
+                                    {hasCopied ? (
+                                      <Check className="h-3 w-3 text-green-500" />
+                                    ) : (
+                                      <Copy className="h-3 w-3" />
+                                    )}
+                                    <span className="sr-only">Copy wallet address</span>
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="space-y-2">
+                              <p>
+                                <strong>Bank Name:</strong> Your Bank
+                              </p>
+                              <p>
+                                <strong>Account Number:</strong> XXXX-XXXX-XXXX
+                              </p>
+                              <p>
+                                <strong>SWIFT/BIC:</strong> XXXXXXXX
+                              </p>
+                              <p>
+                                <strong>Account Name:</strong> Your Company Name
+                              </p>
+                            </div>
+                          )}
+                          <div className="border-t pt-4">
+                            <p className="text-sm text-muted-foreground">
+                              After completing your payment, please contact us with your payment
+                              receipt at{" "}
+                              <a href="mailto:Speedweborg@gmail.com" className="text-primary">
+                                Speedweborg@gmail.com
+                              </a>
+                            </p>
+                          </div>
+                        </div>
+                      </DrawerContent>
+                    </Drawer>
+                  </>
+                )}
               </CardContent>
             </Card>
           </motion.div>

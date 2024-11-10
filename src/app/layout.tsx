@@ -70,6 +70,9 @@ export const metadata: Metadata = {
   verification: {
     google: "7jOURQU_OUwDcuG9P7HzNX4LrQNvh-Qn8DGiWm9D7b0",
   },
+  other: {
+    "social:instagram": "https://instagram.com/speedwebofficial",
+  },
 };
 
 export default function RootLayout({
