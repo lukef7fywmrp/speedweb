@@ -25,7 +25,7 @@ const plans = [
     name: "Starter",
     price: {
       original: "$2,000",
-      discounted: "$1,449",
+      discounted: "$1,499",
     },
     description: {
       desktop: "Perfect for small businesses and startups.",
@@ -206,8 +206,7 @@ export function Pricing() {
     const savings = originalPrice - discountedPrice;
     const percentage = Math.round((savings / originalPrice) * 100);
 
-    // Force specific percentages for our known prices
-    if (discountedPrice === 1449) return "25%";
+    if (discountedPrice === 1499) return "25%";
     if (discountedPrice === 3149) return "30%";
 
     return `${percentage}%`;
