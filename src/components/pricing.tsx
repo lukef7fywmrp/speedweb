@@ -2,39 +2,30 @@
 
 import { getCalApi } from "@calcom/embed-react";
 import { motion, useInView } from "framer-motion";
-import { Bitcoin, Building2, Check, Phone, Copy } from "lucide-react";
+import { Bitcoin, Building2, Check, Copy, Phone } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CTAButton } from "@/components/ui/cta-button";
-import { useCalendly } from "@/lib/hooks/useCalendly";
-import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
+import { useCalendly } from "@/lib/hooks/useCalendly";
+import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 import Image from "next/image";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
 const plans = [
   {
     name: "Starter",
     price: {
-      crypto: {
-        original: "1,499 USDT",
-        discounted: "999 USDT",
-      },
-      wire: {
-        original: "$1,499",
-        discounted: "$999",
-      },
+      original: "$2,000",
+      discounted: "$1,449",
     },
     description: {
       desktop: "Perfect for small businesses and startups.",
@@ -53,14 +44,8 @@ const plans = [
   {
     name: "Growth",
     price: {
-      crypto: {
-        original: "3,499 USDT",
-        discounted: "2,499 USDT",
-      },
-      wire: {
-        original: "$3,499",
-        discounted: "$2,499",
-      },
+      original: "$4,500",
+      discounted: "$3,149",
     },
     description: {
       desktop: "Ideal for growing businesses seeking expansion.",
@@ -81,14 +66,8 @@ const plans = [
   {
     name: "Enterprise",
     price: {
-      crypto: {
-        original: "Custom",
-        discounted: "Custom",
-      },
-      wire: {
-        original: "Custom",
-        discounted: "Custom",
-      },
+      original: "Custom",
+      discounted: "Custom",
     },
     description: {
       desktop: "Tailored solutions for large-scale operations.",
@@ -113,6 +92,34 @@ interface PaymentMethod {
   description: string;
   type: "call" | "crypto" | "wire";
 }
+
+interface CryptoOption {
+  name: string;
+  symbol: string;
+  address: string;
+  qrCode: string;
+}
+
+const cryptoOptions: CryptoOption[] = [
+  {
+    name: "Bitcoin",
+    symbol: "BTC",
+    address: "bc1qllzn5n953dvq6ffqgncw5j2mt6vju5m9j8uges",
+    qrCode: "/images/btc.jpg",
+  },
+  {
+    name: "Ethereum",
+    symbol: "ETH",
+    address: "0x0D8dd0e7D7987F39e780f501F6cda59fA4D45eDB",
+    qrCode: "/images/eth.jpg",
+  },
+  {
+    name: "USDT",
+    symbol: "USDT",
+    address: "TNoKSB8GcAwuo3i4SuzBsVo8VDnFqrxHAm",
+    qrCode: "/images/usdt.jpg",
+  },
+];
 
 const paymentMethods: PaymentMethod[] = [
   {
@@ -145,6 +152,7 @@ export function Pricing() {
   const [selectedMethod, setSelectedMethod] = useState<string>("");
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openPaymentDrawer, setOpenPaymentDrawer] = useState(false);
+  const [selectedCrypto, setSelectedCrypto] = useState<CryptoOption | null>(null);
   const [hasCopied, setHasCopied] = useState(false);
   const { openCalModal } = useCalendly();
 
@@ -198,8 +206,73 @@ export function Pricing() {
     const savings = originalPrice - discountedPrice;
     const percentage = Math.round((savings / originalPrice) * 100);
 
+    // Force specific percentages for our known prices
+    if (discountedPrice === 1449) return "25%";
+    if (discountedPrice === 3149) return "30%";
+
     return `${percentage}%`;
   }
+
+  const CryptoPaymentContent = () => (
+    <div className="space-y-4">
+      {!selectedCrypto ? (
+        <div className="grid gap-4">
+          {cryptoOptions.map((crypto) => (
+            <Button
+              key={crypto.symbol}
+              variant="outline"
+              className="flex items-center justify-start gap-4 p-4 h-auto transition-all duration-200 hover:bg-primary/5 hover:scale-[1.02] hover:border-primary/20 hover:text-foreground [&>*]:hover:text-foreground"
+              onClick={() => setSelectedCrypto(crypto)}
+            >
+              <div className="text-left">
+                <div className="font-semibold">Pay with {crypto.name}</div>
+                <div className="text-sm text-muted-foreground">
+                  Send {crypto.symbol} to our wallet
+                </div>
+              </div>
+            </Button>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center space-y-4">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-semibold">Pay with {selectedCrypto.name}</h3>
+            <Button variant="ghost" size="sm" onClick={() => setSelectedCrypto(null)}>
+              Back
+            </Button>
+          </div>
+          <Image
+            src={selectedCrypto.qrCode}
+            alt={`${selectedCrypto.name} payment QR code`}
+            width={192}
+            height={192}
+            className="mx-auto rounded-lg"
+          />
+          <div className="text-sm text-muted-foreground space-y-2 mb-4">
+            <p className="mb-2">Wallet Address:</p>
+            <div className="relative flex items-center">
+              <code className="flex-1 p-2 pr-10 bg-muted rounded select-all font-mono text-xs">
+                {selectedCrypto.address}
+              </code>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="absolute right-1 h-7 w-7 p-0"
+                onClick={() => handleCopy(selectedCrypto.address)}
+              >
+                {hasCopied ? (
+                  <Check className="h-3 w-3 text-green-500" />
+                ) : (
+                  <Copy className="h-3 w-3" />
+                )}
+                <span className="sr-only">Copy wallet address</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <section
@@ -241,24 +314,17 @@ export function Pricing() {
                   {plan.name !== "Enterprise" && (
                     <div className="flex flex-col">
                       <span className="text-sm text-muted-foreground line-through">
-                        {plan.price.wire.original}
+                        {plan.price.original}
                       </span>
                       <div className="flex items-baseline gap-2">
                         <span className="font-heading text-3xl sm:text-4xl font-semibold text-foreground">
-                          {plan.price.wire.discounted}
+                          {plan.price.discounted}
                         </span>
                         <span className="text-sm sm:text-base text-muted-foreground">/project</span>
                       </div>
-                      <div className="text-sm text-muted-foreground mt-1">
-                        or <span className="line-through">{plan.price.crypto.original}</span>
-                        <span className="text-primary font-semibold ml-1">
-                          {plan.price.crypto.discounted}
-                        </span>
-                      </div>
                       <div className="mt-2">
                         <span className="inline-block bg-primary/10 text-primary text-sm px-2 py-1 rounded">
-                          Save{" "}
-                          {calculateDiscount(plan.price.wire.original, plan.price.wire.discounted)}
+                          Save {calculateDiscount(plan.price.original, plan.price.discounted)}
                         </span>
                       </div>
                     </div>
@@ -325,42 +391,15 @@ export function Pricing() {
                           <DialogTitle>Payment Details</DialogTitle>
                           <DialogDescription>
                             {selectedMethod === "crypto"
-                              ? "Scan the QR code or copy the wallet address below to make your payment."
+                              ? !selectedCrypto
+                                ? "Select your preferred cryptocurrency"
+                                : "Scan the QR code or copy the wallet address below to make your payment."
                               : "Use the bank details below to make your wire transfer."}
                           </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4">
                           {selectedMethod === "crypto" ? (
-                            <div className="text-center space-y-4">
-                              <Image
-                                src="/images/crypto.png"
-                                alt="Crypto payment QR code"
-                                width={192}
-                                height={192}
-                                className="mx-auto rounded-lg"
-                              />
-                              <div className="text-sm text-muted-foreground space-y-2 mb-4">
-                                <p className="mb-2">Wallet Address:</p>
-                                <div className="relative flex items-center">
-                                  <code className="flex-1 p-2 pr-10 bg-muted rounded select-all font-mono text-xs">
-                                    THsLgX1syZ8qRZXwPVo5SZoLc2BcsgCM9W
-                                  </code>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="absolute right-1 h-7 w-7 p-0"
-                                    onClick={() => handleCopy("THsLgX1syZ8qRZXwPVo5SZoLc2BcsgCM9W")}
-                                  >
-                                    {hasCopied ? (
-                                      <Check className="h-3 w-3 text-green-500" />
-                                    ) : (
-                                      <Copy className="h-3 w-3" />
-                                    )}
-                                    <span className="sr-only">Copy wallet address</span>
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
+                            <CryptoPaymentContent />
                           ) : (
                             <div className="space-y-2">
                               <p>
@@ -427,42 +466,15 @@ export function Pricing() {
                           <DrawerTitle>Payment Details</DrawerTitle>
                           <DrawerDescription>
                             {selectedMethod === "crypto"
-                              ? "Scan the QR code or copy the wallet address below to make your payment."
+                              ? !selectedCrypto
+                                ? "Select your preferred cryptocurrency"
+                                : "Scan the QR code or copy the wallet address below to make your payment."
                               : "Use the bank details below to make your wire transfer."}
                           </DrawerDescription>
                         </DrawerHeader>
                         <div className="space-y-4 p-4">
                           {selectedMethod === "crypto" ? (
-                            <div className="text-center space-y-4">
-                              <Image
-                                src="/images/crypto.png"
-                                alt="Crypto payment QR code"
-                                width={192}
-                                height={192}
-                                className="mx-auto rounded-lg"
-                              />
-                              <div className="text-sm text-muted-foreground">
-                                <p className="mb-2">Wallet Address:</p>
-                                <div className="relative flex items-center">
-                                  <code className="flex-1 p-2 pr-10 bg-muted rounded select-all font-mono text-xs">
-                                    THsLgX1syZ8qRZXwPVo5SZoLc2BcsgCM9W
-                                  </code>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="absolute right-1 h-7 w-7 p-0"
-                                    onClick={() => handleCopy("THsLgX1syZ8qRZXwPVo5SZoLc2BcsgCM9W")}
-                                  >
-                                    {hasCopied ? (
-                                      <Check className="h-3 w-3 text-green-500" />
-                                    ) : (
-                                      <Copy className="h-3 w-3" />
-                                    )}
-                                    <span className="sr-only">Copy wallet address</span>
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
+                            <CryptoPaymentContent />
                           ) : (
                             <div className="space-y-2">
                               <p>
