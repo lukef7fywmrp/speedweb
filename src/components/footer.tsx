@@ -6,6 +6,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { RiFacebookBoxFill } from "react-icons/ri";
 import { SiMeta } from "react-icons/si";
 import { Logo } from "./logo";
+import Image from "next/image";
 
 const socialIcons = [
   { id: 1, title: "Meta (Facebook)", Icon: SiMeta, url: "https://facebook.com" },
@@ -30,11 +31,16 @@ export function Footer() {
             transition={{ duration: 0.5 }}
             className="flex items-center gap-2"
           >
-            <Logo
-              width={160}
-              height={80}
-              className="text-primary w-32 h-16 sm:w-36 sm:h-18 md:w-40 md:h-20 lg:w-44 lg:h-22"
-            />
+            <div className="flex items-center gap-2">
+              <Image
+                src="/images/rocketicon.png"
+                alt="Speedweb"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
+              <span className="text-xl font-semibold text-white">Speedweb</span>
+            </div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

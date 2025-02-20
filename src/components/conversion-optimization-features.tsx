@@ -4,9 +4,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CTAButton } from "@/components/ui/cta-button";
 import { useCalendly } from "@/lib/hooks/useCalendly";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
-import { Player } from "@lottiefiles/react-lottie-player";
 import { motion, useInView } from "framer-motion";
+import dynamic from "next/dynamic";
+import type { Player as PlayerType } from "@lottiefiles/react-lottie-player";
+import type { AnimationItem } from "lottie-web";
 import { useEffect, useRef, useState } from "react";
+
+const Player = dynamic(() => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player), {
+  ssr: false,
+});
+
 const features = [
   {
     iconSrc: "/lottie/data-driven-optimization.json",
@@ -36,7 +43,7 @@ const features = [
 
 export function ConversionOptimizationFeatures() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const playerRefs = useRef<(Player | null)[]>([]);
+  const playerRefs = useRef<(AnimationItem | null)[]>([]);
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const isMobile = useMediaQuery("(max-width: 640px)");
@@ -91,7 +98,8 @@ export function ConversionOptimizationFeatures() {
               <CardContent className="flex flex-col gap-6 p-8 text-center items-center h-full">
                 <div className="w-12 h-12 flex items-center justify-center">
                   <Player
-                    ref={(el) => {
+                    key={index}
+                    lottieRef={(el: AnimationItem | null) => {
                       playerRefs.current[index] = el;
                     }}
                     src={feature.iconSrc}

@@ -20,17 +20,12 @@ import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 import Image from "next/image";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
-const plans = [
+const pricingPlans = [
   {
     name: "Starter",
-    price: {
-      original: "$2,000",
-      discounted: "$1,499",
-    },
-    description: {
-      desktop: "Perfect for small businesses and startups.",
-      mobile: "For small businesses & startups.",
-    },
+    originalPrice: "$1,000",
+    price: "$759",
+    description: "Perfect for small businesses looking to boost their online presence.",
     features: [
       "1 High-Converting Landing Page",
       "Performance Analysis",
@@ -39,18 +34,14 @@ const plans = [
       "30-Day Support",
       "1 Round of Revisions",
     ],
-    calLink: "speedweb/15min",
+    discount: "Save 25%",
+    href: "#",
   },
   {
     name: "Growth",
-    price: {
-      original: "$4,500",
-      discounted: "$3,149",
-    },
-    description: {
-      desktop: "Ideal for growing businesses seeking expansion.",
-      mobile: "For growing businesses.",
-    },
+    originalPrice: "$1,500",
+    price: "$969",
+    description: "Ideal for growing businesses ready to scale their online impact.",
     features: [
       "3 High-Converting Landing Pages",
       "Advanced Performance Tracking",
@@ -60,19 +51,15 @@ const plans = [
       "3 Rounds of Revisions",
       "Priority Support",
     ],
-    isBestValue: true,
-    calLink: "speedweb/30min",
+    discount: "Save 30%",
+    href: "#",
+    popular: true,
   },
   {
     name: "Enterprise",
-    price: {
-      original: "Custom",
-      discounted: "Custom",
-    },
-    description: {
-      desktop: "Tailored solutions for large-scale operations.",
-      mobile: "For large-scale operations.",
-    },
+    originalPrice: "$3,990",
+    price: "$2,990",
+    description: "For enterprises needing a comprehensive conversion solution.",
     features: [
       "Unlimited Landing Pages",
       "Complete Sales Process Optimization",
@@ -82,7 +69,8 @@ const plans = [
       "Unlimited Revisions",
       "24/7 Priority Support",
     ],
-    calLink: "speedweb/30min",
+    discount: "Save 25%",
+    href: "#",
   },
 ];
 
@@ -147,7 +135,7 @@ export function Pricing() {
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<(typeof plans)[0] | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<(typeof pricingPlans)[0] | null>(null);
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<string>("");
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -167,7 +155,7 @@ export function Pricing() {
 
     if (methodType === "call") {
       setOpenDrawer(false);
-      openCalModal(selectedPlan?.calLink || "");
+      openCalModal((selectedPlan?.href || "speedweb/30min") as string);
     } else {
       if (isMobile) {
         setOpenDrawer(false);
@@ -178,7 +166,7 @@ export function Pricing() {
     }
   };
 
-  const handlePlanSelect = (plan: (typeof plans)[0]) => {
+  const handlePlanSelect = (plan: (typeof pricingPlans)[0]) => {
     setSelectedPlan(plan);
     if (isMobile) {
       setOpenDrawer(true);
@@ -199,7 +187,7 @@ export function Pricing() {
   }, []);
 
   function calculateDiscount(original: string, discounted: string): string {
-    if (original === "Custom" || discounted === "Custom") return "";
+    if (original === "Custom") return "";
 
     const originalPrice = parseInt(original.replace(/[^0-9]/g, ""));
     const discountedPrice = parseInt(discounted.replace(/[^0-9]/g, ""));
@@ -295,7 +283,7 @@ export function Pricing() {
         </p>
       </motion.div>
       <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-3 md:grid-cols-2 max-w-6xl">
-        {plans.map((plan, index) => (
+        {pricingPlans.map((plan, index) => (
           <motion.div
             key={plan.name}
             initial={{ opacity: 0, y: 20 }}
@@ -303,50 +291,48 @@ export function Pricing() {
             transition={{ duration: 0.6, delay: index * 0.1 }}
           >
             <Card className="relative h-full shadow-lg bg-gradient-to-br from-background/80 to-background hover:from-primary/5 hover:to-secondary/5 transition-all duration-300">
-              {plan.isBestValue && (
+              {plan.popular && (
                 <span className="absolute inset-x-0 -top-5 mx-auto w-36 rounded-full bg-primary px-3 py-2 text-center text-sm font-semibold text-background shadow-md">
                   Most Popular
                 </span>
               )}
               <CardContent className="flex flex-col h-full p-6 sm:p-8">
                 <div className="mb-6">
-                  {plan.name !== "Enterprise" && (
-                    <div className="flex flex-col">
-                      <span className="text-sm text-muted-foreground line-through">
-                        {plan.price.original}
-                      </span>
-                      <div className="flex items-baseline gap-2">
-                        <span className="font-heading text-3xl sm:text-4xl font-semibold text-foreground">
-                          {plan.price.discounted}
-                        </span>
-                        <span className="text-sm sm:text-base text-muted-foreground">/project</span>
-                      </div>
-                      <div className="mt-2">
-                        <span className="inline-block bg-primary/10 text-primary text-sm px-2 py-1 rounded">
-                          Save {calculateDiscount(plan.price.original, plan.price.discounted)}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                  {plan.name === "Enterprise" && (
-                    <span className="font-heading text-3xl sm:text-4xl font-semibold text-foreground">
-                      Custom
+                  <div className="flex flex-col">
+                    <span className="text-sm text-muted-foreground line-through">
+                      {plan.originalPrice}
                     </span>
-                  )}
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-heading text-3xl sm:text-4xl font-semibold text-foreground">
+                        {plan.price}
+                      </span>
+                      <span className="text-sm sm:text-base text-muted-foreground">/project</span>
+                    </div>
+                    <div className="mt-2">
+                      <span className="inline-block bg-primary/10 text-primary text-sm px-2 py-1 rounded">
+                        {plan.discount}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 <ul className="space-y-3 mb-8 flex-grow">
                   {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-3">
-                      <Check size={isMobile ? 16 : 20} className="text-primary" />
-                      <span className="text-sm sm:text-base text-muted-foreground">{feature}</span>
+                    <li key={i} className="flex items-start gap-3">
+                      <Check
+                        size={isMobile ? 16 : 20}
+                        className="text-primary mt-1 flex-shrink-0"
+                      />
+                      <span className="text-sm sm:text-base text-muted-foreground leading-normal">
+                        {feature}
+                      </span>
                     </li>
                   ))}
                 </ul>
                 <CTAButton
-                  href="#"
+                  href={plan.href}
                   className={`w-full justify-center ${
-                    plan.isBestValue ? "bg-primary text-background hover:bg-primary/90" : ""
+                    plan.popular ? "bg-primary text-background hover:bg-primary/90" : ""
                   }`}
                   onClick={() => handlePlanSelect(plan)}
                 >
@@ -509,26 +495,19 @@ export function Pricing() {
           </motion.div>
         ))}
       </div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="text-center"
-      >
-        <p className="text-base sm:text-lg text-muted-foreground mb-4">
-          {isMobile
-            ? "Not sure? Let's talk."
-            : "Not sure which plan is right for you? Let's discuss your needs."}
+      <div className="text-center mt-12">
+        <p className="text-muted-foreground mb-4">
+          Not sure which plan is right for you? Let's discuss your needs.
         </p>
         <Button
           variant="outline"
           size="lg"
-          onClick={() => openCalModal("speedweb/15min")}
-          className="font-semibold"
+          onClick={() => openCalModal("speedweb/30min")}
+          className="h-14 px-8 text-xl font-semibold hover:bg-white hover:text-black transition-all duration-300"
         >
-          {isMobile ? "Free Discovery Call" : "Schedule a Free Discovery Call"}
+          Schedule a Free Discovery Call
         </Button>
-      </motion.div>
+      </div>
     </section>
   );
 }

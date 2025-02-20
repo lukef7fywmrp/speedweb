@@ -3,7 +3,8 @@ import { Hero } from "@/components/hero";
 import { RecentWork } from "@/components/recent-work";
 import { ConversionOptimizationFeatures } from "@/components/conversion-optimization-features";
 import { TailoredSolutionsSection } from "@/components/tailored-solutions-section";
-import { Technologies } from "@/components/technologies";
+// import { Technologies } from "@/components/technologies";
+import { ComparisonGrid } from "@/components/comparison-grid";
 import { Pricing } from "@/components/pricing";
 import { Testimonials } from "@/components/testimonials";
 import { Faq } from "@/components/faq";
@@ -18,7 +19,8 @@ export default function HomePage() {
       <RecentWork />
       <ConversionOptimizationFeatures />
       <TailoredSolutionsSection />
-      <Technologies />
+      {/* <Technologies /> */}
+      <ComparisonGrid />
       <Pricing />
       <Testimonials />
       <Faq />

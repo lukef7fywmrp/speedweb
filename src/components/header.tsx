@@ -4,12 +4,15 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { smoothScroll } from "@/lib/smoothScroll";
-import { Logo } from "./logo";
+import { Spotlight } from "@/components/ui/spotlight";
 
 export function Header() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -62,49 +65,68 @@ export function Header() {
     }
   };
 
+  const handleNavigation = (sectionId: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    smoothScroll(sectionId)(e);
+    router.push(`/${sectionId}`);
+    setIsOpen(false);
+  };
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="container flex items-center justify-between gap-10 py-6 w-full relative"
+      className="container flex items-center justify-between gap-10 py-6 px-8 md:px-12 lg:px-16 xl:px-20 w-full relative"
     >
-      <Link href="/" className="flex items-center gap-3 flex-1">
-        <motion.div className="text-primary h-[48px] sm:h-[60px] md:h-[72px] flex items-center">
-          <Logo
-            width={120}
-            height={48}
-            className="text-primary sm:w-[150px] sm:h-[60px] md:w-[200px] md:h-[72px]"
+      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+      <Link href="/" className="flex items-center gap-2">
+        <motion.div className="h-[40px] w-[40px] flex items-center">
+          <Image
+            src="/images/rocketicon.png"
+            alt="Speedweb"
+            width={40}
+            height={40}
+            className="object-contain"
           />
         </motion.div>
+        <span className="text-xl font-semibold text-white">Speedweb</span>
       </Link>
-      <nav className="hidden items-center gap-8 md:flex flex-1 justify-center">
+
+      <nav className="hidden items-center gap-8 md:flex">
         {navItems.map((item) => (
-          <motion.div key={item.href} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <motion.div key={item.href} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <Link
-              href={item.href}
-              className="flex cursor-pointer items-center text-lg font-medium transition hover:text-foreground sm:text-sm px-4 py-2 rounded-sm duration-300 hover:bg-white/10"
-              onClick={(e) => smoothScroll(item.href.slice(1))(e)}
+              href={`/${item.href.slice(1)}`}
+              className="flex cursor-pointer items-center text-[17px] font-medium text-zinc-300 transition-all duration-200 hover:text-[#FE8A0A] px-2"
+              onClick={(e) => handleNavigation(item.href.slice(1))(e)}
             >
               {item.label}
             </Link>
           </motion.div>
         ))}
       </nav>
-      <div className="hidden items-center gap-2 md:flex flex-1 justify-end">
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button asChild className="text-black group">
+
+      <div className="hidden items-center md:flex">
+        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          <Button
+            asChild
+            className="relative h-11 px-5 font-medium rounded-lg group overflow-hidden bg-[#F5F5F5] hover:bg-white transition-all duration-300 shadow-[0_2px_10px_rgba(255,255,255,0.1)] hover:shadow-[0_2px_15px_rgba(255,255,255,0.2)] border border-white/10"
+          >
             <Link
-              href="#pricing"
-              className="cursor-pointer flex items-center"
-              onClick={(e) => smoothScroll("pricing")(e)}
+              href="/pricing"
+              className="flex items-center"
+              onClick={(e) => handleNavigation("pricing")(e)}
             >
-              Get Started
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <span className="relative flex items-center text-zinc-900 font-semibold tracking-wide text-[15px]">
+                Get Started
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </span>
             </Link>
           </Button>
         </motion.div>
       </div>
+
       <div className="md:hidden">
         <Button
           variant="ghost"
@@ -130,16 +152,13 @@ export function Header() {
             className="absolute top-full left-0 right-0 bg-background shadow-xl z-50"
             onKeyDown={handleKeyDown}
           >
-            <nav className="flex flex-col gap-2 p-4">
+            <nav className="flex flex-col gap-3 p-4">
               {navItems.map((item, index) => (
                 <Link
                   key={item.href}
-                  href={item.href}
-                  className="flex w-full cursor-pointer items-center rounded-md p-2 font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 active:bg-accent/50"
-                  onClick={(e) => {
-                    smoothScroll(item.href.slice(1))(e);
-                    setIsOpen(false);
-                  }}
+                  href={`/${item.href.slice(1)}`}
+                  className="flex w-full cursor-pointer items-center rounded-md p-3 text-[16px] font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 active:bg-accent/50"
+                  onClick={(e) => handleNavigation(item.href.slice(1))(e)}
                   ref={index === 0 ? firstMenuItemRef : undefined}
                   onKeyDown={(e) => handleMenuItemKeyDown(e, index)}
                 >
@@ -148,17 +167,14 @@ export function Header() {
               ))}
               <Button
                 size="lg"
-                className="mt-4 w-full text-black group"
+                className="mt-4 w-full bg-white text-zinc-900 hover:bg-white/90 font-medium"
                 ref={lastMenuItemRef}
                 onKeyDown={(e) => handleMenuItemKeyDown(e, navItems.length)}
               >
                 <Link
-                  href="#pricing"
+                  href="/pricing"
                   className="cursor-pointer flex items-center justify-center w-full h-full"
-                  onClick={(e) => {
-                    smoothScroll("pricing")(e);
-                    setIsOpen(false);
-                  }}
+                  onClick={(e) => handleNavigation("pricing")(e)}
                 >
                   Get Started
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />

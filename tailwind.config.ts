@@ -16,7 +16,7 @@ const config = {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1200px",
+        "2xl": "1400px",
       },
     },
     extend: {
@@ -79,11 +79,34 @@ const config = {
             transform: "translate(-50%,-40%) scale(1)",
           },
         },
+        borderFlow: {
+          "0%": {
+            clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
+            borderImage: "linear-gradient(90deg, transparent, #FE8A0A, transparent) 1",
+          },
+          "25%": {
+            clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
+            borderImage: "linear-gradient(180deg, transparent, #FE8A0A, transparent) 1",
+          },
+          "50%": {
+            clipPath: "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)",
+            borderImage: "linear-gradient(270deg, transparent, #FE8A0A, transparent) 1",
+          },
+          "75%": {
+            clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
+            borderImage: "linear-gradient(0deg, transparent, #FE8A0A, transparent) 1",
+          },
+          "100%": {
+            clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)",
+            borderImage: "linear-gradient(90deg, transparent, #FE8A0A, transparent) 1",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         spotlight: "spotlight 2s ease .75s 1 forwards",
+        borderFlow: "borderFlow 6s linear infinite",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
