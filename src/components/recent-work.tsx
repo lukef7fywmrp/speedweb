@@ -63,6 +63,19 @@ const recentWork: WorkItem[] = [
     featured: true,
   },
   {
+    title: "Kalam Space - Creative Community Platform",
+    description:
+      "Designed and developed a vibrant platform for creative collaboration, featuring a clean, pastel-themed UI with intuitive navigation. The site showcases community features, creative tools, and educational resources with a focus on user engagement and accessibility.",
+    shortDescription: "Community platform for creative collaboration with a pastel aesthetic.",
+    imageUrl: "/images/kalamspace/kalamspace.png",
+    challenge: "Creating an inviting digital space that fosters creativity and community building",
+    solution: "Warm, approachable design with intuitive UX and clear information architecture",
+    results:
+      "Engaging platform that successfully connects creative individuals and educational resources",
+    projectUrl: "https://kalamspace.vercel.app/",
+    featured: true,
+  },
+  {
     title: "Al Jamal Al Sheyaka Beauty Salon",
     description:
       "Created an elegant, user-friendly website for a premium beauty salon in Sharjah, featuring WhatsApp integration for appointments, service showcase, and customer testimonials. The design emphasizes luxury and professionalism while maintaining accessibility for diverse clientele.",
@@ -109,7 +122,7 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
 
       {/* Overlay with title and link on hover */}
       <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 mobile:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5 mobile:p-3">
-        <h3 className="text-xl mobile:text-base font-medium text-white mb-2 mobile:mb-1 group-hover:text-[#FE8200] transition-colors duration-300">
+        <h3 className="text-xl mobile:text-sm font-medium text-white mb-2 mobile:mb-1 group-hover:text-[#FE8200] transition-colors duration-300 line-clamp-1">
           {project.title}
         </h3>
 
