@@ -165,7 +165,7 @@ function TypewriterText() {
           {staticText}
         </span>
       </div>
-      <div className="relative flex justify-center w-full mobile:pb-3 sm:pb-1">
+      <div className="relative flex justify-center w-full mobile:pb-1 sm:pb-1">
         <div className="relative inline-block">
           <span className="bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text mobile:text-[1.75rem] mobile:leading-[1.8] sm:leading-normal inline-block">
             {displayText}
@@ -187,17 +187,25 @@ export function Hero() {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const { openCalModal } = useCalendly();
 
+  // Alternative mobile button texts
+  const mobileButtonText = "Free Strategy Call";
+  // Other options could be:
+  // "Get Started Free"
+  // "Book a Free Call"
+  // "Talk to an Expert"
+  // "Schedule a Call"
+
   return (
     <section
       id="about"
-      className="container flex flex-col items-center justify-center mobile:gap-6 sm:gap-2 pt-12 sm:pt-16 relative min-h-[calc(100vh-80px)] overflow-hidden"
+      className="container flex flex-col items-center justify-center mobile:gap-1 sm:gap-2 pt-12 sm:pt-16 relative min-h-[calc(100vh-80px)] overflow-hidden"
     >
       <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="max-w-5xl text-center font-heading text-4xl sm:text-5xl sm:leading-tight lg:text-7xl font-bold relative z-10 [text-wrap:balance] mb-0"
+        className="max-w-5xl text-center font-heading text-4xl sm:text-5xl sm:leading-tight lg:text-7xl font-bold relative z-10 [text-wrap:balance] mb-0 mobile:mb-0"
       >
         <TypewriterText />
       </motion.h1>
@@ -205,7 +213,7 @@ export function Hero() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className="max-w-2xl text-center text-base sm:text-xl text-muted-foreground"
+        className="max-w-2xl text-center text-base sm:text-xl text-muted-foreground mobile:mt-0 mb-4"
       >
         {isMobile
           ? "Double your revenue with psychology-driven design. Unlock the power of conversion-focused pages."
@@ -223,8 +231,9 @@ export function Hero() {
           icon={
             <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           }
+          className="mobile:text-[1.1rem]"
         >
-          {isMobile ? "Book Free Call" : "Book Your Free Growth Call"}
+          {isMobile ? mobileButtonText : "Book Your Free Growth Call"}
         </CTAButton>
         <motion.div
           initial={{ scale: 1 }}
@@ -232,16 +241,18 @@ export function Hero() {
           transition={{ duration: 0.3 }}
           className="relative h-14 w-full sm:w-auto"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-md opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-md opacity-50 mobile:opacity-80" />
           <Button
             size="lg"
             asChild
             variant="outline"
-            className="w-full h-full text-base font-semibold hover:bg-secondary/10 transition duration-300 text-foreground hover:text-foreground group border-2 border-transparent bg-background relative z-10 m-[1px]"
+            className="w-full h-full text-base font-semibold hover:bg-secondary/10 transition duration-300 text-foreground hover:text-foreground group border-2 border-transparent bg-background relative z-10 m-[1px] mobile:m-[1.5px] mobile:hover:bg-black/50"
           >
             <Link href="#testimonials" className="flex items-center justify-center">
-              {isMobile ? "Success Stories" : "See Success Stories"}
-              <Eye className="ml-2 h-4 w-4" />
+              <span className="mobile:text-[1.1rem]">
+                {isMobile ? "Success Stories" : "See Success Stories"}
+              </span>
+              <Eye className="ml-2 h-4 w-4 mobile:h-[1.1rem] mobile:w-[1.1rem] group-hover:text-primary transition-colors" />
             </Link>
           </Button>
         </motion.div>
@@ -250,7 +261,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.8 }}
-        className="flex flex-col items-center justify-center mt-8 space-y-4 px-4 sm:px-0"
+        className="flex flex-col items-center justify-center mt-10 space-y-4 px-4 sm:px-0"
       >
         <div className="flex flex-wrap justify-center gap-6 sm:gap-12">
           <div className="flex items-center gap-2">
@@ -283,7 +294,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 1 }}
-        className="text-center text-muted-foreground text-sm"
+        className="text-center text-muted-foreground text-sm mt-4"
       >
         {isMobile
           ? "Boost conversions now. No commitment."
