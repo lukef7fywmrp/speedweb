@@ -19,11 +19,12 @@ function TypewriterText() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
-  const staticText = "Craft High-Converting Pages: ";
+  const staticText = "Craft High-Converting Pages:";
   const firstPhrase = "Boost Sales Now";
-  const secondPhrase = "Turn Clicks into Sales";
-  const thirdPhrase = "Convert Visitors Instantly";
+  const secondPhrase = "Turn Clicks into Cash";
+  const thirdPhrase = isMobile ? "Sell More Today ⚡" : "Supercharge Your Sales ⚡";
 
   // Get typing speed based on character
   const getTypingSpeed = (char: string) => {
@@ -159,20 +160,20 @@ function TypewriterText() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="text-center mb-2">
-        <span className="bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text inline-block leading-relaxed">
+      <div className="text-center mobile:mb-0 sm:mb-[-0.5rem]">
+        <span className="bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text inline-block mobile:leading-[1.3] sm:leading-tight mobile:text-[1.75rem]">
           {staticText}
         </span>
       </div>
-      <div className="h-[2rem] relative flex justify-center items-center w-full">
-        <div className="relative inline-flex items-center justify-center">
-          <span className="bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text">
+      <div className="relative flex justify-center w-full mobile:pb-3 sm:pb-1">
+        <div className="relative inline-block">
+          <span className="bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text mobile:text-[1.75rem] mobile:leading-[1.8] sm:leading-normal inline-block">
             {displayText}
           </span>
           <span
             className={`${
               showCursor ? "opacity-100" : "opacity-0"
-            } transition-opacity duration-100 text-[#FE8A0A] ml-[2px]`}
+            } transition-opacity duration-100 text-[#FE8A0A] ml-[2px] mobile:text-[1.75rem] inline-block`}
           >
             |
           </span>
@@ -189,14 +190,14 @@ export function Hero() {
   return (
     <section
       id="about"
-      className="container flex flex-col items-center justify-center gap-8 pt-12 sm:pt-16 sm:gap-10 relative min-h-[calc(100vh-80px)] overflow-hidden"
+      className="container flex flex-col items-center justify-center mobile:gap-6 sm:gap-2 pt-12 sm:pt-16 relative min-h-[calc(100vh-80px)] overflow-hidden"
     >
       <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="max-w-5xl text-center font-heading text-4xl sm:text-5xl sm:leading-tight lg:text-7xl font-bold relative z-10 [text-wrap:balance]"
+        className="max-w-5xl text-center font-heading text-4xl sm:text-5xl sm:leading-tight lg:text-7xl font-bold relative z-10 [text-wrap:balance] mb-0"
       >
         <TypewriterText />
       </motion.h1>
@@ -204,7 +205,7 @@ export function Hero() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className="max-w-2xl text-center text-lg text-muted-foreground sm:text-xl"
+        className="max-w-2xl text-center text-base sm:text-xl text-muted-foreground"
       >
         {isMobile
           ? "Double your revenue with psychology-driven design. Unlock the power of conversion-focused pages."
