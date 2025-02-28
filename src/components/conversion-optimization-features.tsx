@@ -1,140 +1,245 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { CTAButton } from "@/components/ui/cta-button";
 import { useCalendly } from "@/lib/hooks/useCalendly";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 import { motion, useInView } from "framer-motion";
-import dynamic from "next/dynamic";
-import type { Player as PlayerType } from "@lottiefiles/react-lottie-player";
-import type { AnimationItem } from "lottie-web";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, BarChart3, Brain, MessageSquareText, Rocket } from "lucide-react";
 
-const Player = dynamic(() => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player), {
-  ssr: false,
-});
-
+// Simplified feature data
 const features = [
   {
-    iconSrc: "/lottie/data-driven-optimization.json",
-    title: "Data-Driven Optimization",
-    description: "Leverage analytics to improve conversion rates.",
-    mobileDescription: "Use data to boost conversions.",
+    title: "Speed That Sells",
+    description:
+      "Milliseconds matter! Faster pages mean lower bounce rates, better user experience, and higher conversions. We optimize every element to ensure your site loads instantly, keeping visitors engaged and moving toward action.",
+    mobileDescription: "Faster pages = higher conversions.",
+    customIcon: (
+      <div className="flex items-center justify-center shadow-lg transition-transform duration-300">
+        <img src="/images/icons/lightningIcon.png" alt="Lightning Icon" className="h-12 w-12" />
+      </div>
+    ),
+    useCustomIcon: true,
   },
   {
-    iconSrc: "/lottie/psychology-driven-design.json",
-    title: "Psychology-Driven Design",
-    description: "Implement persuasive design principles to boost engagement.",
-    mobileDescription: "Persuasive design for engagement.",
+    title: "Designed for Trust",
+    description:
+      "A reliable website builds confidence. With secure browsing, fast performance, and clear messaging, we create an experience that makes visitors feel safe and ready to take action.",
+    mobileDescription: "Trust through design.",
+    customIcon: (
+      <div className="flex items-center justify-center transition-transform duration-300">
+        <img src="/images/icons/lockIcon.png" alt="Unlock Icon" className="h-12 w-12" />
+      </div>
+    ),
+    useCustomIcon: true,
   },
   {
-    iconSrc: "/lottie/conversion-focused-copy.json",
-    title: "Conversion-Focused Copy",
-    description: "Craft compelling narratives that drive action and sales.",
-    mobileDescription: "Compelling copy for more sales.",
+    title: "CTAs That Work",
+    description:
+      "Strategic, attention-grabbing CTAs seamlessly guide visitors toward taking action—boosting leads and sales. We create clear, well-placed buttons and prompts that encourage users to take the next step with confidence.",
+    mobileDescription: "Effective CTAs for more leads.",
+    icon: MessageSquareText,
+    customIcon: (
+      <div className="flex items-center justify-center shadow-lg transition-transform duration-300">
+        <img src="/images/icons/clickIcon.png" alt="Finger Click Icon" className="h-12 w-12" />
+      </div>
+    ),
+    useCustomIcon: true,
   },
+
   {
-    iconSrc: "/lottie/rapid-implementation.json",
-    title: "Rapid Implementation",
-    description: "Quick turnaround times to get your optimized pages live fast.",
-    mobileDescription: "Fast optimization deployment.",
+    title: "SEO-Optimized for Growth",
+    description:
+      "Optimize your site for search engines and users with fast load speeds, smart keyword placement, and a well-structured layout to enhance visibility and drive organic traffic.",
+    mobileDescription:
+      "Optimize your site for search engines and users with fast load speeds, smart keyword placement, and a well-structured layout to enhance visibility and drive organic traffic.",
+    icon: Rocket,
+    customIcon: (
+      <div className="flex items-center justify-center shadow-lg transition-transform duration-300">
+        <img src="/images/icons/graphIcon.png" alt="Bar Up Icon" className="h-12 w-12" />
+      </div>
+    ),
+    useCustomIcon: true,
   },
 ];
 
+// Stats data
+const stats = [
+  { value: 100, suffix: "%", label: "Conversion Rate Increase" },
+  { value: 50, suffix: "+", label: "Happy Clients" },
+  { value: 5, suffix: "", label: "Years Experience" },
+];
+
+// Counter animation hook with linear animation
+function useCounter(end: number, duration: number = 1500, start: number = 0, delay: number = 0) {
+  const [count, setCount] = useState(start);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    if (!isAnimating) return;
+
+    let startTime: number | null = null;
+    let animationFrame: number;
+    const stepValue = end / 30; // Ensure smooth steps
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const percentage = Math.min(progress / duration, 1);
+
+      // Linear animation for consistent speed
+      setCount(Math.floor(start + percentage * (end - start)));
+
+      if (percentage < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      animationFrame = requestAnimationFrame(animate);
+    }, delay);
+
+    return () => {
+      clearTimeout(timeoutId);
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [start, end, duration, isAnimating, delay]);
+
+  return { count, setIsAnimating };
+}
+
 export function ConversionOptimizationFeatures() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const playerRefs = useRef<(AnimationItem | null)[]>([]);
+  // Move hook calls inside the component
+  const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const isMobile = useMediaQuery("(max-width: 640px)");
   const { openCalModal } = useCalendly();
 
-  useEffect(() => {
-    playerRefs.current = playerRefs.current.slice(0, features.length);
-  }, []);
+  // Initialize counters with shorter duration
+  const counters = stats.map((stat, index) => useCounter(stat.value, 1500, 0, index * 100));
 
+  // Start animations when section is in view
   useEffect(() => {
-    playerRefs.current.forEach((player, index) => {
-      if (hoveredIndex === index) {
-        player?.play();
-      } else {
-        player?.stop();
-      }
-    });
-  }, [hoveredIndex]);
+    if (isInView) {
+      counters.forEach((counter) => counter.setIsAnimating(true));
+    }
+  }, [isInView]);
 
   return (
     <section
       id="features"
       ref={sectionRef}
-      className="container flex flex-col items-center gap-8 py-24 sm:gap-12"
+      className="relative py-24 md:py-32 overflow-hidden bg-black"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.6 }}
-        className="flex flex-col gap-4 text-center"
-      >
-        <h2 className="font-heading text-2xl font-semibold sm:text-3xl lg:text-4xl max-w-3xl mx-auto">
-          {isMobile ? "High-Converting Pages" : "Unlock the Power of High-Converting Pages"}
-        </h2>
-        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-          {isMobile
-            ? "Boost sales with proven optimization strategies."
-            : "Transform your website into a sales-generating machine with our proven conversion optimization strategies."}
-        </p>
-      </motion.div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-6xl">
-        {features.map((feature, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: index * 0.2 }}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
-            <Card className="h-full shadow-lg border-0 overflow-hidden group relative">
-              <CardContent className="flex flex-col gap-6 p-8 text-center items-center h-full">
-                <div className="w-12 h-12 flex items-center justify-center">
-                  <Player
-                    key={index}
-                    lottieRef={(el: AnimationItem | null) => {
-                      playerRefs.current[index] = el;
-                    }}
-                    src={feature.iconSrc}
-                    className="w-12 h-12"
-                    loop={false}
-                    autoplay={false}
-                    style={{
-                      filter:
-                        "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%)",
-                    }}
-                  />
+      <div className="container max-w-6xl mx-auto px-4">
+        {/* Header Section */}
+        <div className="mb-12 md:mb-16 text-center">
+          <h2 className="font-heading text-3xl md:text-5xl lg:text-6xl font-semibold mb-4">
+            {isMobile ? (
+              "High-Converting Pages"
+            ) : (
+              <>
+                <div className="flex justify-center items-center gap-4 mb-2">
+                  <span>More Clicks.</span>
+                  <span className="text-[#FE8B00]">More Leads.</span>
                 </div>
-                <div>
-                  <h4 className="mb-3 text-lg sm:text-xl font-semibold text-foreground">
-                    {feature.title}
-                  </h4>
-                  <p className="text-sm sm:text-base text-muted-foreground">
+                <span className="block">More Sales.</span>
+              </>
+            )}
+          </h2>
+          <p className="text-base md:text-lg text-zinc-400 max-w-2xl mx-auto">
+            Design That Doesn't Just Look Good—It Sells.
+          </p>
+        </div>
+
+        {/* Stats Section - Centered layout with reduced gap */}
+        <div className="mb-20">
+          <div className="flex justify-center items-center gap-4 md:gap-16 lg:gap-24">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="text-center"
+              >
+                <motion.p
+                  className={`text-4xl md:text-5xl font-bold mb-1 ${
+                    index === 0 ? "text-[#FE8B00]" : "text-white"
+                  }`}
+                  initial={{ scale: 0.9 }}
+                  animate={isInView ? { scale: 1 } : { scale: 0.9 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  {counters[index].count}
+                  {stat.suffix}
+                </motion.p>
+                <p className="text-xs md:text-sm text-zinc-500">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Subtle divider */}
+          <div className="h-px w-full max-w-md mx-auto bg-zinc-800/50 mt-12"></div>
+        </div>
+
+        {/* Features Section - Clean layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16">
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group"
+                onMouseEnter={() => setHoveredFeature(index)}
+                onMouseLeave={() => setHoveredFeature(null)}
+              >
+                <div className="flex flex-col h-full">
+                  <div className="mb-4 flex items-center gap-3">
+                    {feature.useCustomIcon ? (
+                      feature.customIcon
+                    ) : (
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#FE8B00]/10 group-hover:bg-[#FE8B00]/20 transition-transform duration-300">
+                        {Icon && <Icon className="h-5 w-5 text-[#FE8B00]" />}
+                      </div>
+                    )}
+                    <h3 className="text-xl md:text-2xl font-semibold text-white group-hover:text-[#FE8B00] transition-colors duration-300">
+                      {feature.title}
+                    </h3>
+                  </div>
+                  <p className="text-zinc-400 text-base leading-relaxed group-hover:text-zinc-300 transition-colors duration-300">
                     {isMobile ? feature.mobileDescription : feature.description}
                   </p>
                 </div>
-              </CardContent>
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </Card>
-          </motion.div>
-        ))}
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="mt-20 md:mt-28 text-center"
+        >
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => openCalModal("speedweb/30min")}
+            className="h-14 px-8 text-xl font-semibold text-white border-2 border-white hover:bg-white hover:text-black transition-transform duration-300 transform hover:scale-105"
+          >
+            <span className="flex items-center">
+              Your Website Can Do More. Let's Prove It.
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+          </Button>
+        </motion.div>
       </div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
-      >
-        <CTAButton href="#" onClick={() => openCalModal("speedweb/30min")}>
-          {isMobile ? "Boost Conversions" : "Boost Your Conversions Now"}
-        </CTAButton>
-      </motion.div>
     </section>
   );
 }
