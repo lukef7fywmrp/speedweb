@@ -111,19 +111,19 @@ const cryptoOptions: CryptoOption[] = [
 
 const paymentMethods: PaymentMethod[] = [
   {
-    icon: <Phone className="w-6 h-6" />,
+    icon: <Phone className="size-6" />,
     name: "Book a Call",
     description: "Discuss with an expert and pay during the call",
     type: "call",
   },
   {
-    icon: <Bitcoin className="w-6 h-6" />,
+    icon: <Bitcoin className="size-6" />,
     name: "Cryptocurrency",
     description: "Pay with BTC, ETH, or USDT",
     type: "crypto",
   },
   {
-    icon: <Building2 className="w-6 h-6" />,
+    icon: <Building2 className="size-6" />,
     name: "Wire Transfer",
     description: "Traditional bank transfer",
     type: "wire",
@@ -244,13 +244,13 @@ export function Pricing() {
               <Button
                 size="sm"
                 variant="ghost"
-                className="absolute right-1 h-7 w-7 p-0"
+                className="absolute right-1 size-7 p-0"
                 onClick={() => handleCopy(selectedCrypto.address)}
               >
                 {hasCopied ? (
-                  <Check className="h-3 w-3 text-green-500" />
+                  <Check className="size-3 text-green-500" />
                 ) : (
-                  <Copy className="h-3 w-3" />
+                  <Copy className="size-3" />
                 )}
                 <span className="sr-only">Copy wallet address</span>
               </Button>
@@ -316,12 +316,12 @@ export function Pricing() {
                   </div>
                 </div>
 
-                <ul className="space-y-3 mb-8 flex-grow">
+                <ul className="space-y-3 mb-8 grow">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <Check
                         size={isMobile ? 16 : 20}
-                        className="text-primary mt-1 flex-shrink-0"
+                        className="text-primary mt-1 shrink-0"
                       />
                       <span className="text-sm sm:text-base text-muted-foreground leading-normal">
                         {feature}

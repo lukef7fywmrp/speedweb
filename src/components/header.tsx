@@ -9,7 +9,6 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { smoothScroll } from "@/lib/smoothScroll";
-import { Spotlight } from "@/components/ui/spotlight";
 
 export function Header() {
   const router = useRouter();
@@ -77,11 +76,10 @@ export function Header() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="container flex items-center justify-between gap-10 py-6 px-8 md:px-12 lg:px-16 xl:px-20 w-full relative"
+      className="container flex items-center justify-between gap-10 py-6 px-8 md:px-12 lg:px-16 xl:px-20 w-full relative bg-black z-50"
     >
-      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
       <Link href="/" className="flex items-center gap-2">
-        <motion.div className="h-[40px] w-[40px] flex items-center">
+        <motion.div className="size-[40px] flex items-center justify-center relative">
           <Image
             src="/images/rocketicon.png"
             alt="Speedweb"
@@ -120,7 +118,7 @@ export function Header() {
             >
               <span className="relative flex items-center text-zinc-900 font-semibold tracking-wide text-[15px]">
                 Get Started
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />
               </span>
             </Link>
           </Button>
@@ -136,7 +134,7 @@ export function Header() {
           aria-controls="mobile-menu"
           ref={menuButtonRef}
         >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
           <span className="sr-only">{isOpen ? "Close menu" : "Open menu"}</span>
         </Button>
       </div>
@@ -149,7 +147,7 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 right-0 bg-background shadow-xl z-50"
+            className="absolute top-full inset-x-0 bg-background shadow-xl z-50"
             onKeyDown={handleKeyDown}
           >
             <nav className="flex flex-col gap-3 p-4">
@@ -177,7 +175,7 @@ export function Header() {
                   onClick={(e) => handleNavigation("pricing")(e)}
                 >
                   Get Started
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </nav>

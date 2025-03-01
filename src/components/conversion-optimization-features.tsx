@@ -3,9 +3,10 @@
 import { useCalendly } from "@/lib/hooks/useCalendly";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BarChart3, Brain, MessageSquareText, Rocket } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 // Simplified feature data
 const features = [
@@ -13,10 +14,17 @@ const features = [
     title: "Speed That Sells",
     description:
       "Milliseconds matter! Faster pages mean lower bounce rates, better user experience, and higher conversions. We optimize every element to ensure your site loads instantly, keeping visitors engaged and moving toward action.",
-    mobileDescription: "Faster pages = higher conversions.",
+    mobileDescription:
+      "Milliseconds matter! Faster pages mean lower bounce rates, better user experience, and higher conversions. We optimize every element to ensure your site loads instantly, keeping visitors engaged and moving toward action.",
     customIcon: (
-      <div className="flex items-center justify-center shadow-lg transition-transform duration-300">
-        <img src="/images/icons/lightningIcon.png" alt="Lightning Icon" className="h-12 w-12" />
+      <div className="flex items-center justify-center transition-all duration-300 shadow-lg">
+        <Image
+          src="/images/icons/lightningIcon.png"
+          alt="Lightning Icon"
+          width={48}
+          height={48}
+          className="size-12"
+        />
       </div>
     ),
     useCustomIcon: true,
@@ -25,10 +33,17 @@ const features = [
     title: "Designed for Trust",
     description:
       "A reliable website builds confidence. With secure browsing, fast performance, and clear messaging, we create an experience that makes visitors feel safe and ready to take action.",
-    mobileDescription: "Trust through design.",
+    mobileDescription:
+      "A reliable website builds confidence. With secure browsing, fast performance, and clear messaging, we create an experience that makes visitors feel safe and ready to take action.",
     customIcon: (
-      <div className="flex items-center justify-center transition-transform duration-300">
-        <img src="/images/icons/lockIcon.png" alt="Unlock Icon" className="h-12 w-12" />
+      <div className="flex items-center justify-center transition-all duration-300">
+        <Image
+          src="/images/icons/lockIcon.png"
+          alt="Unlock Icon"
+          width={48}
+          height={48}
+          className="size-12"
+        />
       </div>
     ),
     useCustomIcon: true,
@@ -37,11 +52,17 @@ const features = [
     title: "CTAs That Work",
     description:
       "Strategic, attention-grabbing CTAs seamlessly guide visitors toward taking action—boosting leads and sales. We create clear, well-placed buttons and prompts that encourage users to take the next step with confidence.",
-    mobileDescription: "Effective CTAs for more leads.",
-    icon: MessageSquareText,
+    mobileDescription:
+      "Strategic, attention-grabbing CTAs seamlessly guide visitors toward taking action—boosting leads and sales. We create clear, well-placed buttons and prompts that encourage users to take the next step with confidence.",
     customIcon: (
-      <div className="flex items-center justify-center shadow-lg transition-transform duration-300">
-        <img src="/images/icons/clickIcon.png" alt="Finger Click Icon" className="h-12 w-12" />
+      <div className="flex items-center justify-center transition-all duration-300 shadow-lg">
+        <Image
+          src="/images/icons/clickIcon.png"
+          alt="Finger Click Icon"
+          width={48}
+          height={48}
+          className="size-12"
+        />
       </div>
     ),
     useCustomIcon: true,
@@ -53,10 +74,15 @@ const features = [
       "Optimize your site for search engines and users with fast load speeds, smart keyword placement, and a well-structured layout to enhance visibility and drive organic traffic.",
     mobileDescription:
       "Optimize your site for search engines and users with fast load speeds, smart keyword placement, and a well-structured layout to enhance visibility and drive organic traffic.",
-    icon: Rocket,
     customIcon: (
-      <div className="flex items-center justify-center shadow-lg transition-transform duration-300">
-        <img src="/images/icons/graphIcon.png" alt="Bar Up Icon" className="h-12 w-12" />
+      <div className="flex items-center justify-center transition-all duration-300 shadow-lg">
+        <Image
+          src="/images/icons/graphIcon.png"
+          alt="Bar Up Icon"
+          width={48}
+          height={48}
+          className="size-12"
+        />
       </div>
     ),
     useCustomIcon: true,
@@ -116,31 +142,39 @@ export function ConversionOptimizationFeatures() {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const { openCalModal } = useCalendly();
 
-  // Initialize counters with shorter duration
-  const counters = stats.map((stat, index) => useCounter(stat.value, 1500, 0, index * 100));
+  // Create individual counter hooks outside of any callbacks
+  const counter1 = useCounter(stats[0]?.value || 100, 1500, 0, 0);
+  const counter2 = useCounter(stats[1]?.value || 50, 1500, 0, 100);
+  const counter3 = useCounter(stats[2]?.value || 5, 1500, 0, 200);
+  const counter4 = useCounter(stats[3]?.value || 0, 1500, 0, 300);
+
+  // Store counters in an array using useMemo
+  const counters = useMemo(() => {
+    return [counter1, counter2, counter3, counter4].slice(0, stats.length);
+  }, [counter1, counter2, counter3, counter4]);
 
   // Start animations when section is in view
   useEffect(() => {
     if (isInView) {
       counters.forEach((counter) => counter.setIsAnimating(true));
     }
-  }, [isInView]);
+  }, [isInView, counters]);
 
   return (
     <section
       id="features"
       ref={sectionRef}
-      className="relative py-24 md:py-32 overflow-hidden bg-black"
+      className="relative overflow-hidden bg-black py-24 md:py-32"
     >
-      <div className="container max-w-6xl mx-auto px-4">
+      <div className="container mx-auto max-w-6xl px-4">
         {/* Header Section */}
-        <div className="mb-12 md:mb-16 text-center">
-          <h2 className="font-heading text-3xl md:text-5xl lg:text-6xl font-semibold mb-4">
+        <div className="mb-12 text-center md:mb-16">
+          <h2 className="mb-4 font-heading text-3xl font-semibold md:text-5xl lg:text-6xl">
             {isMobile ? (
               "High-Converting Pages"
             ) : (
               <>
-                <div className="flex justify-center items-center gap-4 mb-2">
+                <div className="mb-2 flex items-center justify-center gap-4">
                   <span>More Clicks.</span>
                   <span className="text-[#FE8B00]">More Leads.</span>
                 </div>
@@ -148,14 +182,14 @@ export function ConversionOptimizationFeatures() {
               </>
             )}
           </h2>
-          <p className="text-base md:text-lg text-zinc-400 max-w-2xl mx-auto">
-            Design That Doesn't Just Look Good—It Sells.
+          <p className="mx-auto max-w-2xl text-base text-zinc-400 md:text-lg">
+            Design That Doesn&apos;t Just Look Good—It Sells.
           </p>
         </div>
 
         {/* Stats Section - Centered layout with reduced gap */}
         <div className="mb-20">
-          <div className="flex justify-center items-center gap-4 md:gap-16 lg:gap-24">
+          <div className="flex items-center justify-center gap-4 md:gap-16 lg:gap-24">
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
@@ -165,7 +199,7 @@ export function ConversionOptimizationFeatures() {
                 className="text-center"
               >
                 <motion.p
-                  className={`text-4xl md:text-5xl font-bold mb-1 ${
+                  className={`mb-1 text-4xl font-bold md:text-5xl ${
                     index === 0 ? "text-[#FE8B00]" : "text-white"
                   }`}
                   initial={{ scale: 0.9 }}
@@ -175,19 +209,18 @@ export function ConversionOptimizationFeatures() {
                   {counters[index].count}
                   {stat.suffix}
                 </motion.p>
-                <p className="text-xs md:text-sm text-zinc-500">{stat.label}</p>
+                <p className="text-xs text-zinc-500 md:text-sm">{stat.label}</p>
               </motion.div>
             ))}
           </div>
 
           {/* Subtle divider */}
-          <div className="h-px w-full max-w-md mx-auto bg-zinc-800/50 mt-12"></div>
+          <div className="mx-auto mt-12 h-px w-full max-w-md bg-zinc-800/50"></div>
         </div>
 
         {/* Features Section - Clean layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16">
+        <div className="grid grid-cols-1 gap-16 md:grid-cols-2">
           {features.map((feature, index) => {
-            const Icon = feature.icon;
             return (
               <motion.div
                 key={index}
@@ -198,20 +231,20 @@ export function ConversionOptimizationFeatures() {
                 onMouseEnter={() => setHoveredFeature(index)}
                 onMouseLeave={() => setHoveredFeature(null)}
               >
-                <div className="flex flex-col h-full">
+                <div className="flex h-full flex-col">
                   <div className="mb-4 flex items-center gap-3">
                     {feature.useCustomIcon ? (
                       feature.customIcon
                     ) : (
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#FE8B00]/10 group-hover:bg-[#FE8B00]/20 transition-transform duration-300">
-                        {Icon && <Icon className="h-5 w-5 text-[#FE8B00]" />}
+                      <div className="flex size-10 items-center justify-center rounded-full bg-[#FE8B00]/10 transition-all duration-300 group-hover:bg-[#FE8B00]/20">
+                        <ArrowRight className="size-5 text-[#FE8B00]" />
                       </div>
                     )}
-                    <h3 className="text-xl md:text-2xl font-semibold text-white group-hover:text-[#FE8B00] transition-colors duration-300">
+                    <h3 className="text-xl font-semibold text-white transition-colors duration-300 group-hover:text-[#FE8B00] md:text-2xl">
                       {feature.title}
                     </h3>
                   </div>
-                  <p className="text-zinc-400 text-base leading-relaxed group-hover:text-zinc-300 transition-colors duration-300">
+                  <p className="text-base leading-relaxed text-zinc-400 transition-colors duration-300 group-hover:text-zinc-300">
                     {isMobile ? feature.mobileDescription : feature.description}
                   </p>
                 </div>
@@ -225,17 +258,17 @@ export function ConversionOptimizationFeatures() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="mt-20 md:mt-28 text-center"
+          className="mt-20 text-center md:mt-28"
         >
           <Button
             variant="outline"
             size="lg"
             onClick={() => openCalModal("speedweb/30min")}
-            className="h-14 px-8 text-xl font-semibold text-white border-2 border-white hover:bg-white hover:text-black transition-transform duration-300 transform hover:scale-105"
+            className="h-14 px-8 text-xl font-semibold text-white border-2 border-white transition-all duration-300 hover:scale-105 hover:bg-white hover:text-black"
           >
             <span className="flex items-center">
-              Your Website Can Do More. Let's Prove It.
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              Your Website Can Do More. Let&apos;s Prove It.
+              <ArrowRight className="ml-2 size-5 transition- duration-300 group-hover:translate-x-1" />
             </span>
           </Button>
         </motion.div>

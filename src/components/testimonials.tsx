@@ -76,34 +76,34 @@ function TestimonialCard({
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
       className={cn(
-        "group relative rounded-2xl bg-gradient-to-br from-zinc-900 via-black to-zinc-900 p-8 border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-300",
+        "group relative rounded-2xl border border-zinc-800/50 bg-gradient-to-br from-zinc-900 via-black to-zinc-900 p-8 transition-all duration-300 hover:border-zinc-700/50",
         className,
       )}
     >
       {/* Decorative elements */}
-      <div className="absolute top-0 right-0 w-24 h-24 bg-[#FE8B00]/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      <div className="absolute right-0 top-0 size-24 rounded-full bg-[#FE8B00]/5 blur-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
 
       {/* Quote icon */}
-      <div className="absolute top-6 right-6 text-[#FE8B00]/10 group-hover:text-[#FE8B00]/20 transition-colors duration-300">
+      <div className="absolute right-6 top-6 text-[#FE8B00]/10 transition-colors duration-300 group-hover:text-[#FE8B00]/20">
         <IconQuote size={40} />
       </div>
 
-      <div className="flex flex-col h-full relative z-10">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="relative h-12 w-12 overflow-hidden border border-zinc-800 group-hover:border-[#FE8B00]/20 transition-colors duration-300">
+      <div className="relative z-10 flex h-full flex-col">
+        <div className="mb-6 flex items-center gap-4">
+          <div className="relative size-12 overflow-hidden border border-zinc-800 transition-colors duration-300 group-hover:border-[#FE8B00]/20">
             <Image src={testimonial.src} alt={testimonial.name} fill className="object-cover" />
           </div>
           <div>
-            <p className="font-medium text-white group-hover:text-[#FE8B00] transition-colors duration-300">
+            <p className="font-medium text-white transition-colors duration-300 group-hover:text-[#FE8B00]">
               {testimonial.name}
             </p>
             <p className="text-sm text-zinc-500">{testimonial.designation}</p>
           </div>
         </div>
-        <blockquote className="text-lg text-zinc-300 flex-grow leading-relaxed italic">
-          "{testimonial.quote}"
+        <blockquote className="grow text-lg leading-relaxed italic text-zinc-300">
+          &quot;{testimonial.quote}&quot;
         </blockquote>
-        <div className="mt-6 pt-6 border-t border-zinc-800 group-hover:border-zinc-700 transition-colors duration-300">
+        <div className="mt-6 border-t border-zinc-800 pt-6 transition-colors duration-300 group-hover:border-zinc-700">
           <p className="text-sm text-zinc-600">{testimonial.company}</p>
         </div>
       </div>
@@ -139,14 +139,14 @@ export function Testimonials() {
           className="flex flex-col gap-4 text-left max-w-[90%] sm:max-w-none"
         >
           <div>
-            <p className="text-[#FE8B00] text-sm sm:text-base md:text-lg font-medium uppercase tracking-wider mb-2">
+            <p className="mb-2 text-sm font-medium uppercase tracking-wider text-[#FE8B00] sm:text-base md:text-lg">
               Testimonials
             </p>
-            <h2 className="font-heading text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.15] sm:leading-[1.1]">
+            <h2 className="font-heading text-[2rem] font-semibold leading-[1.15] tracking-tight sm:text-4xl sm:leading-[1.1] md:text-5xl lg:text-6xl">
               Straight from Our Customers
             </h2>
           </div>
-          <p className="text-sm sm:text-base md:text-lg text-zinc-400 max-w-[42rem] leading-normal sm:leading-relaxed">
+          <p className="max-w-[42rem] text-sm leading-normal text-zinc-400 sm:text-base sm:leading-relaxed md:text-lg">
             See how Speedweb drives growth for companies like yours. Real results, real success.
           </p>
         </motion.div>
@@ -164,7 +164,7 @@ export function Testimonials() {
         </motion.div>
       ) : (
         // Desktop view - Regular testimonial cards
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl">
+        <div className="grid w-full max-w-7xl grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((testimonial, index) => (
             <TestimonialCard key={index} testimonial={testimonial} />
           ))}

@@ -66,7 +66,7 @@ export function Technologies() {
               {isMobile ? (
                 <Card className="group hover:border-primary transition-colors duration-300">
                   <CardContent className="flex flex-col items-center justify-center p-4">
-                    <tech.icon className="w-10 h-10 text-muted-foreground group-hover:text-primary transition-colors duration-300 mb-2" />
+                    <tech.icon className="size-10 text-muted-foreground group-hover:text-primary transition-colors duration-300 mb-2" />
                     <p className="text-xs text-center text-foreground">{tech.name}</p>
                   </CardContent>
                 </Card>
@@ -75,7 +75,7 @@ export function Technologies() {
                   <TooltipTrigger asChild>
                     <Card className="group hover:border-primary transition-colors duration-300">
                       <CardContent className="flex items-center justify-center p-6">
-                        <tech.icon className="w-12 h-12 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+                        <tech.icon className="size-12 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
                       </CardContent>
                     </Card>
                   </TooltipTrigger>

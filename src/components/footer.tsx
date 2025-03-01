@@ -59,7 +59,7 @@ export function Footer() {
                 whileHover={{ scale: 1.2, rotate: 5 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="size-5" />
               </motion.a>
             ))}
           </motion.div>

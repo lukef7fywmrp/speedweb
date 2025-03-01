@@ -24,7 +24,7 @@ export function SparklesPreview({
       </span>{" "}
       <span className="inline-block relative">
         More Sales.
-        <div className="absolute -bottom-32 left-0 right-0 h-28 overflow-hidden">
+        <div className="absolute -bottom-32 inset-x-0 h-28 overflow-hidden">
           {/* More subtle gradient line */}
           <div className="absolute inset-x-0 top-0 h-[1.5px] w-full bg-gradient-to-r from-transparent via-[#FE8B00]/80 to-transparent" />
 

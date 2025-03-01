@@ -148,7 +148,7 @@ function TypewriterText() {
     }
 
     return () => clearTimeout(timeout);
-  }, [currentIndex, phase, isPaused]);
+  }, [currentIndex, phase, isPaused, firstPhrase, secondPhrase, thirdPhrase, displayText.length]);
 
   useEffect(() => {
     const cursorInterval = setInterval(() => {
@@ -229,7 +229,7 @@ export function Hero() {
           href="#"
           onClick={() => openCalModal("speedweb/15min")}
           icon={
-            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-" />
           }
           className="mobile:text-[1.1rem]"
         >
@@ -252,7 +252,7 @@ export function Hero() {
               <span className="mobile:text-[1.1rem]">
                 {isMobile ? "Success Stories" : "See Success Stories"}
               </span>
-              <Eye className="ml-2 h-4 w-4 mobile:h-[1.1rem] mobile:w-[1.1rem] group-hover:text-primary transition-colors" />
+              <Eye className="ml-2 size-4 mobile:h-[1.1rem] mobile:w-[1.1rem] group-hover:text-primary transition-colors" />
             </Link>
           </Button>
         </motion.div>
@@ -266,7 +266,7 @@ export function Hero() {
         <div className="flex flex-wrap justify-center gap-6 sm:gap-12">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-full bg-primary/10">
-              <Zap className="w-4 h-4 text-primary" />
+              <Zap className="size-4 text-primary" />
             </div>
             <span className="text-sm font-medium">
               {isMobile ? "Fast Results" : "Results in 30 Days"}
@@ -274,7 +274,7 @@ export function Hero() {
           </div>
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-full bg-primary/10">
-              <Users className="w-4 h-4 text-primary" />
+              <Users className="size-4 text-primary" />
             </div>
             <span className="text-sm font-medium">
               {isMobile ? "1:1 Support" : "Dedicated 1:1 Support"}
@@ -282,7 +282,7 @@ export function Hero() {
           </div>
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-full bg-primary/10">
-              <Code className="w-4 h-4 text-primary" />
+              <Code className="size-4 text-primary" />
             </div>
             <span className="text-sm font-medium">
               {isMobile ? "Custom Code" : "Custom-Built Solutions"}

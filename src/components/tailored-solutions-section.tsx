@@ -89,13 +89,13 @@ export function TailoredSolutionsSection() {
             <Card className="border-0 shadow-xl overflow-hidden bg-gradient-to-br from-background via-background/90 to-background">
               <CardContent className="p-6 sm:p-10">
                 <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 flex items-center justify-center bg-primary/10 rounded-full">
+                  <div className="size-16 sm:size-20 shrink-0 flex items-center justify-center bg-primary/10 rounded-full">
                     {createElement(clientTypes[activeIndex].icon, {
                       size: isMobile ? 32 : 40,
                       className: "text-primary",
                     })}
                   </div>
-                  <div className="flex-grow text-center sm:text-left">
+                  <div className="grow text-center sm:text-left">
                     <h3 className="text-xl sm:text-2xl font-semibold mb-4 text-primary">
                       {clientTypes[activeIndex].title}
                     </h3>

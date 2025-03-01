@@ -91,14 +91,14 @@ export function ComparisonGrid() {
             ].map((feature, index) => (
               <li
                 key={index}
-                className="flex gap-2 items-start h-12 hover:translate-x-2 transition-transform duration-300"
+                className="flex gap-2 items-start h-12 hover:translate-x-2 transition- duration-300"
               >
                 <Image
                   src="/images/rocketicon.png"
                   alt="Speedweb feature"
                   width={32}
                   height={32}
-                  className="text-[#FE8A0A] flex-shrink-0 mt-1 group-hover:rotate-12 transition-transform duration-300"
+                  className="text-[#FE8A0A] shrink-0 mt-1 group-hover:rotate-12 transition- duration-300"
                 />
                 <span className="text-lg font-medium text-zinc-100 hover:text-[#FE8A0A] transition-colors duration-300 leading-6">
                   {feature}
@@ -159,7 +159,7 @@ export function ComparisonGrid() {
             <ul className="space-y-[2.5rem] mb-4">
               {column.items.map((item, index) => (
                 <li key={index} className="flex gap-2 items-start h-12">
-                  <X className="h-6 w-6 text-[#FE8A0A] flex-shrink-0 mt-1 stroke-[2.5]" />
+                  <X className="size-6 text-[#FE8A0A] shrink-0 mt-1 stroke-[2.5]" />
                   <span className="text-lg font-medium text-zinc-200 leading-6">{item}</span>
                 </li>
               ))}

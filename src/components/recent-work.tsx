@@ -6,7 +6,7 @@ import { motion, useInView } from "framer-motion";
 import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 interface WorkItem {
   title: string;
@@ -99,7 +99,7 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group min-w-[300px] sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px] flex-shrink-0 mx-3 relative"
+      className="group mx-3 min-w-[300px] shrink-0 relative sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px]"
     >
       {/* Pure image display without containers */}
       <div className="relative w-full aspect-video">
@@ -114,26 +114,26 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
         {/* Featured indicator as a small dot */}
         {project.featured && (
           <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-[#FE8200]"></div>
+            <div className="size-2 rounded-full bg-[#FE8200]"></div>
             <span className="text-xs font-medium text-white/90">Featured</span>
           </div>
         )}
       </div>
 
       {/* Overlay with title and link on hover */}
-      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 mobile:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5 mobile:p-3">
-        <h3 className="text-xl mobile:text-sm font-medium text-white mb-2 mobile:mb-1 group-hover:text-[#FE8200] transition-colors duration-300 line-clamp-1">
+      <div className="absolute inset-0 flex flex-col justify-end bg-black/70 p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 mobile:opacity-100 mobile:p-3">
+        <h3 className="mb-2 text-xl font-medium text-white line-clamp-1 transition-colors duration-300 group-hover:text-[#FE8200] mobile:mb-1 mobile:text-sm">
           {project.title}
         </h3>
 
-        <p className="text-sm mobile:text-xs text-zinc-300 mb-4 mobile:mb-2 mobile:line-clamp-2">
+        <p className="mb-4 text-sm text-zinc-300 mobile:mb-2 mobile:text-xs mobile:line-clamp-2">
           {isMobile ? project.shortDescription : project.shortDescription}
         </p>
 
         <Button
           variant="ghost"
           size="sm"
-          className="px-0 text-white hover:text-[#FE8200] hover:bg-transparent transition-colors text-sm mobile:text-xs font-medium w-fit"
+          className="w-fit px-0 text-sm font-medium text-white transition-colors hover:bg-transparent hover:text-[#FE8200] mobile:text-xs"
           asChild
         >
           <a
@@ -142,7 +142,7 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
             rel="noopener noreferrer"
             className="flex items-center gap-2"
           >
-            View Project <ExternalLink className="h-3.5 w-3.5 mobile:h-3 mobile:w-3" />
+            View Project <ExternalLink className="size-3.5 mobile:size-3" />
           </a>
         </Button>
       </div>
@@ -161,7 +161,7 @@ export function RecentWork() {
 
   const scrollAmount = 600;
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (!carouselRef.current) return;
 
     const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
@@ -174,7 +174,7 @@ export function RecentWork() {
     if (newIndex !== activeIndex) {
       setActiveIndex(newIndex);
     }
-  };
+  }, [activeIndex]);
 
   useEffect(() => {
     const carousel = carouselRef.current;
@@ -182,7 +182,7 @@ export function RecentWork() {
       carousel.addEventListener("scroll", handleScroll);
       return () => carousel.removeEventListener("scroll", handleScroll);
     }
-  }, [activeIndex]);
+  }, [activeIndex, handleScroll]);
 
   const scrollLeft = () => {
     if (carouselRef.current) {
@@ -222,15 +222,15 @@ export function RecentWork() {
         transition={{ duration: 0.5 }}
         className="mb-10 text-center"
       >
-        <h2 className="font-heading text-4xl font-semibold sm:text-5xl lg:text-6xl mb-3">
+        <h2 className="mb-3 font-heading text-4xl font-semibold sm:text-5xl lg:text-6xl">
           Our Recent <span className="text-[#FE8200]">Work</span>
         </h2>
-        <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+        <p className="mx-auto max-w-2xl text-base text-muted-foreground">
           {isMobile ? (
             "See how we've boosted businesses with innovative design."
           ) : (
             <>
-              Discover how we've helped businesses achieve remarkable
+              Discover how we&apos;ve helped businesses achieve remarkable
               <br />
               results through innovative design.
             </>
@@ -238,7 +238,7 @@ export function RecentWork() {
         </p>
 
         {/* Subtle orange accent line */}
-        <div className="h-px w-16 bg-[#FE8200]/70 mx-auto mt-4"></div>
+        <div className="mx-auto mt-4 h-px w-16 bg-[#FE8200]/70"></div>
       </motion.div>
 
       {/* Carousel container with navigation */}
@@ -250,10 +250,10 @@ export function RecentWork() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
             onClick={scrollLeft}
-            className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 rounded-full p-2 text-white/80 hover:text-white hover:bg-black/70 transition-all"
+            className="absolute -left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white/80 transition-all hover:bg-black/70 hover:text-white"
             aria-label="Previous projects"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="size-6" />
           </motion.button>
         )}
 
@@ -280,10 +280,10 @@ export function RecentWork() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
             onClick={scrollRight}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 rounded-full p-2 text-white/80 hover:text-white hover:bg-black/70 transition-all"
+            className="absolute -right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white/80 transition-all hover:bg-black/70 hover:text-white"
             aria-label="Next projects"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="size-6" />
           </motion.button>
         )}
 
@@ -292,7 +292,7 @@ export function RecentWork() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex justify-center mt-4 gap-2"
+          className="mt-4 flex justify-center gap-2"
         >
           {recentWork.map((_, index) => (
             <button

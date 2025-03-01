@@ -16,7 +16,7 @@ interface CTAButtonProps {
 export function CTAButton({
   href,
   children,
-  icon = <Zap className="ml-2 h-4 w-4" />,
+  icon = <Zap className="ml-2 size-4" />,
   className,
   onClick,
 }: CTAButtonProps) {

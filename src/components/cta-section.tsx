@@ -103,9 +103,9 @@ export function CtaSection() {
                 >
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
-                    className={`h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 mb-2 sm:mb-3 md:mb-4 rounded-full flex items-center justify-center bg-gradient-to-br ${item.color}`}
+                    className={`size-10 sm:size-12 md:size-16 mb-2 sm:mb-3 md:mb-4 rounded-full flex items-center justify-center bg-gradient-to-br ${item.color}`}
                   >
-                    <item.icon className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-white" />
+                    <item.icon className="size-5 sm:size-6 md:size-8 text-white" />
                   </motion.div>
                   <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium group-hover:text-primary transition-colors duration-300">
                     {isMobile ? item.mobileText : item.text}
@@ -115,6 +115,9 @@ export function CtaSection() {
             </div>
           </motion.div>
         </div>
+
+        <div className="absolute inset-0 size-full bg-gradient-radial from-[#FE8A0A]/20 via-transparent to-transparent opacity-70"></div>
+        <div className="absolute inset-0 size-full bg-gradient-radial from-white/5 via-transparent to-transparent opacity-30"></div>
       </motion.div>
     </section>
   );

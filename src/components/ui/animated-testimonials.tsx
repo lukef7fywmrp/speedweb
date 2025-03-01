@@ -3,7 +3,7 @@
 import { IconArrowLeft, IconArrowRight, IconQuote } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 type Testimonial = {
   quote: string;
@@ -11,6 +11,7 @@ type Testimonial = {
   designation: string;
   src: string;
 };
+
 export const AnimatedTestimonials = ({
   testimonials,
   autoplay = false,
@@ -20,9 +21,9 @@ export const AnimatedTestimonials = ({
 }) => {
   const [active, setActive] = useState(0);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setActive((prev) => (prev + 1) % testimonials.length);
-  };
+  }, [testimonials.length]);
 
   const handlePrev = () => {
     setActive((prev) => (prev - 1 + testimonials.length) % testimonials.length);
@@ -37,26 +38,26 @@ export const AnimatedTestimonials = ({
       const interval = setInterval(handleNext, 5000);
       return () => clearInterval(interval);
     }
-  }, [autoplay]);
+  }, [autoplay, handleNext]);
 
   const randomRotateY = () => {
     return Math.floor(Math.random() * 21) - 10;
   };
 
   return (
-    <div className="w-full mx-auto">
+    <div className="mx-auto w-full">
       {/* Testimonial Header */}
       <div className="mb-8 px-4">
-        <p className="text-[#FE8B00] text-sm font-medium uppercase tracking-wider mb-2">
+        <p className="mb-2 text-sm font-medium uppercase tracking-wider text-[#FE8B00]">
           Testimonials
         </p>
-        <h2 className="font-heading text-3xl font-semibold text-white mb-4">
+        <h2 className="mb-4 font-heading text-3xl font-semibold text-white">
           Straight from Our Customers
         </h2>
       </div>
 
       {/* Image Section - Centered with border */}
-      <div className="relative w-full max-w-[280px] mx-auto mb-8 aspect-[4/5]">
+      <div className="relative mx-auto mb-8 aspect-[4/5] w-full max-w-[280px]">
         <AnimatePresence mode="wait">
           {testimonials.map(
             (testimonial, index) =>
@@ -69,7 +70,7 @@ export const AnimatedTestimonials = ({
                   transition={{ duration: 0.5, ease: "easeOut" }}
                   className="absolute inset-0"
                 >
-                  <div className="relative w-full h-full border-2 border-[#FE8B00]/20">
+                  <div className="relative h-full w-full border-2 border-[#FE8B00]/20">
                     <Image
                       src={testimonial.src}
                       alt={testimonial.name}
@@ -85,7 +86,7 @@ export const AnimatedTestimonials = ({
       </div>
 
       {/* Quote Section */}
-      <div className="px-4 w-full">
+      <div className="w-full px-4">
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
@@ -95,19 +96,19 @@ export const AnimatedTestimonials = ({
             transition={{ duration: 0.4, ease: "easeOut" }}
             className="mb-6"
           >
-            <p className="text-white/90 text-lg leading-relaxed mb-6 italic">
-              "{testimonials[active].quote}"
+            <p className="mb-6 text-lg italic leading-relaxed text-white/90">
+              &quot;{testimonials[active].quote}&quot;
             </p>
 
-            <div className="flex flex-col mt-4">
-              <h3 className="text-[#FE8B00] text-xl font-semibold">{testimonials[active].name}</h3>
-              <p className="text-zinc-400 text-sm mt-1">{testimonials[active].designation}</p>
+            <div className="mt-4 flex flex-col">
+              <h3 className="text-xl font-semibold text-[#FE8B00]">{testimonials[active].name}</h3>
+              <p className="mt-1 text-sm text-zinc-400">{testimonials[active].designation}</p>
             </div>
           </motion.div>
         </AnimatePresence>
 
         {/* Progress indicator and Navigation */}
-        <div className="flex items-center gap-1 mb-4">
+        <div className="mb-4 flex items-center gap-1">
           {testimonials.map((_, index) => (
             <button
               key={index}
@@ -123,17 +124,17 @@ export const AnimatedTestimonials = ({
         <div className="flex gap-2">
           <button
             onClick={handlePrev}
-            className="h-10 w-10 rounded-full bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center transition-colors"
+            className="flex size-10 items-center justify-center rounded-full bg-zinc-800 transition-colors hover:bg-zinc-700"
             aria-label="Previous testimonial"
           >
-            <IconArrowLeft className="h-5 w-5 text-white" />
+            <IconArrowLeft className="size-5 text-white" />
           </button>
           <button
             onClick={handleNext}
-            className="h-10 w-10 rounded-full bg-[#FE8B00] hover:bg-[#FE8B00]/90 flex items-center justify-center transition-colors"
+            className="flex size-10 items-center justify-center rounded-full bg-[#FE8B00] transition-colors hover:bg-[#FE8B00]/90"
             aria-label="Next testimonial"
           >
-            <IconArrowRight className="h-5 w-5 text-white" />
+            <IconArrowRight className="size-5 text-white" />
           </button>
         </div>
       </div>
