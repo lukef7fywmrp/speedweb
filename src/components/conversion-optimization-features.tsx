@@ -15,7 +15,7 @@ const features = [
     description:
       "Milliseconds matter! Faster pages mean lower bounce rates, better user experience, and higher conversions. We optimize every element to ensure your site loads instantly, keeping visitors engaged and moving toward action.",
     mobileDescription:
-      "Milliseconds matter! Faster pages mean lower bounce rates, better user experience, and higher conversions. We optimize every element to ensure your site loads instantly, keeping visitors engaged and moving toward action.",
+      "Milliseconds matter! Faster pages mean better UX, higher conversions, and lower bounce rates. We optimize every element for instant loading.",
     customIcon: (
       <div className="flex items-center justify-center transition-all duration-300 shadow-lg">
         <Image
@@ -30,11 +30,11 @@ const features = [
     useCustomIcon: true,
   },
   {
-    title: "Designed for Trust",
+    title: "Designed For Trust",
     description:
       "A reliable website builds confidence. With secure browsing, fast performance, and clear messaging, we create an experience that makes visitors feel safe and ready to take action.",
     mobileDescription:
-      "A reliable website builds confidence. With secure browsing, fast performance, and clear messaging, we create an experience that makes visitors feel safe and ready to take action.",
+      "A reliable website builds trust. With secure browsing, fast performance, and clear messaging, visitors feel confident and ready to act.",
     customIcon: (
       <div className="flex items-center justify-center transition-all duration-300">
         <Image
@@ -53,7 +53,7 @@ const features = [
     description:
       "Strategic, attention-grabbing CTAs seamlessly guide visitors toward taking action—boosting leads and sales. We create clear, well-placed buttons and prompts that encourage users to take the next step with confidence.",
     mobileDescription:
-      "Strategic, attention-grabbing CTAs seamlessly guide visitors toward taking action—boosting leads and sales. We create clear, well-placed buttons and prompts that encourage users to take the next step with confidence.",
+      "Attention-grabbing CTAs drive action, boosting leads and sales. We design clear, well-placed prompts for confident next steps.",
     customIcon: (
       <div className="flex items-center justify-center transition-all duration-300 shadow-lg">
         <Image
@@ -69,11 +69,11 @@ const features = [
   },
 
   {
-    title: "SEO-Optimized for Growth",
+    title: "SEO-Optimized For Growth",
     description:
       "Optimize your site for search engines and users with fast load speeds, smart keyword placement, and a well-structured layout to enhance visibility and drive organic traffic.",
     mobileDescription:
-      "Optimize your site for search engines and users with fast load speeds, smart keyword placement, and a well-structured layout to enhance visibility and drive organic traffic.",
+      "Optimize your site with speed, smart keywords, and a structured layout to boost visibility and drive traffic.",
     customIcon: (
       <div className="flex items-center justify-center transition-all duration-300 shadow-lg">
         <Image
@@ -139,7 +139,8 @@ export function ConversionOptimizationFeatures() {
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
-  const isMobile = useMediaQuery("(max-width: 640px)");
+  const isDesktop = useMediaQuery("(min-width: 769px)");
+  const isSmallerDevice = useMediaQuery("(max-width: 429px)");
   const { openCalModal } = useCalendly();
 
   // Create individual counter hooks outside of any callbacks
@@ -166,13 +167,11 @@ export function ConversionOptimizationFeatures() {
       ref={sectionRef}
       className="relative overflow-hidden bg-black py-24 md:py-32"
     >
-      <div className="container mx-auto max-w-6xl px-4">
+      <div className="container mx-auto max-w-6xl px-6 sm:px-4">
         {/* Header Section */}
         <div className="mb-12 text-center md:mb-16">
           <h2 className="mb-4 font-heading text-3xl font-semibold md:text-5xl lg:text-6xl">
-            {isMobile ? (
-              "High-Converting Pages"
-            ) : (
+            {isDesktop ? (
               <>
                 <div className="mb-2 flex items-center justify-center gap-4">
                   <span>More Clicks.</span>
@@ -180,10 +179,24 @@ export function ConversionOptimizationFeatures() {
                 </div>
                 <span className="block">More Sales.</span>
               </>
+            ) : (
+              <div className="flex flex-col items-center justify-center">
+                <span className="block mb-2 text-5xl">More Clicks.</span>
+                <span className="block mb-2 text-5xl text-[#FE8B00]">More Leads.</span>
+                <span className="block text-5xl">More Sales.</span>
+              </div>
             )}
           </h2>
           <p className="mx-auto max-w-2xl text-base text-zinc-400 md:text-lg">
-            Design That Doesn&apos;t Just Look Good—It Sells.
+            {!isDesktop ? (
+              <>
+                Design That Doesn&apos;t Just Look Good—
+                <br />
+                It Sells.
+              </>
+            ) : (
+              "Design That Doesn&apos;t Just Look Good—It Sells."
+            )}
           </p>
         </div>
 
@@ -227,7 +240,7 @@ export function ConversionOptimizationFeatures() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group"
+                className="group px-2"
                 onMouseEnter={() => setHoveredFeature(index)}
                 onMouseLeave={() => setHoveredFeature(null)}
               >
@@ -240,12 +253,20 @@ export function ConversionOptimizationFeatures() {
                         <ArrowRight className="size-5 text-[#FE8B00]" />
                       </div>
                     )}
-                    <h3 className="text-xl font-semibold text-white transition-colors duration-300 group-hover:text-[#FE8B00] md:text-2xl">
+                    <h3
+                      className={`font-semibold text-white transition-colors duration-300 group-hover:text-[#FE8B00] ${
+                        !isDesktop ? "text-2xl" : "text-xl md:text-2xl"
+                      }`}
+                    >
                       {feature.title}
                     </h3>
                   </div>
-                  <p className="text-base leading-relaxed text-zinc-400 transition-colors duration-300 group-hover:text-zinc-300">
-                    {isMobile ? feature.mobileDescription : feature.description}
+                  <p
+                    className={`leading-relaxed text-zinc-400 transition-colors duration-300 group-hover:text-zinc-300 ${
+                      !isDesktop ? "text-lg" : "text-base"
+                    }`}
+                  >
+                    {!isDesktop ? feature.mobileDescription : feature.description}
                   </p>
                 </div>
               </motion.div>
@@ -264,11 +285,17 @@ export function ConversionOptimizationFeatures() {
             variant="outline"
             size="lg"
             onClick={() => openCalModal("speedweb/30min")}
-            className="h-14 px-8 text-xl font-semibold text-white border-2 border-white transition-all duration-300 hover:scale-105 hover:bg-white hover:text-black"
+            className={`transition-all duration-300 hover:scale-105 hover:bg-white hover:text-black text-white border-2 border-white ${
+              !isDesktop
+                ? "h-14 px-6 text-lg font-medium w-full max-w-[350px]"
+                : "h-14 px-8 text-xl font-semibold"
+            }`}
           >
-            <span className="flex items-center">
-              Your Website Can Do More. Let&apos;s Prove It.
-              <ArrowRight className="ml-2 size-5 transition- duration-300 group-hover:translate-x-1" />
+            <span className="flex items-center justify-center">
+              {!isDesktop
+                ? "Let's Boost Your Website"
+                : "Your Website Can Do More. Let's Prove It."}
+              <ArrowRight className="ml-2 size-5 transition-all duration-300 group-hover:translate-x-1" />
             </span>
           </Button>
         </motion.div>

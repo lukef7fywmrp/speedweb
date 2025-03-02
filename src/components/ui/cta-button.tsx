@@ -11,6 +11,7 @@ interface CTAButtonProps {
   icon?: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
 export function CTAButton({
@@ -19,6 +20,7 @@ export function CTAButton({
   icon = <Zap className="ml-2 size-4" />,
   className,
   onClick,
+  style,
 }: CTAButtonProps) {
   const buttonContent = (
     <>
@@ -36,6 +38,7 @@ export function CTAButton({
         className,
       )}
       onClick={onClick}
+      style={style}
     >
       {onClick ? (
         <span className="flex items-center justify-center">{buttonContent}</span>

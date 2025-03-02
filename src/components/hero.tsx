@@ -20,6 +20,7 @@ function TypewriterText() {
   const [showCursor, setShowCursor] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const isIphone14ProMax = useMediaQuery("(width: 430px) and (height: 932px)");
 
   const staticText = "Craft High-Converting Pages:";
   const firstPhrase = "Boost Sales Now";
@@ -161,19 +162,23 @@ function TypewriterText() {
   return (
     <div className="flex flex-col items-center">
       <div className="text-center mobile:mb-0 sm:mb-[-0.5rem]">
-        <span className="bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text inline-block mobile:leading-[1.3] sm:leading-tight mobile:text-[1.75rem]">
+        <span
+          className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text inline-block mobile:leading-[1.3] sm:leading-tight ${isIphone14ProMax ? "text-[2.2rem]" : "mobile:text-[1.75rem]"}`}
+        >
           {staticText}
         </span>
       </div>
       <div className="relative flex justify-center w-full mobile:pb-1 sm:pb-1">
-        <div className="relative inline-block">
-          <span className="bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text mobile:text-[1.75rem] mobile:leading-[1.8] sm:leading-normal inline-block">
+        <div className="text-center min-w-[300px]">
+          <span
+            className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text whitespace-nowrap ${isIphone14ProMax ? "text-[2.2rem] leading-[1.8]" : "mobile:text-[1.75rem] mobile:leading-[1.8]"} sm:leading-normal`}
+          >
             {displayText}
           </span>
           <span
             className={`${
               showCursor ? "opacity-100" : "opacity-0"
-            } transition-opacity duration-100 text-[#FE8A0A] ml-[2px] mobile:text-[1.75rem] inline-block`}
+            } transition-opacity duration-100 text-[#FE8A0A] ${isIphone14ProMax ? "text-[2.2rem]" : "mobile:text-[1.75rem]"} inline-block`}
           >
             |
           </span>
@@ -185,10 +190,12 @@ function TypewriterText() {
 
 export function Hero() {
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const isIphone14ProMax = useMediaQuery("(width: 430px) and (height: 932px)");
+  const isSmallerDevice = useMediaQuery("(max-width: 380px)"); // For iPhone SE and similar small devices
   const { openCalModal } = useCalendly();
 
   // Alternative mobile button texts
-  const mobileButtonText = "Free Strategy Call";
+  const mobileButtonText = "Book Your Free Strategy Call";
   // Other options could be:
   // "Get Started Free"
   // "Book a Free Call"
@@ -198,7 +205,15 @@ export function Hero() {
   return (
     <section
       id="about"
-      className="container flex flex-col items-center justify-center mobile:gap-1 sm:gap-2 pt-12 sm:pt-16 relative min-h-[calc(100vh-80px)] overflow-hidden"
+      className={`container flex flex-col items-center justify-center mobile:gap-1 sm:gap-2 ${
+        isIphone14ProMax
+          ? "pt-0 -mt-8"
+          : isSmallerDevice
+            ? "pt-4" // Modest padding for iPhone SE
+            : isMobile
+              ? "pt-2 -mt-4" // Balanced spacing for other mobile devices
+              : "pt-16" // Desktop spacing
+      } sm:pt-16 relative min-h-[calc(100vh-80px)] overflow-hidden`}
     >
       <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
       <motion.h1
@@ -213,7 +228,7 @@ export function Hero() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className="max-w-2xl text-center text-base sm:text-xl text-muted-foreground mobile:mt-0 mb-4"
+        className={`max-w-2xl text-center ${isIphone14ProMax ? "text-lg" : "text-base"} sm:text-xl text-muted-foreground mobile:mt-0 mb-4`}
       >
         {isMobile
           ? "Double your revenue with psychology-driven design. Unlock the power of conversion-focused pages."
@@ -225,16 +240,35 @@ export function Hero() {
         transition={{ duration: 0.8, delay: 0.6 }}
         className="flex flex-col sm:flex-row justify-center gap-4 w-full max-w-md mx-auto"
       >
-        <CTAButton
-          href="#"
-          onClick={() => openCalModal("speedweb/15min")}
-          icon={
-            <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-" />
-          }
-          className="mobile:text-[1.1rem]"
-        >
-          {isMobile ? mobileButtonText : "Book Your Free Growth Call"}
-        </CTAButton>
+        {isIphone14ProMax ? (
+          <Button
+            size="lg"
+            onClick={() => openCalModal("speedweb/15min")}
+            className="h-12 text-lg font-medium transition-all duration-300 group px-3 hover:shadow-lg hover:shadow-[#FF9500]/30 active:scale-95"
+            style={{
+              backgroundColor: "#FF9500",
+              color: "black",
+              boxShadow: "0 8px 30px rgba(255, 149, 0, 0.35)",
+              border: "1px solid rgba(255, 180, 50, 0.3)",
+              transform: "scale(1)",
+            }}
+          >
+            <span className="flex items-center justify-center tracking-wide">
+              {mobileButtonText}
+              <ArrowRight className="ml-2 size-5 group-hover:translate-x-2 transition-transform duration-300" />
+            </span>
+          </Button>
+        ) : (
+          // Regular CTAButton for all other devices
+          <CTAButton
+            href="#"
+            onClick={() => openCalModal("speedweb/15min")}
+            icon={<ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-" />}
+            className="mobile:text-[1.1rem]"
+          >
+            {isMobile ? mobileButtonText : "Book Your Free Growth Call"}
+          </CTAButton>
+        )}
         <motion.div
           initial={{ scale: 1 }}
           whileHover={{ scale: 1.05 }}
@@ -242,19 +276,33 @@ export function Hero() {
           className="relative h-14 w-full sm:w-auto"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-md opacity-50 mobile:opacity-80" />
-          <Button
-            size="lg"
-            asChild
-            variant="outline"
-            className="w-full h-full text-base font-semibold hover:bg-secondary/10 transition duration-300 text-foreground hover:text-foreground group border-2 border-transparent bg-background relative z-10 m-[1px] mobile:m-[1.5px] mobile:hover:bg-black/50"
-          >
-            <Link href="#testimonials" className="flex items-center justify-center">
-              <span className="mobile:text-[1.1rem]">
-                {isMobile ? "Success Stories" : "See Success Stories"}
-              </span>
-              <Eye className="ml-2 size-4 mobile:h-[1.1rem] mobile:w-[1.1rem] group-hover:text-primary transition-colors" />
-            </Link>
-          </Button>
+          {isIphone14ProMax ? (
+            <Button
+              size="lg"
+              asChild
+              variant="outline"
+              className="w-full h-14 text-lg font-medium hover:bg-secondary/10 transition duration-300 text-foreground hover:text-foreground group border-2 border-transparent bg-background relative z-10 m-[1px] mobile:m-[1.5px] mobile:hover:bg-black/50"
+            >
+              <Link href="#testimonials" className="flex items-center justify-center">
+                <span>Success Stories</span>
+                <Eye className="ml-2 size-5 group-hover:text-primary transition-colors" />
+              </Link>
+            </Button>
+          ) : (
+            <Button
+              size="lg"
+              asChild
+              variant="outline"
+              className="w-full h-full text-base font-semibold hover:bg-secondary/10 transition duration-300 text-foreground hover:text-foreground group border-2 border-transparent bg-background relative z-10 m-[1px] mobile:m-[1.5px] mobile:hover:bg-black/50"
+            >
+              <Link href="#testimonials" className="flex items-center justify-center">
+                <span className="mobile:text-[1.1rem]">
+                  {isMobile ? "Success Stories" : "See Success Stories"}
+                </span>
+                <Eye className="ml-2 size-4 mobile:h-[1.1rem] mobile:w-[1.1rem] group-hover:text-primary transition-colors" />
+              </Link>
+            </Button>
+          )}
         </motion.div>
       </motion.div>
       <motion.div
@@ -265,26 +313,26 @@ export function Hero() {
       >
         <div className="flex flex-wrap justify-center gap-6 sm:gap-12">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-full bg-primary/10">
-              <Zap className="size-4 text-primary" />
+            <div className={`p-2 rounded-full bg-primary/10 ${isIphone14ProMax ? "p-3" : ""}`}>
+              <Zap className={`${isIphone14ProMax ? "size-5" : "size-4"} text-primary`} />
             </div>
-            <span className="text-sm font-medium">
+            <span className={`${isIphone14ProMax ? "text-base" : "text-sm"} font-medium`}>
               {isMobile ? "Fast Results" : "Results in 30 Days"}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-full bg-primary/10">
-              <Users className="size-4 text-primary" />
+            <div className={`p-2 rounded-full bg-primary/10 ${isIphone14ProMax ? "p-3" : ""}`}>
+              <Users className={`${isIphone14ProMax ? "size-5" : "size-4"} text-primary`} />
             </div>
-            <span className="text-sm font-medium">
+            <span className={`${isIphone14ProMax ? "text-base" : "text-sm"} font-medium`}>
               {isMobile ? "1:1 Support" : "Dedicated 1:1 Support"}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-full bg-primary/10">
-              <Code className="size-4 text-primary" />
+            <div className={`p-2 rounded-full bg-primary/10 ${isIphone14ProMax ? "p-3" : ""}`}>
+              <Code className={`${isIphone14ProMax ? "size-5" : "size-4"} text-primary`} />
             </div>
-            <span className="text-sm font-medium">
+            <span className={`${isIphone14ProMax ? "text-base" : "text-sm"} font-medium`}>
               {isMobile ? "Custom Code" : "Custom-Built Solutions"}
             </span>
           </div>
@@ -294,7 +342,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 1 }}
-        className="text-center text-muted-foreground text-sm mt-4"
+        className={`text-center text-muted-foreground ${isIphone14ProMax ? "text-base" : "text-sm"} mt-4`}
       >
         {isMobile
           ? "Boost conversions now. No commitment."

@@ -14,14 +14,6 @@ import { IconQuote } from "@tabler/icons-react";
 const testimonials = [
   {
     quote:
-      "This solution has significantly improved our team's productivity. The intuitive interface makes complex tasks simple.",
-    name: "David Anderson",
-    designation: "Operations Director at CloudScale",
-    company: "CloudScale",
-    src: "/images/testimonial-3.avif",
-  },
-  {
-    quote:
       "The ROI we've seen since implementing Speedweb's solutions has been remarkable. Our conversion rates have doubled in just two months.",
     name: "Sarah Chen",
     designation: "Marketing Lead at TechFlow",

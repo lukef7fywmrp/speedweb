@@ -5,7 +5,7 @@ import { ConversionOptimizationFeatures } from "@/components/conversion-optimiza
 import { TailoredSolutionsSection } from "@/components/tailored-solutions-section";
 // import { Technologies } from "@/components/technologies";
 import { ComparisonGrid } from "@/components/comparison-grid";
-import { Pricing } from "@/components/pricing";
+// import { Pricing } from "@/components/pricing";
 import { Testimonials } from "@/components/testimonials";
 import { Faq } from "@/components/faq";
 import { CtaSection } from "@/components/cta-section";
@@ -21,7 +21,7 @@ export default function HomePage() {
       <TailoredSolutionsSection />
       {/* <Technologies /> */}
       <ComparisonGrid />
-      <Pricing />
+      {/* <Pricing /> */}
       <Testimonials />
       <Faq />
       <CtaSection />

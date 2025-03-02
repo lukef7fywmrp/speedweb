@@ -319,10 +319,7 @@ export function Pricing() {
                 <ul className="space-y-3 mb-8 grow">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <Check
-                        size={isMobile ? 16 : 20}
-                        className="text-primary mt-1 shrink-0"
-                      />
+                      <Check size={isMobile ? 16 : 20} className="text-primary mt-1 shrink-0" />
                       <span className="text-sm sm:text-base text-muted-foreground leading-normal">
                         {feature}
                       </span>

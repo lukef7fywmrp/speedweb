@@ -92,6 +92,7 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const isIphone14ProMax = useMediaQuery("(width: 430px) and (height: 932px)");
 
   return (
     <motion.div
@@ -99,15 +100,19 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group mx-3 min-w-[300px] shrink-0 relative sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px]"
+      className={`group mx-3 shrink-0 relative ${
+        isIphone14ProMax
+          ? "min-w-[340px]"
+          : "min-w-[300px] sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px]"
+      }`}
     >
       {/* Pure image display without containers */}
-      <div className="relative w-full aspect-video">
+      <div className={`relative w-full ${isIphone14ProMax ? "aspect-[16/10]" : "aspect-video"}`}>
         <Image
           src={project.imageUrl}
           alt={project.title}
           fill
-          className="object-contain"
+          className={`object-contain ${isIphone14ProMax ? "scale-110" : ""}`}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
@@ -121,19 +126,37 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
       </div>
 
       {/* Overlay with title and link on hover */}
-      <div className="absolute inset-0 flex flex-col justify-end bg-black/70 p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 mobile:opacity-100 mobile:p-3">
-        <h3 className="mb-2 text-xl font-medium text-white line-clamp-1 transition-colors duration-300 group-hover:text-[#FE8200] mobile:mb-1 mobile:text-sm">
+      <div
+        className={`absolute inset-0 flex flex-col justify-end bg-black/70 ${
+          isIphone14ProMax
+            ? "p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            : "p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 mobile:opacity-100 mobile:p-3"
+        }`}
+      >
+        <h3
+          className={`mb-2 font-medium text-white line-clamp-1 transition-colors duration-300 group-hover:text-[#FE8200] ${
+            isIphone14ProMax ? "text-2xl mb-3" : "text-xl mobile:mb-1 mobile:text-sm"
+          }`}
+        >
           {project.title}
         </h3>
 
-        <p className="mb-4 text-sm text-zinc-300 mobile:mb-2 mobile:text-xs mobile:line-clamp-2">
+        <p
+          className={`text-zinc-300 ${
+            isIphone14ProMax
+              ? "mb-5 text-base line-clamp-2"
+              : "mb-4 text-sm mobile:mb-2 mobile:text-xs mobile:line-clamp-2"
+          }`}
+        >
           {isMobile ? project.shortDescription : project.shortDescription}
         </p>
 
         <Button
           variant="ghost"
           size="sm"
-          className="w-fit px-0 text-sm font-medium text-white transition-colors hover:bg-transparent hover:text-[#FE8200] mobile:text-xs"
+          className={`w-fit px-0 font-medium text-white transition-colors hover:bg-transparent hover:text-[#FE8200] ${
+            isIphone14ProMax ? "text-base" : "text-sm mobile:text-xs"
+          }`}
           asChild
         >
           <a
@@ -142,7 +165,8 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
             rel="noopener noreferrer"
             className="flex items-center gap-2"
           >
-            View Project <ExternalLink className="size-3.5 mobile:size-3" />
+            View Project{" "}
+            <ExternalLink className={`${isIphone14ProMax ? "size-4" : "size-3.5 mobile:size-3"}`} />
           </a>
         </Button>
       </div>
@@ -155,11 +179,12 @@ export function RecentWork() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const isIphone14ProMax = useMediaQuery("(width: 430px) and (height: 932px)");
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const scrollAmount = 600;
+  const scrollAmount = isIphone14ProMax ? 340 : 600;
 
   const handleScroll = useCallback(() => {
     if (!carouselRef.current) return;
@@ -210,7 +235,7 @@ export function RecentWork() {
     <motion.section
       id="work"
       ref={sectionRef}
-      className="container py-16"
+      className={`container ${isIphone14ProMax ? "py-12" : "py-16"}`}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.1 }}
@@ -220,9 +245,11 @@ export function RecentWork() {
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.5 }}
-        className="mb-10 text-center"
+        className={`${isIphone14ProMax ? "mb-6" : "mb-10"} text-center`}
       >
-        <h2 className="mb-3 font-heading text-4xl font-semibold sm:text-5xl lg:text-6xl">
+        <h2
+          className={`mb-3 font-heading ${isIphone14ProMax ? "text-4xl" : "text-4xl sm:text-5xl lg:text-6xl"} font-semibold`}
+        >
           Our Recent <span className="text-[#FE8200]">Work</span>
         </h2>
         <p className="mx-auto max-w-2xl text-base text-muted-foreground">
@@ -250,27 +277,27 @@ export function RecentWork() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
             onClick={scrollLeft}
-            className="absolute -left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white/80 transition-all hover:bg-black/70 hover:text-white"
+            className={`absolute ${isIphone14ProMax ? "-left-2" : "-left-4"} top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white/80 transition-all hover:bg-black/70 hover:text-white`}
             aria-label="Previous projects"
           >
-            <ChevronLeft className="size-6" />
+            <ChevronLeft className={`${isIphone14ProMax ? "size-5" : "size-6"}`} />
           </motion.button>
         )}
 
         {/* Swipeable carousel */}
         <div
           ref={carouselRef}
-          className="flex overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory"
+          className={`flex overflow-x-auto ${isIphone14ProMax ? "pb-6" : "pb-8"} scrollbar-hide snap-x snap-mandatory`}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           onScroll={handleScroll}
         >
-          <div className="pl-4"></div> {/* Left padding */}
+          <div className={`${isIphone14ProMax ? "pl-2" : "pl-4"}`}></div> {/* Left padding */}
           {recentWork.map((project, index) => (
             <div key={index} className="snap-start">
               <ProjectCard project={project} index={index} />
             </div>
           ))}
-          <div className="pr-4"></div> {/* Right padding */}
+          <div className={`${isIphone14ProMax ? "pr-2" : "pr-4"}`}></div> {/* Right padding */}
         </div>
 
         {/* Right navigation arrow */}
@@ -280,10 +307,10 @@ export function RecentWork() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
             onClick={scrollRight}
-            className="absolute -right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white/80 transition-all hover:bg-black/70 hover:text-white"
+            className={`absolute ${isIphone14ProMax ? "-right-2" : "-right-4"} top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white/80 transition-all hover:bg-black/70 hover:text-white`}
             aria-label="Next projects"
           >
-            <ChevronRight className="size-6" />
+            <ChevronRight className={`${isIphone14ProMax ? "size-5" : "size-6"}`} />
           </motion.button>
         )}
 

@@ -17,7 +17,8 @@ export function CtaSection() {
   const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1.1]);
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
   const rotateReverse = useTransform(scrollYProgress, [0, 1], [360, 0]);
-  const isMobile = useMediaQuery("(max-width: 640px)");
+  const isDesktop = useMediaQuery("(min-width: 769px)");
+  const isSmallerDevice = useMediaQuery("(max-width: 429px)");
   const { openCalModal } = useCalendly();
 
   const ctaItems = [
@@ -70,19 +71,21 @@ export function CtaSection() {
             className="text-left md:w-1/2"
           >
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-primary">
-              {isMobile ? "Boost Your Conversions" : "Supercharge Your Conversion Rates"}
+              {isDesktop ? "Supercharge Your Conversion Rates" : "Boost Your Conversions"}
             </h2>
             <p className="text-lg sm:text-xl mb-8 text-muted-foreground">
-              {isMobile
-                ? "Our strategies boost online performance. Ready to join?"
-                : "Don't leave money on the table. Our battle-tested strategies have helped businesses just like yours skyrocket their online performance. Ready to join them?"}
+              {isDesktop
+                ? "Don't leave money on the table. Our battle-tested strategies have helped businesses just like yours skyrocket their online performance. Ready to join them?"
+                : "Our strategies boost online performance. Ready to join?"}
             </p>
             <CTAButton
               href="#"
-              className="text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              className={`text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 ${
+                !isDesktop ? "w-full" : ""
+              }`}
               onClick={() => openCalModal("speedweb/30min")}
             >
-              {isMobile ? "Talk Strategy" : "Let's Talk Strategy"}
+              {isDesktop ? "Let's Talk Strategy" : "Talk Strategy"}
             </CTAButton>
           </motion.div>
 
@@ -103,12 +106,34 @@ export function CtaSection() {
                 >
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
-                    className={`size-10 sm:size-12 md:size-16 mb-2 sm:mb-3 md:mb-4 rounded-full flex items-center justify-center bg-gradient-to-br ${item.color}`}
+                    className={`${
+                      !isDesktop
+                        ? isSmallerDevice
+                          ? "size-14"
+                          : "size-16"
+                        : "size-10 sm:size-12 md:size-16"
+                    } mb-2 sm:mb-3 md:mb-4 rounded-full flex items-center justify-center bg-gradient-to-br ${item.color}`}
                   >
-                    <item.icon className="size-5 sm:size-6 md:size-8 text-white" />
+                    <item.icon
+                      className={`${
+                        !isDesktop
+                          ? isSmallerDevice
+                            ? "size-7"
+                            : "size-8"
+                          : "size-5 sm:size-6 md:size-8"
+                      } text-white`}
+                    />
                   </motion.div>
-                  <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium group-hover:text-primary transition-colors duration-300">
-                    {isMobile ? item.mobileText : item.text}
+                  <p
+                    className={`${
+                      !isDesktop
+                        ? isSmallerDevice
+                          ? "text-sm"
+                          : "text-base"
+                        : "text-xs sm:text-sm md:text-base lg:text-lg"
+                    } font-medium group-hover:text-primary transition-colors duration-300`}
+                  >
+                    {!isDesktop ? item.mobileText : item.text}
                   </p>
                 </motion.div>
               ))}
