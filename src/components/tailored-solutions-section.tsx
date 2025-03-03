@@ -24,7 +24,7 @@ const clientTypes = [
   },
   {
     iconType: "image",
-    iconSrc: "/images/icons/target.png",
+    iconSrc: "/images/icons/targetIcon.png",
     title: "E-commerce Brands",
     description: {
       desktop:

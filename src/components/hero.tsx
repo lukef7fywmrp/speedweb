@@ -20,11 +20,29 @@ function TypewriterText() {
   const [showCursor, setShowCursor] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const isIphone14ProMax = useMediaQuery("(width: 430px) and (height: 932px)");
+  const isIphoneXR = useMediaQuery("(width: 414px) and (height: 896px)");
+  const isIphone12Pro = useMediaQuery("(width: 390px) and (height: 844px)");
+  const isSmallerDevice = useMediaQuery("(max-width: 380px)"); // For iPhone SE and similar small devices
 
-  const staticText = "Craft High-Converting Pages:";
+  // Add Android device detection - simplified
+  const is412x915Device = useMediaQuery("(width: 412px) and (height: 915px)"); // For Pixel 7 and Samsung Galaxy S20 Ultra
+  const isGalaxyS8Plus = useMediaQuery("(width: 360px) and (height: 740px)");
+
+  // Check if current device is any of the Android devices
+  const isAndroidDevice = is412x915Device || isGalaxyS8Plus;
+
+  // Modify static text for Android devices to force line breaks, similar to iPhone 12 Pro
+  const staticText =
+    isIphone12Pro || is412x915Device
+      ? "Craft High-\nConverting Pages:"
+      : isGalaxyS8Plus
+        ? "Craft High\nConverting Pages:" // Remove hyphen for Galaxy S8+
+        : "Craft High-Converting Pages:";
+
+  // Use non-breaking space for "Turn Clicks into Cash" to prevent unwanted line breaks
   const firstPhrase = "Boost Sales Now";
-  const secondPhrase = "Turn Clicks into Cash";
+  const secondPhrase =
+    isIphone12Pro || isAndroidDevice ? "Turn Clicks\u00A0into\u00A0Cash" : "Turn Clicks into Cash";
   const thirdPhrase = isMobile ? "Sell More Today ⚡" : "Supercharge Your Sales ⚡";
 
   // Get typing speed based on character
@@ -163,26 +181,65 @@ function TypewriterText() {
     <div className="flex flex-col items-center">
       <div className="text-center mobile:mb-0 sm:mb-[-0.5rem]">
         <span
-          className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text inline-block mobile:leading-[1.3] sm:leading-tight ${isIphone14ProMax ? "text-[2.2rem]" : "mobile:text-[1.75rem]"}`}
+          className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text inline-block mobile:leading-[1.3] sm:leading-tight ${
+            isIphoneXR || isSmallerDevice
+              ? "text-[2.1875rem]"
+              : isIphone12Pro
+                ? "text-[2rem] whitespace-pre-line"
+                : isGalaxyS8Plus
+                  ? "!text-[28px] whitespace-pre-line" // Adjusted size for Galaxy S8+
+                  : is412x915Device
+                    ? "text-[2rem] whitespace-pre-line"
+                    : "mobile:text-[2.5rem]"
+          }`}
+          style={isGalaxyS8Plus ? { fontSize: "28px" } : {}}
         >
           {staticText}
         </span>
       </div>
       <div className="relative flex justify-center w-full mobile:pb-1 sm:pb-1">
-        <div className="text-center min-w-[300px]">
-          <span
-            className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text whitespace-nowrap ${isIphone14ProMax ? "text-[2.2rem] leading-[1.8]" : "mobile:text-[1.75rem] mobile:leading-[1.8]"} sm:leading-normal`}
-          >
-            {displayText}
-          </span>
-          <span
-            className={`${
-              showCursor ? "opacity-100" : "opacity-0"
-            } transition-opacity duration-100 text-[#FE8A0A] ${isIphone14ProMax ? "text-[2.2rem]" : "mobile:text-[1.75rem]"} inline-block`}
-          >
-            |
-          </span>
-        </div>
+        {/* For iPhone 12 Pro and Android devices, use a special layout to keep cursor inline */}
+        {isIphone12Pro || isAndroidDevice ? (
+          <div className="text-center inline-flex items-center justify-center">
+            <span
+              className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text ${
+                isGalaxyS8Plus ? "!text-[28px]" : "text-[2rem]"
+              } leading-[1.4]`}
+              style={isGalaxyS8Plus ? { fontSize: "28px" } : {}}
+            >
+              {displayText}
+            </span>
+            <span
+              className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity duration-100 text-[#FE8A0A] ${
+                isGalaxyS8Plus ? "!text-[28px]" : "text-[2rem]"
+              }`}
+              style={isGalaxyS8Plus ? { fontSize: "28px" } : {}}
+            >
+              |
+            </span>
+          </div>
+        ) : (
+          <div className="text-center min-w-[300px]">
+            <span
+              className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text whitespace-nowrap ${
+                isIphoneXR || isSmallerDevice
+                  ? "text-[2.1875rem] leading-[1.4]"
+                  : "mobile:text-[2.5rem] mobile:leading-[1.8]"
+              } sm:leading-normal`}
+            >
+              {displayText}
+            </span>
+            <span
+              className={`${
+                showCursor ? "opacity-100" : "opacity-0"
+              } transition-opacity duration-100 text-[#FE8A0A] ${
+                isIphoneXR || isSmallerDevice ? "text-[2.1875rem]" : "mobile:text-[2.5rem]"
+              } inline-block`}
+            >
+              |
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -191,7 +248,16 @@ function TypewriterText() {
 export function Hero() {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isIphone14ProMax = useMediaQuery("(width: 430px) and (height: 932px)");
+  const isIphoneXR = useMediaQuery("(width: 414px) and (height: 896px)");
   const isSmallerDevice = useMediaQuery("(max-width: 380px)"); // For iPhone SE and similar small devices
+
+  // Add Android device detection - simplified
+  const is412x915Device = useMediaQuery("(width: 412px) and (height: 915px)"); // For Pixel 7 and Samsung Galaxy S20 Ultra
+  const isGalaxyS8Plus = useMediaQuery("(width: 360px) and (height: 740px)");
+
+  // Check if current device is any of the Android devices
+  const isAndroidDevice = is412x915Device || isGalaxyS8Plus;
+
   const { openCalModal } = useCalendly();
 
   // Alternative mobile button texts
@@ -208,19 +274,25 @@ export function Hero() {
       className={`container flex flex-col items-center justify-center mobile:gap-1 sm:gap-2 ${
         isIphone14ProMax
           ? "pt-0 -mt-8"
-          : isSmallerDevice
-            ? "pt-4" // Modest padding for iPhone SE
-            : isMobile
-              ? "pt-2 -mt-4" // Balanced spacing for other mobile devices
-              : "pt-16" // Desktop spacing
-      } sm:pt-16 relative min-h-[calc(100vh-80px)] overflow-hidden`}
+          : isIphoneXR
+            ? "pt-1" // Minimal padding for iPhone XR
+            : isAndroidDevice
+              ? "pt-0 -mt-2" // Reduced padding and slight negative margin for Android devices
+              : isSmallerDevice
+                ? "pt-4" // Modest padding for iPhone SE
+                : isMobile
+                  ? "pt-2 -mt-4" // Balanced spacing for other mobile devices
+                  : "pt-16" // Desktop spacing
+      } sm:pt-16 relative ${isIphoneXR || isAndroidDevice ? "min-h-[calc(100vh-100px)]" : "min-h-[calc(100vh-80px)]"} overflow-hidden`}
     >
       <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="max-w-5xl text-center font-heading text-4xl sm:text-5xl sm:leading-tight lg:text-7xl font-bold relative z-10 [text-wrap:balance] mb-0 mobile:mb-0"
+        className={`max-w-5xl text-center font-heading text-4xl sm:text-5xl sm:leading-tight lg:text-7xl font-bold relative z-10 [text-wrap:balance] mb-0 mobile:mb-0 ${
+          isIphoneXR ? "mt-0" : isAndroidDevice ? "-mt-1" : "mt-4"
+        }`}
       >
         <TypewriterText />
       </motion.h1>
@@ -228,7 +300,7 @@ export function Hero() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className={`max-w-2xl text-center ${isIphone14ProMax ? "text-lg" : "text-base"} sm:text-xl text-muted-foreground mobile:mt-0 mb-4`}
+        className={`max-w-2xl text-center ${isIphone14ProMax ? "text-lg" : isIphoneXR || isAndroidDevice ? "text-base mt-0" : "text-base"} sm:text-xl text-muted-foreground mobile:mt-0 mb-4`}
       >
         {isMobile
           ? "Double your revenue with psychology-driven design. Unlock the power of conversion-focused pages."

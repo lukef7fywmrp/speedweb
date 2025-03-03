@@ -100,20 +100,27 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className={`group mx-3 shrink-0 relative ${
-        isIphone14ProMax
-          ? "min-w-[340px]"
-          : "min-w-[300px] sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px]"
+      className={`group mx-1 shrink-0 relative ${
+        isMobile
+          ? "min-w-[85vw] max-w-[85vw]"
+          : isIphone14ProMax
+            ? "min-w-[340px]"
+            : "min-w-[300px] sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px]"
       }`}
     >
-      {/* Pure image display without containers */}
-      <div className={`relative w-full ${isIphone14ProMax ? "aspect-[16/10]" : "aspect-video"}`}>
+      {/* Image container */}
+      <div
+        className={`relative w-full overflow-hidden rounded-md ${
+          isMobile ? "aspect-[16/9]" : isIphone14ProMax ? "aspect-[16/10]" : "aspect-video"
+        }`}
+      >
         <Image
           src={project.imageUrl}
           alt={project.title}
           fill
-          className={`object-contain ${isIphone14ProMax ? "scale-110" : ""}`}
+          className="object-cover"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority={index < 2}
         />
 
         {/* Featured indicator as a small dot */}
@@ -127,15 +134,21 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
 
       {/* Overlay with title and link on hover */}
       <div
-        className={`absolute inset-0 flex flex-col justify-end bg-black/70 ${
-          isIphone14ProMax
+        className={`absolute inset-0 flex flex-col justify-end bg-black/70 rounded-md ${
+          isMobile
             ? "p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-            : "p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 mobile:opacity-100 mobile:p-3"
+            : isIphone14ProMax
+              ? "p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              : "p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 mobile:opacity-100 mobile:p-3"
         }`}
       >
         <h3
           className={`mb-2 font-medium text-white line-clamp-1 transition-colors duration-300 group-hover:text-[#FE8200] ${
-            isIphone14ProMax ? "text-2xl mb-3" : "text-xl mobile:mb-1 mobile:text-sm"
+            isMobile
+              ? "text-2xl mb-3"
+              : isIphone14ProMax
+                ? "text-2xl mb-3"
+                : "text-xl mobile:mb-1 mobile:text-sm"
           }`}
         >
           {project.title}
@@ -143,19 +156,21 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
 
         <p
           className={`text-zinc-300 ${
-            isIphone14ProMax
+            isMobile
               ? "mb-5 text-base line-clamp-2"
-              : "mb-4 text-sm mobile:mb-2 mobile:text-xs mobile:line-clamp-2"
+              : isIphone14ProMax
+                ? "mb-5 text-base line-clamp-2"
+                : "mb-4 text-sm mobile:mb-2 mobile:text-xs mobile:line-clamp-2"
           }`}
         >
-          {isMobile ? project.shortDescription : project.shortDescription}
+          {project.shortDescription}
         </p>
 
         <Button
           variant="ghost"
           size="sm"
           className={`w-fit px-0 font-medium text-white transition-colors hover:bg-transparent hover:text-[#FE8200] ${
-            isIphone14ProMax ? "text-base" : "text-sm mobile:text-xs"
+            isMobile ? "text-base" : isIphone14ProMax ? "text-base" : "text-sm mobile:text-xs"
           }`}
           asChild
         >
@@ -166,7 +181,11 @@ function ProjectCard({ project, index }: { project: WorkItem; index: number }) {
             className="flex items-center gap-2"
           >
             View Project{" "}
-            <ExternalLink className={`${isIphone14ProMax ? "size-4" : "size-3.5 mobile:size-3"}`} />
+            <ExternalLink
+              className={`${
+                isMobile ? "size-5" : isIphone14ProMax ? "size-4" : "size-3.5 mobile:size-3"
+              }`}
+            />
           </a>
         </Button>
       </div>
@@ -270,8 +289,8 @@ export function RecentWork() {
 
       {/* Carousel container with navigation */}
       <div className="relative">
-        {/* Left navigation arrow */}
-        {showLeftArrow && (
+        {/* Left navigation arrow - only show on non-mobile */}
+        {showLeftArrow && !isMobile && (
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -287,21 +306,23 @@ export function RecentWork() {
         {/* Swipeable carousel */}
         <div
           ref={carouselRef}
-          className={`flex overflow-x-auto ${isIphone14ProMax ? "pb-6" : "pb-8"} scrollbar-hide snap-x snap-mandatory`}
+          className={`flex overflow-x-auto ${
+            isMobile ? "pb-4 px-2 gap-3" : isIphone14ProMax ? "pb-6 gap-4" : "pb-8 gap-4"
+          } scrollbar-hide snap-x snap-mandatory`}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           onScroll={handleScroll}
         >
-          <div className={`${isIphone14ProMax ? "pl-2" : "pl-4"}`}></div> {/* Left padding */}
+          {isMobile ? null : <div className={`${isIphone14ProMax ? "pl-2" : "pl-4"}`}></div>}
           {recentWork.map((project, index) => (
             <div key={index} className="snap-start">
               <ProjectCard project={project} index={index} />
             </div>
           ))}
-          <div className={`${isIphone14ProMax ? "pr-2" : "pr-4"}`}></div> {/* Right padding */}
+          {isMobile ? null : <div className={`${isIphone14ProMax ? "pr-2" : "pr-4"}`}></div>}
         </div>
 
-        {/* Right navigation arrow */}
-        {showRightArrow && (
+        {/* Right navigation arrow - only show on non-mobile */}
+        {showRightArrow && !isMobile && (
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

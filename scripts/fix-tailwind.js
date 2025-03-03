@@ -63,6 +63,20 @@ const replacements = [
   { pattern: /\bblur-\[8px\]\b/g, replacement: "blur" },
 ];
 
+// Add a function to replace unnecessary arbitrary values with standard classes
+const replaceUnnecessaryArbitraryValues = (content) => {
+  // Replace common arbitrary values with their standard equivalents
+  content = content.replace(/h-\[1px\]/g, "h-px");
+  content = content.replace(/w-\[80%\]/g, "w-4/5");
+  content = content.replace(/w-\[60%\]/g, "w-3/5");
+  content = content.replace(/blur-\[8px\]/g, "blur");
+
+  // Replace w-full h-full with size-full
+  content = content.replace(/(?:w-full\s+h-full|h-full\s+w-full)/g, "size-full");
+
+  return content;
+};
+
 // Process each file
 const processFile = (filePath) => {
   console.log(`Processing ${filePath}...`);
@@ -78,9 +92,12 @@ const processFile = (filePath) => {
     }
   });
 
+  // Add the replacement of unnecessary arbitrary values
+  let updatedContent = replaceUnnecessaryArbitraryValues(content);
+
   // Save the file if modified
   if (modified) {
-    fs.writeFileSync(filePath, content, "utf8");
+    fs.writeFileSync(filePath, updatedContent, "utf8");
     console.log(`Updated ${filePath}`);
   }
 };
