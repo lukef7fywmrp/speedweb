@@ -20,7 +20,7 @@ export function Header() {
 
   const navItems = [
     { href: "#work", label: "Work" },
-    { href: "#pricing", label: "Pricing" },
+    { href: "#testimonials", label: "Testimonials" },
     { href: "#faq", label: "FAQ" },
   ];
 
@@ -112,9 +112,9 @@ export function Header() {
             className="relative h-11 px-5 font-medium rounded-lg group overflow-hidden bg-[#F5F5F5] hover:bg-white transition-all duration-300 shadow-[0_2px_10px_rgba(255,255,255,0.1)] hover:shadow-[0_2px_15px_rgba(255,255,255,0.2)] border border-white/10"
           >
             <Link
-              href="/pricing"
+              href="/testimonials"
               className="flex items-center"
-              onClick={(e) => handleNavigation("pricing")(e)}
+              onClick={(e) => handleNavigation("testimonials")(e)}
             >
               <span className="relative flex items-center text-zinc-900 font-semibold tracking-wide text-[15px]">
                 Get Started
@@ -170,9 +170,9 @@ export function Header() {
                 onKeyDown={(e) => handleMenuItemKeyDown(e, navItems.length)}
               >
                 <Link
-                  href="/pricing"
+                  href="/testimonials"
                   className="cursor-pointer flex items-center justify-center w-full h-full"
-                  onClick={(e) => handleNavigation("pricing")(e)}
+                  onClick={(e) => handleNavigation("testimonials")(e)}
                 >
                   Get Started
                   <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />

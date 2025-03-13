@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Code, Eye, Users, Zap } from "lucide-react";
+import { ArrowRight, Code, Eye, Users, Zap, Trophy, Star } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -22,6 +22,7 @@ function TypewriterText() {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isIphoneXR = useMediaQuery("(width: 414px) and (height: 896px)");
   const isIphone12Pro = useMediaQuery("(width: 390px) and (height: 844px)");
+  const isIphone14ProMax = useMediaQuery("(width: 430px) and (height: 932px)");
   const isSmallerDevice = useMediaQuery("(max-width: 380px)"); // For iPhone SE and similar small devices
 
   // Add Android device detection - simplified
@@ -33,17 +34,17 @@ function TypewriterText() {
 
   // Modify static text for Android devices to force line breaks, similar to iPhone 12 Pro
   const staticText =
-    isIphone12Pro || is412x915Device
-      ? "Craft High-\nConverting Pages:"
-      : isGalaxyS8Plus
-        ? "Craft High\nConverting Pages:" // Remove hyphen for Galaxy S8+
-        : "Craft High-Converting Pages:";
+    isMobile || isIphone14ProMax || isIphone12Pro || is412x915Device || isGalaxyS8Plus
+      ? "Build Websites You Fully Control:"
+      : "Build Websites You Fully Control:";
 
   // Use non-breaking space for "Turn Clicks into Cash" to prevent unwanted line breaks
-  const firstPhrase = "Boost Sales Now";
+  const firstPhrase = "No\u00A0tech\u00A0team\u00A0needed";
   const secondPhrase =
-    isIphone12Pro || isAndroidDevice ? "Turn Clicks\u00A0into\u00A0Cash" : "Turn Clicks into Cash";
-  const thirdPhrase = isMobile ? "Sell More Today ⚡" : "Supercharge Your Sales ⚡";
+    isIphone12Pro || isAndroidDevice ? "Edit in real-time ⚡" : "Edit in real-time ⚡";
+  const thirdPhrase = isMobile
+    ? "Turn\u00A0Clicks\u00A0into\u00A0Cash"
+    : "Turn\u00A0Clicks\u00A0into\u00A0Cash⚡";
 
   // Get typing speed based on character
   const getTypingSpeed = (char: string) => {
@@ -181,16 +182,24 @@ function TypewriterText() {
     <div className="flex flex-col items-center">
       <div className="text-center mobile:mb-0 sm:mb-[-0.5rem]">
         <span
-          className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text inline-block mobile:leading-[1.3] sm:leading-tight ${
-            isIphoneXR || isSmallerDevice
-              ? "text-[2.1875rem]"
+          className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text inline-block ${
+            isMobile || isIphone14ProMax || isIphone12Pro || is412x915Device || isGalaxyS8Plus
+              ? "mobile:leading-[1.3]"
+              : "whitespace-nowrap mobile:leading-[1.3] sm:leading-tight"
+          } ${
+            isIphone14ProMax
+              ? "text-[2.5rem]"
               : isIphone12Pro
-                ? "text-[2rem] whitespace-pre-line"
-                : isGalaxyS8Plus
-                  ? "!text-[28px] whitespace-pre-line" // Adjusted size for Galaxy S8+
-                  : is412x915Device
-                    ? "text-[2rem] whitespace-pre-line"
-                    : "mobile:text-[2.5rem]"
+                ? "text-[2rem]"
+                : isIphoneXR
+                  ? "text-[2.25rem]"
+                  : isGalaxyS8Plus
+                    ? "!text-[28px]"
+                    : is412x915Device
+                      ? "text-[2.25rem]"
+                      : isSmallerDevice
+                        ? "text-[2.1875rem]"
+                        : "mobile:text-[2.5rem]"
           }`}
           style={isGalaxyS8Plus ? { fontSize: "28px" } : {}}
         >
@@ -203,7 +212,13 @@ function TypewriterText() {
           <div className="text-center inline-flex items-center justify-center">
             <span
               className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text ${
-                isGalaxyS8Plus ? "!text-[28px]" : "text-[2rem]"
+                isGalaxyS8Plus
+                  ? "!text-[28px]"
+                  : isIphone12Pro
+                    ? "text-[2rem]"
+                    : isIphone14ProMax
+                      ? "text-[2.25rem]"
+                      : "text-[2rem]"
               } leading-[1.4]`}
               style={isGalaxyS8Plus ? { fontSize: "28px" } : {}}
             >
@@ -211,7 +226,13 @@ function TypewriterText() {
             </span>
             <span
               className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity duration-100 text-[#FE8A0A] ${
-                isGalaxyS8Plus ? "!text-[28px]" : "text-[2rem]"
+                isGalaxyS8Plus
+                  ? "!text-[28px]"
+                  : isIphone12Pro
+                    ? "text-[2rem]"
+                    : isIphone14ProMax
+                      ? "text-[2.25rem]"
+                      : "text-[2rem]"
               }`}
               style={isGalaxyS8Plus ? { fontSize: "28px" } : {}}
             >
@@ -222,9 +243,11 @@ function TypewriterText() {
           <div className="text-center min-w-[300px]">
             <span
               className={`bg-gradient-to-r from-white via-white to-white/90 text-transparent bg-clip-text whitespace-nowrap ${
-                isIphoneXR || isSmallerDevice
-                  ? "text-[2.1875rem] leading-[1.4]"
-                  : "mobile:text-[2.5rem] mobile:leading-[1.8]"
+                isIphoneXR
+                  ? "text-[2.25rem] leading-[1.4]"
+                  : isSmallerDevice
+                    ? "text-[2.1875rem] leading-[1.4]"
+                    : "mobile:text-[2.5rem] mobile:leading-[1.8]"
               } sm:leading-normal`}
             >
               {displayText}
@@ -233,7 +256,11 @@ function TypewriterText() {
               className={`${
                 showCursor ? "opacity-100" : "opacity-0"
               } transition-opacity duration-100 text-[#FE8A0A] ${
-                isIphoneXR || isSmallerDevice ? "text-[2.1875rem]" : "mobile:text-[2.5rem]"
+                isIphoneXR
+                  ? "text-[2.25rem]"
+                  : isSmallerDevice
+                    ? "text-[2.1875rem]"
+                    : "mobile:text-[2.5rem]"
               } inline-block`}
             >
               |
@@ -247,8 +274,9 @@ function TypewriterText() {
 
 export function Hero() {
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const isIphone14ProMax = useMediaQuery("(width: 430px) and (height: 932px)");
   const isIphoneXR = useMediaQuery("(width: 414px) and (height: 896px)");
+  const isIphone12Pro = useMediaQuery("(width: 390px) and (height: 844px)");
+  const isIphone14ProMax = useMediaQuery("(width: 430px) and (height: 932px)");
   const isSmallerDevice = useMediaQuery("(max-width: 380px)"); // For iPhone SE and similar small devices
 
   // Add Android device detection - simplified
@@ -303,8 +331,8 @@ export function Hero() {
         className={`max-w-2xl text-center ${isIphone14ProMax ? "text-lg" : isIphoneXR || isAndroidDevice ? "text-base mt-0" : "text-base"} sm:text-xl text-muted-foreground mobile:mt-0 mb-4`}
       >
         {isMobile
-          ? "Double your revenue with psychology-driven design. Unlock the power of conversion-focused pages."
-          : "Unlock the secret to skyrocketing sales with our conversion-focused pages. Imagine doubling your revenue without working harder – that's the power of psychology-driven design at your fingertips."}
+          ? "We design & build your website with Sanity CMS, allowing you to edit and update everything without a tech team."
+          : "We design & build your website—then integrate it with Sanity, letting you edit, update, and manage everything in real-time without a tech team. You get full control over content, design, and functionality—no coding needed."}
       </motion.p>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -316,16 +344,9 @@ export function Hero() {
           <Button
             size="lg"
             onClick={() => openCalModal("speedweb/15min")}
-            className="h-12 text-lg font-medium transition-all duration-300 group px-3 hover:shadow-lg hover:shadow-[#FF9500]/30 active:scale-95"
-            style={{
-              backgroundColor: "#FF9500",
-              color: "black",
-              boxShadow: "0 8px 30px rgba(255, 149, 0, 0.35)",
-              border: "1px solid rgba(255, 180, 50, 0.3)",
-              transform: "scale(1)",
-            }}
+            className="btn-grad h-14 text-[1.3rem] font-bold tracking-wide transition duration-300 group hover:bg-black hover:shadow-[0_8px_16px_rgba(0,0,0,0.1),_0_0_0_2px_#FF9500] active:scale-95"
           >
-            <span className="flex items-center justify-center tracking-wide">
+            <span className="flex items-center justify-center text-white">
               {mobileButtonText}
               <ArrowRight className="ml-2 size-5 group-hover:translate-x-2 transition-transform duration-300" />
             </span>
@@ -336,42 +357,53 @@ export function Hero() {
             href="#"
             onClick={() => openCalModal("speedweb/15min")}
             icon={<ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-" />}
-            className="mobile:text-[1.1rem]"
+            className="mobile:text-[1.1rem] text-[1.3rem] font-bold"
           >
             {isMobile ? mobileButtonText : "Book Your Free Growth Call"}
           </CTAButton>
         )}
         <motion.div
           initial={{ scale: 1 }}
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
+          whileHover={{
+            scale: 1.05,
+            y: -5,
+            boxShadow: "0 10px 25px rgba(255,255,255,0.2)",
+          }}
+          transition={{
+            duration: 0.3,
+            type: "spring",
+            stiffness: 300,
+          }}
           className="relative h-14 w-full sm:w-auto"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-md opacity-50 mobile:opacity-80" />
           {isIphone14ProMax ? (
             <Button
               size="lg"
               asChild
-              variant="outline"
-              className="w-full h-14 text-lg font-medium hover:bg-secondary/10 transition duration-300 text-foreground hover:text-foreground group border-2 border-transparent bg-background relative z-10 m-[1px] mobile:m-[1.5px] mobile:hover:bg-black/50"
+              className="w-full h-14 text-lg font-medium bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/15 hover:backdrop-blur-md transition-all duration-300 group shadow-[0_6px_20px_rgba(255,255,255,0.1)] hover:shadow-[0_10px_25px_rgba(255,255,255,0.2)] hover:translate-y-[-2px]"
             >
-              <Link href="#testimonials" className="flex items-center justify-center">
-                <span>Success Stories</span>
-                <Eye className="ml-2 size-5 group-hover:text-primary transition-colors" />
+              <Link
+                href="#testimonials"
+                className="flex items-center justify-center whitespace-nowrap"
+              >
+                <span className="font-semibold text-[1.25rem]">Success Stories</span>
+                <Star className="ml-2 size-5 group-hover:text-primary transition-colors" />
               </Link>
             </Button>
           ) : (
             <Button
               size="lg"
               asChild
-              variant="outline"
-              className="w-full h-full text-base font-semibold hover:bg-secondary/10 transition duration-300 text-foreground hover:text-foreground group border-2 border-transparent bg-background relative z-10 m-[1px] mobile:m-[1.5px] mobile:hover:bg-black/50"
+              className="w-full h-full text-base font-semibold bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/15 hover:backdrop-blur-md transition-all duration-300 group shadow-[0_6px_20px_rgba(255,255,255,0.1)] hover:shadow-[0_10px_25px_rgba(255,255,255,0.2)] hover:translate-y-[-2px]"
             >
-              <Link href="#testimonials" className="flex items-center justify-center">
-                <span className="mobile:text-[1.1rem]">
+              <Link
+                href="#testimonials"
+                className="flex items-center justify-center whitespace-nowrap"
+              >
+                <span className="mobile:text-[1.25rem] text-[1.15rem] font-semibold">
                   {isMobile ? "Success Stories" : "See Success Stories"}
                 </span>
-                <Eye className="ml-2 size-4 mobile:h-[1.1rem] mobile:w-[1.1rem] group-hover:text-primary transition-colors" />
+                <Star className="ml-2 size-4 mobile:h-[1.2rem] mobile:w-[1.2rem] group-hover:text-primary transition-colors" />
               </Link>
             </Button>
           )}

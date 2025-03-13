@@ -34,16 +34,16 @@ export function CTAButton({
       size="lg"
       variant="default"
       className={cn(
-        "h-14 text-base font-semibold hover:scale-105 transition duration-300 group bg-gradient-to-r from-[#ff8c00] to-[#ff7f00] text-black hover:from-[#ff7300] hover:to-[#ff6600] shadow-lg shadow-[#ff7f00]/30",
+        "btn-grad h-14 text-[1.2rem] font-semibold tracking-wide transition duration-300 group hover:bg-black hover:shadow-[0_8px_16px_rgba(0,0,0,0.1),_0_0_0_2px_#FF9500]",
         className,
       )}
       onClick={onClick}
       style={style}
     >
       {onClick ? (
-        <span className="flex items-center justify-center">{buttonContent}</span>
+        <span className="flex items-center justify-center text-white">{buttonContent}</span>
       ) : (
-        <Link href={href} className="flex items-center justify-center">
+        <Link href={href} className="flex items-center justify-center text-white">
           {buttonContent}
         </Link>
       )}

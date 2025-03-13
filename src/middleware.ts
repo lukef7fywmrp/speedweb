@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // List of valid section IDs
-  const validSections = ["work", "pricing", "faq"];
+  const validSections = ["work", "testimonials", "faq"];
 
   if (validSections.includes(path.slice(1))) {
     // Rewrite to home page but maintain the URL
@@ -16,5 +16,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/work", "/pricing", "/faq"],
+  matcher: ["/work", "/testimonials", "/faq"],
 };

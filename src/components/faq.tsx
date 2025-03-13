@@ -26,18 +26,18 @@ const faqs = [
     question: "What sets your service apart?",
     answer: {
       desktop:
-        "We offer a complete solution: custom design, full implementation, data-driven optimization, and ongoing support. Plus, we provide you with the full source code, giving you complete control and transparency.",
+        "We design and build high-performance websites, integrating them with Sanity to give you full control—so you can easily update content without relying on a tech team.",
       mobile:
-        "Complete solution: design, implementation, optimization, support, and full source code access.",
+        "We build websites with Sanity integration, giving you full control to update content without needing a tech team.",
     },
   },
   {
-    question: "Is this right for my business size?",
+    question: "Can I fully control and edit my website without a developer?",
     answer: {
       desktop:
-        "Absolutely. We've successfully worked with startups, SMEs, and large corporations. Our solutions and code base scale to fit your needs and budget.",
+        "Yes! We not only build your website, but we also integrate it with Sanity, a powerful and user-friendly content management system (CMS). This integration gives you full control to update your website—change text, images, layouts, and more—without needing any technical skills or a developer. You get complete flexibility without touching a single line of code.",
       mobile:
-        "Yes. We work with startups, SMEs, and large corporations, scaling to fit your needs and budget.",
+        "Yes! We integrate your site with Sanity CMS, giving you full control to update text, images, and layouts without any technical skills or developer assistance.",
     },
   },
   {
@@ -58,11 +58,12 @@ const faqs = [
     },
   },
   {
-    question: "Do I get access to the source code?",
+    question: "Do I get full ownership and flexibility to edit my website as needed?",
     answer: {
       desktop:
-        "Yes, absolutely. We provide you with the full, well-documented source code. This allows for easy maintenance, future updates, and full transparency in our development process.",
-      mobile: "Yes. Full, documented source code provided for maintenance and transparency.",
+        "Yes! You get full ownership of your website, along with the flexibility to edit and update it anytime through our Sanity integration—no developer needed.",
+      mobile:
+        "Yes! You get full ownership and can edit your website anytime through Sanity—no developer needed.",
     },
   },
 ];

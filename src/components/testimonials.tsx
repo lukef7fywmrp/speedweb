@@ -4,21 +4,22 @@ import { CTAButton } from "@/components/ui/cta-button";
 import { useCalendly } from "@/lib/hooks/useCalendly";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { AnimatedTestimonials } from "./ui/animated-testimonials";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { IconQuote } from "@tabler/icons-react";
+import { Play } from "lucide-react";
 
 const testimonials = [
   {
     quote:
       "The ROI we've seen since implementing Speedweb's solutions has been remarkable. Our conversion rates have doubled in just two months.",
-    name: "Sarah Chen",
-    designation: "Marketing Lead at TechFlow",
-    company: "TechFlow",
-    src: "/images/testimonial-2.avif",
+    name: "Raheel Abbas",
+    designation: "CEO at House of Pakistan Restaurant Fujairah",
+    company: "House of Pakistan Restaurant",
+    src: "/images/raheelTestimonial.png",
   },
   {
     quote:
@@ -30,27 +31,19 @@ const testimonials = [
   },
   {
     quote:
-      "The level of customization and attention to detail exceeded our expectations. Our landing page conversion rate increased by 150% within weeks.",
-    name: "Emily Thompson",
-    designation: "Digital Marketing Director at InnovateTech",
-    company: "InnovateTech",
-    src: "/images/testimonial-4.avif",
-  },
-  {
-    quote:
       "Speedweb delivered exactly what we needed - a high-converting, professional website that truly represents our brand. The results speak for themselves.",
-    name: "James Wilson",
-    designation: "Founder at ScaleUp Solutions",
-    company: "ScaleUp Solutions",
-    src: "/images/testimonial-5.avif",
+    name: "Emran Luden",
+    designation: "CEO at Kalam Space",
+    company: "Kalam Space",
+    src: "/images/emranTestimonial.png",
   },
   {
     quote:
       "The expertise and professionalism of the Speedweb team is outstanding. They not only built our landing pages but helped optimize our entire conversion funnel.",
-    name: "Lisa Martinez",
-    designation: "Head of Growth at FutureFlow",
-    company: "FutureFlow",
-    src: "/images/testimonial-6.avif",
+    name: "Minal Sohail",
+    designation: "CEO at Al Jamal Al Sheyaka Beauty Salon",
+    company: "Al Jamal Al Sheyaka Beauty Salon",
+    src: "/images/minalTestimonial.png",
   },
 ];
 
@@ -103,6 +96,81 @@ function TestimonialCard({
   );
 }
 
+function VideoTestimonial() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handlePlayClick = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
+  const handleVideoEnd = () => {
+    setIsPlaying(false);
+  };
+
+  const handleVideoPause = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="group relative rounded-2xl border border-zinc-800/50 bg-gradient-to-br from-zinc-900 via-black to-zinc-900 p-6 transition-all duration-300 hover:border-zinc-700/50 overflow-hidden h-full"
+    >
+      {/* Decorative elements */}
+      <div className="absolute right-0 top-0 size-24 rounded-full bg-[#FE8B00]/5 blur-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+
+      <div className="relative z-10 flex flex-col h-full">
+        <h3 className="mb-4 text-xl font-medium text-white">Client Success Story</h3>
+
+        <div className="relative w-full aspect-[9/16] rounded-lg overflow-hidden flex-grow">
+          {/* Video Element */}
+          <video
+            ref={videoRef}
+            className="w-full h-full object-cover"
+            poster="/images/videoTestimonial/posterImage.png"
+            onEnded={handleVideoEnd}
+            onPause={handleVideoPause}
+            controls={isPlaying}
+          >
+            <source src="/images/videoTestimonial/WhatsApp Video 1806 (2).MP4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Play Button Overlay */}
+          {!isPlaying && (
+            <div
+              className="absolute inset-0 flex items-center justify-center cursor-pointer transition-all duration-300 bg-gradient-to-t from-black/60 via-black/20 to-transparent hover:from-black/70 hover:via-black/30"
+              onClick={handlePlayClick}
+            >
+              <div className="flex flex-col items-center gap-3 transform transition-transform duration-300 hover:scale-105">
+                <div className="size-14 sm:size-16 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-lg hover:bg-white/30 transition-all duration-300">
+                  <Play className="size-6 sm:size-7 text-white" fill="white" />
+                </div>
+                <span className="text-white text-sm sm:text-base font-medium tracking-wide drop-shadow-md">
+                  Watch Video
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-zinc-800 transition-colors duration-300 group-hover:border-zinc-700">
+          <p className="text-zinc-300">
+            Watch how our solution transformed this client&apos;s business
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export function Testimonials() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
@@ -145,21 +213,32 @@ export function Testimonials() {
       )}
 
       {isMobile ? (
-        // Mobile view - Animated Testimonials
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full"
-        >
-          <AnimatedTestimonials testimonials={animatedTestimonialsData} autoplay={true} />
-        </motion.div>
+        // Mobile view - Animated Testimonials and Video
+        <div className="w-full space-y-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full"
+          >
+            <AnimatedTestimonials testimonials={animatedTestimonialsData} autoplay={true} />
+          </motion.div>
+
+          {/* Video Testimonial for Mobile */}
+          <VideoTestimonial />
+        </div>
       ) : (
-        // Desktop view - Regular testimonial cards
-        <div className="grid w-full max-w-7xl grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {testimonials.map((testimonial, index) => (
-            <TestimonialCard key={index} testimonial={testimonial} />
-          ))}
+        // Desktop view - Video on left, testimonials on right in a grid
+        <div className="grid w-full max-w-7xl grid-cols-1 gap-8 lg:grid-cols-[1fr,2fr]">
+          {/* Video testimonial on the left */}
+          <VideoTestimonial />
+
+          {/* Testimonials grid on the right */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <TestimonialCard key={index} testimonial={testimonial} />
+            ))}
+          </div>
         </div>
       )}
     </section>
